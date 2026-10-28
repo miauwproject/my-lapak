@@ -1,0 +1,7 @@
+{
+  "versionCode": 8,
+  "versionName": "1.0.4-beta",
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.0.4-beta/my-lapak_v1.0.4-beta.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4wLjQtYmV0YS9teS1sYXBha192MS4wLjQtYmV0YS5hcGs=",
+  "notes": "My Lapak 1.0.4-beta — Basis v1.0.4 final utuh (badge Developer, batas perangkat Trial 1 / Putus 3 / Langganan 5, cloud mati total saat lisensi habis/invalid/perangkat tidak terdaftar/dinonaktifkan, daftar perangkat sync Firestore, panduan Lisensi & Perangkat) + 2 fix: (1) picker mingguan HAPUS kalender, ganti chips Hari Sen-Min di bawah baris mingguan, ketuk hari = hari berulang (misal Minggu = tiap Minggu); (2) teks Terakhir sinkron di Beranda font 11px, sebaris dengan tombol Atur Layout. Tujuan beta: tes notif upgrade dari v1.0.4 code 7 ke beta code 8. v1.0.5 final code 9 menyusul terpisah."
+}
