@@ -1,0 +1,1699 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyLapak-Dev v1.3.1</title>
+<style>
+* { box-sizing: border-box; }
+body { font-family: system-ui, -apple-system, sans-serif; margin: 0; background: var(--bg); color: var(--txt); }
+header { background: #1b7a3d; color: #fff; padding: 20px 16px; }
+header h1 { margin: 0 0 4px; font-size: 22px; }
+header p { margin: 0; opacity: .9; font-size: 14px; }
+main { max-width: 680px; margin: 0 auto; padding: 16px; }
+.card { background: #fff; border-radius: 16px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+.card h2 { margin: 0 0 12px; font-size: 17px; }
+.card h3 { margin: 14px 0 8px; font-size: 15px; }
+.pkgs { display: flex; flex-direction: column; gap: 8px; }
+.pkg { display: flex; align-items: center; gap: 10px; border: 2px solid #ddd; border-radius: 12px; padding: 12px; cursor: pointer; background: #fff; text-align: left; font-size: 15px; width: 100%; }
+.pkg.sel { border-color: #1b7a3d; background: #eef7f0; }
+.pkg b { display: block; }
+.pkg span { color: #555; font-size: 13px; }
+label { display: block; font-size: 13px; color: #555; margin: 12px 0 4px; }
+input[type=text], input[type=tel], input[type=date], input[type=password], select { width: 100%; padding: 11px 12px; border: 1px solid #ccc; border-radius: 10px; font-size: 15px; }
+.btn { border: none; border-radius: 10px; padding: 12px 16px; font-size: 15px; cursor: pointer; }
+.btn-green { background: #1b7a3d; color: #fff; width: 100%; font-weight: 700; }
+.btn-outline { background: #fff; color: #1b7a3d; border: 2px solid #1b7a3d; font-weight: 600; }
+.btn-sm { padding: 7px 12px; font-size: 13px; border-radius: 8px; }
+.btn-red { background: #fff; color: #b91c1c; border: 2px solid #b91c1c; font-weight: 600; }
+.code { font-family: ui-monospace, monospace; font-size: 22px; font-weight: 800; letter-spacing: 1px; text-align: center; margin: 8px 0; word-break: break-all; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+td { padding: 9px 6px; border-bottom: 1px solid #eee; vertical-align: middle; }
+td.f { font-family: ui-monospace, monospace; font-weight: 700; }
+td.t { color: #555; }
+td.v { font-family: ui-monospace, monospace; word-break: break-all; }
+.row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.row .grow { flex: 1; }
+.preview { background: #eef7f0; border: 1px solid #bfe3cb; border-radius: 10px; padding: 10px 12px; font-size: 14px; margin-top: 12px; }
+.warn { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 10px; padding: 10px 12px; font-size: 14px; margin-top: 12px; }
+.danger { background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; padding: 10px 12px; font-size: 14px; margin-top: 12px; }
+.note { font-size: 13px; color: #555; line-height: 1.5; }
+.note b { color: #1a1a1a; }
+.hidden { display: none !important; }
+.cust { border: 1px solid #e5e5e5; border-radius: 12px; padding: 12px; margin-bottom: 10px; }
+.cust b { font-size: 15px; }
+.cust .meta { font-size: 13px; color: #555; line-height: 1.5; word-break: break-all; }
+.badge { display: inline-block; padding: 3px 10px; border-radius: 99px; font-size: 12px; font-weight: 700; }
+.badge-green { background: #dcfce7; color: #166534; }
+.badge-amber { background: #fef3c7; color: #92400e; }
+.badge-red { background: #fee2e2; color: #991b1b; }
+.badge-grey { background: #e5e7eb; color: #374151; }
+#toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: #1a1a1a; color: #fff; padding: 10px 18px; border-radius: 99px; font-size: 14px; display: none; z-index: 50; }
+#lockScreen { max-width: 480px; margin: 40px auto; padding: 16px; }
+header { background: var(--header-bg); }
+#appHeader { display:flex; align-items:center; gap:10px; }
+#appHeader .hgrow { flex:1; }
+#pageBackBtn, #pageHelpBtn { background: rgba(255,255,255,.15); color:#fff; border:1px solid rgba(255,255,255,.4); border-radius:10px; padding:10px 14px; font-size:15px; font-weight:700; cursor:pointer; }
+#bottomNav { position: fixed; left:0; right:0; bottom:0; z-index:40; background:#fff; border-top:1px solid #ddd; display:flex; padding:8px 8px calc(8px + env(safe-area-inset-bottom)); gap:8px; }
+#bottomNav button { flex:1; background:#f2f5f2; border:1px solid #ddd; border-radius:12px; padding:12px 4px; font-size:14px; cursor:pointer; }
+#bottomNav button.active { background:#eef7f0; border-color:#1b7a3d; color:#1b7a3d; font-weight:800; }
+main { padding-bottom: 84px !important; }
+.client-outer { background:#eef2ee; border:1px solid #ddd; border-radius:16px; padding:12px; margin-bottom:14px; }
+.client-outer .cust { background:#fff; margin-bottom:10px; }
+.logcard { background:#d6d6d6; border:1px solid #bbb; border-radius:12px; padding:10px 12px; }
+.logscroll { max-height:220px; overflow-y:auto; }
+.logline { font-family: ui-monospace, monospace; font-size:9px; line-height:1.6; color:#1a1a1a; white-space:nowrap; }
+.log-old { color:#dc2626; font-weight:700; }
+.log-new { color:#16a34a; font-weight:700; }
+.extbtns { display:flex; gap:8px; }
+.extbtns .btn { flex:1; }
+.guide h3 { margin:16px 0 6px; font-size:15px; }
+.guide p, .guide li { font-size:13px; color:#333; line-height:1.6; }
+
+
+:root { --bg:#F8FAFF; --card:#ffffff; --txt:#102A56; --mut:#5A6B8A; --line:#DCE6F5; --primary:#1769FF; --primary-d:#0F56D6; --header-bg:linear-gradient(135deg,#1769FF,#102A56); --outer-bg:#EAF1FF; --log-bg:#D6E4FF; --log-border:#B9D0F5; --log-txt:#102A56; --log-old:#dc2626; --log-new:#0A9A4A; --preview-bg:#EAF6FF; --card-sel:#EAF1FF; --input-bg:#ffffff; --nav-bg:#ffffff; }
+[data-theme="gelap"] { --bg:#0B1D3A; --card:#16305E; --txt:#F8FAFF; --mut:#A8C0E8; --line:#2A4A7A; --primary:#38BDF8; --primary-d:#0EA5E9; --header-bg:linear-gradient(135deg,#102A56,#1769FF); --outer-bg:#12294F; --log-bg:#1E3A5F; --log-border:#2A4A7A; --log-txt:#F8FAFF; --log-old:#f87171; --log-new:#34d399; --preview-bg:#12294F; --card-sel:#1E3A5F; --input-bg:#12294F; --nav-bg:#102A56; }
+body { background: var(--bg); color: var(--txt); }
+header { background: var(--header-bg); }
+#appHeader .app-logo { width:44px; height:44px; border-radius:12px; flex-shrink:0; }
+#appHeader .hgrow h1 { font-size:20px; }
+.card { background: var(--card); color: var(--txt); border:1px solid var(--line); }
+.card h2, .card h3 { color: var(--txt); }
+label { color: var(--mut); }
+input[type=text], input[type=tel], input[type=date], input[type=password], select { background: var(--input-bg); color: var(--txt); border-color: var(--line); }
+.btn-green { background: var(--primary); }
+.btn-outline { color: var(--primary); border-color: var(--primary); }
+.pkg { background: var(--card); border-color: var(--line); color: var(--txt); }
+.pkg.sel { border-color: var(--primary); background: var(--card-sel); }
+.pkg span { color: var(--mut); }
+.preview { background: var(--preview-bg); border-color: var(--line); }
+.note { color: var(--mut); }
+.note b { color: var(--txt); }
+.cust { border-color: var(--line); }
+.client-outer { background: var(--outer-bg); border-color: var(--line); }
+.client-outer .cust { background: var(--card); }
+.logcard { background: var(--log-bg); border-color: var(--log-border); }
+.logline { color: var(--log-txt); }
+.log-old { color: var(--log-old); }
+.log-new { color: var(--log-new); }
+#bottomNav { background: var(--nav-bg); border-color: var(--line); }
+#bottomNav button { background: var(--bg); border-color: var(--line); color: var(--mut); flex-direction:column; }
+#bottomNav button.active { background: var(--card-sel); border-color: var(--primary); color: var(--primary); }
+#bottomNav button .ic { display:block; line-height:0; }
+#bottomNav button .ic svg { width:21px; height:21px; }
+#bottomNav button .lbl { font-size:11px; margin-top:2px; }
+.pagebar { position: sticky; top:0; z-index:30; display:flex; align-items:center; gap:10px; background: var(--card); border:1px solid var(--line); border-radius:14px; padding:10px 12px; margin-bottom:14px; transition: transform .25s ease, opacity .25s ease; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+.pagebar.hide { transform: translateY(-120%); opacity:0; pointer-events:none; }
+.pagebar .pagebar-title { flex:1; font-weight:800; color: var(--txt); font-size:15px; }
+#pageBackBtn, #pageHelpBtn { background: var(--card-sel); color: var(--primary); border:1px solid var(--primary); border-radius:10px; padding:9px 13px; font-size:14px; font-weight:700; cursor:pointer; }
+.setting-item { width:100%; display:flex; align-items:center; gap:12px; background: var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 16px; cursor:pointer; text-align:left; font-size:15px; font-weight:700; color: var(--txt); margin-bottom:10px; }
+.setting-item .si-ic { font-size:20px; line-height:0; color: var(--primary); }
+.setting-item .si-ic svg { width:21px; height:21px; }
+.setting-item .si-grow { flex:1; }
+.setting-item .si-grow small { display:block; font-weight:400; color: var(--mut); font-size:12px; margin-top:2px; }
+.setting-item .si-chev { color: var(--mut); font-size:18px; }
+.theme-btn { border:2px solid var(--line); border-radius:12px; padding:12px 8px; font-size:13px; font-weight:700; cursor:pointer; background: var(--card); color: var(--txt); flex:1; }
+.theme-btn.on { border-color: var(--primary); background: var(--primary); color:#fff; }
+.palette-swatch { display:inline-block; width:36px; height:36px; border-radius:10px; border:1px solid var(--line); margin-right:8px; vertical-align:middle; }
+.about-logo { width:100%; max-width:320px; display:block; margin:0 auto 12px; border-radius:16px; background:#fff; padding:12px; }
+
+</style>
+<script>try{ if(localStorage.getItem('ml_admin_theme_v1')==='gelap') document.documentElement.setAttribute('data-theme','gelap'); }catch(e){}</script>
+</head>
+<body>
+<header id="appHeader">
+<img id="appLogo" class="app-logo" src="icon.png" alt="MyLapak-Dev">
+<div class="hgrow"><h1>MyLapak-Dev</h1><p>Generate License Code • MyLapak App • v1.3.1</p></div>
+</header>
+
+<div id="lockScreen">
+<div class="card" id="deviceCheckCard">
+<h2>Memeriksa perangkat...</h2>
+<p class="note">Menunggu Android ID perangkat (maksimal 3 detik). Jangan tutup app dulu.</p>
+</div>
+<div class="card hidden" id="deviceLockCard">
+<h2>Perangkat tidak dikenali</h2>
+<p class="note">HP ini bukan HP yang terikat ke app ini. App terkunci: tidak bisa masuk, generate, atau melihat Client. Satu-satunya jalan masuk adalah Restore Backup dari HP lama + PIN lama, yang bila cocok akan mengikat ulang app ke HP ini.</p>
+<label>File backup dari HP lama</label><input type="file" id="devRestoreFile" accept=".json,application/json">
+<label>PIN lama (PIN saat backup dibuat)</label><input type="password" id="devRestorePin" inputmode="numeric" maxlength="6" placeholder="6 angka">
+<div style="margin-top:14px"><button class="btn btn-outline" style="width:100%" onclick="restoreFromDeviceLock()">Restore backup dan ikat ke HP ini</button></div>
+</div>
+<div class="card hidden" id="pinSetupCard">
+<h2>Atur PIN (sekali saja)</h2>
+<p class="note">PIN ini kunci app di HP ini. Buat PIN 6 angka yang cuma lo tahu. Kalau lupa PIN, data tidak bisa dibuka kecuali lewat file backup + PIN lama.</p>
+<label>PIN baru (6 angka)</label><input type="password" id="pinNew" inputmode="numeric" maxlength="6" placeholder="cth: 123456">
+<label>Ulangi PIN</label><input type="password" id="pinNew2" inputmode="numeric" maxlength="6" placeholder="Ulangi PIN">
+<div style="margin-top:14px"><button class="btn btn-green" onclick="setupPin()">Simpan PIN dan buka app</button></div>
+</div>
+<div class="card hidden" id="pinLockCard">
+<h2>App terkunci</h2>
+<p class="note">Masukkan PIN untuk membuka data Client. App ini terkunci di HP ini: tanpa PIN, data tidak bisa dibuka.</p>
+<label>PIN</label><input type="password" id="pinInput" inputmode="numeric" maxlength="6" placeholder="6 angka">
+<div style="margin-top:14px"><button class="btn btn-green" onclick="unlockPin()">Buka app</button></div>
+<div style="margin-top:12px" class="note" id="pinError" style="color:#b91c1c"></div>
+<hr style="margin:16px 0">
+<h3>Pindah HP / Restore backup</h3>
+<p class="note">Pilih file backup (.json) dari HP lama, lalu masukkan PIN lama file itu. Tanpa PIN lama, backup tidak bisa dibuka.</p>
+<label>File backup</label><input type="file" id="restoreFile" accept=".json,application/json">
+<label>PIN lama (PIN saat backup dibuat)</label><input type="password" id="restorePin" inputmode="numeric" maxlength="6" placeholder="6 angka">
+<div style="margin-top:14px"><button class="btn btn-outline" style="width:100%" onclick="restoreFromLock()">Restore backup dan buka app</button></div>
+</div>
+</div>
+
+<main id="appMain" class="hidden">
+
+<div id="pageBar" class="pagebar">
+<button id="pageBackBtn" class="hidden" onclick="goBack()">&lt; Kembali</button>
+<span class="pagebar-title" id="pageBarTitle">Client</span>
+<button id="pageHelpBtn" onclick="openGuide()">? Bantuan</button>
+</div>
+
+<div class="card hidden" id="reminderCard">
+<h2>Reminder</h2>
+<div id="reminderBody" class="note"></div>
+</div>
+
+<div class="card" id="genPkgCard">
+<h2>1. Pilih paket</h2>
+<div class="pkgs" id="pkgs">
+<button class="pkg" data-pkg="trial"><span class="grow"><b>Trial</b><span>Gratis 7 hari</span></span></button>
+<button class="pkg sel" data-pkg="langganan"><span class="grow"><b>Langganan</b><span>Rp150rb / 3 bulan</span></span></button>
+<button class="pkg" data-pkg="lifetime"><span class="grow"><b>Lifetime (beli putus)</b><span>Rp350rb, tanpa tanggal hangus</span></span></button>
+</div>
+<label for="buyer">Nama Client</label><input type="text" id="buyer" placeholder="cth: Warung Bu Tini">
+<label for="buyerPhone">Nomor WA Client (opsional)</label><input type="tel" id="buyerPhone" placeholder="cth: 0812xxxxxxx">
+<label for="buyerNote">Catatan (opsional)</label><input type="text" id="buyerNote" placeholder="cth: Bayar tunai, toko di pasar">
+<div style="margin-top:14px"><button class="btn btn-green" id="genBtn">Generate kode baru</button></div>
+</div>
+
+<div class="card" id="resultCard">
+<h2>2. Hasil — tempel ke console</h2>
+<div class="note">Langkah tempel console, urut dari atas ke bawah. Jangan tukar nama field dengan isinya.</div>
+<div class="warn" id="consoleSteps">
+<b>Langkah 1:</b> Firebase Console, proyek <b>toko-mobile-app</b>, Firestore Database, Data, collection <b>licenses</b>, Add document.<br>
+<b>Langkah 2:</b> Document ID = kode di bawah ini. Jangan klik Auto-ID.<br>
+<b>Langkah 3:</b> Tambah field satu per satu pakai tombol <b>+ Add field</b>. Semua type pilih <b>string</b>, kecuali <b>maxDevices</b> pilih <b>number</b>.<br>
+<b>Langkah 4:</b> Save, lalu klik tombol <b>Tandai sudah ditempel</b> di bawah supaya tidak double tempel.
+</div>
+<div class="note" style="margin-top:10px">Document ID (ketik di kotak Document ID, bukan Auto-ID):</div>
+<div class="row"><div class="code grow" id="docId">—</div><button class="btn btn-outline btn-sm" onclick="copyText('docId')">Salin</button></div>
+<table>
+<tr><td class="f">type</td><td class="t">string</td><td class="v" id="vType">—</td><td><button class="btn btn-outline btn-sm" onclick="copyVal('vType')">Salin</button></td></tr>
+<tr id="rowExp"><td class="f">expiresAt</td><td class="t">string</td><td class="v" id="vExp">—</td><td><button class="btn btn-outline btn-sm" onclick="copyVal('vExp')">Salin</button></td></tr>
+<tr><td class="f">status</td><td class="t">string</td><td class="v" id="vStatus">active</td><td><button class="btn btn-outline btn-sm" onclick="copyVal('vStatus')">Salin</button></td></tr>
+<tr><td class="f">maxDevices</td><td class="t">number</td><td class="v" id="vMaxDevices">—</td><td><button class="btn btn-outline btn-sm" onclick="copyVal('vMaxDevices')">Salin</button></td></tr>
+</table>
+<div class="note" id="expNote" style="margin-top:8px"></div>
+<div class="preview" id="preview">Di HP Client muncul: —</div>
+<div class="row" style="margin-top:14px">
+<button class="btn btn-outline grow" id="copyAllBtn">Salin semua</button>
+<button class="btn btn-green grow" id="saveCustBtn">Simpan Client</button>
+</div>
+<div class="row" style="margin-top:10px">
+<button class="btn btn-outline grow" id="markSyncedBtn">Tandai sudah ditempel</button>
+</div>
+<div class="note" style="margin-top:12px" id="madeNote"></div>
+<div class="note" id="syncNote"></div>
+</div>
+
+<div class="card" id="oldCustCard">
+<h2>3. Tambah Client lama (kode sudah ada)</h2>
+<p class="note">Buat mencatat kode yang sudah dibuat sebelumnya, misal kode trial yang sudah ditempel ke console. Isi persis sama dengan dokumen di console.</p>
+<label>Kode</label><input type="text" id="oldCode" placeholder="ML-XXXX-XXXX-XXXX">
+<label>Nama Client</label><input type="text" id="oldName" placeholder="Nama Client">
+<label>Nomor WA (opsional)</label><input type="tel" id="oldPhone" placeholder="0812xxxxxxx">
+<label>Paket</label>
+<select id="oldPkg"><option value="trial">Trial</option><option value="langganan">Langganan</option><option value="lifetime">Lifetime</option></select>
+<label>Tanggal hangus (kosongkan untuk Lifetime)</label><input type="date" id="oldExp">
+<div style="margin-top:14px"><button class="btn btn-green" onclick="addOldCustomer()">Tambah Client lama</button></div>
+</div>
+
+<div class="card" id="devFbCard">
+<h2>Firebase — Perangkat Terdaftar</h2>
+<p class="note">Daftar perangkat dibaca dari Firestore <b>licenses/{kode}/devices/</b> — sumber yang sama persis dengan app MyLapak utama, bukan daftar lokal terpisah. Nonaktifkan di sini = set <b>active=false</b> di dokumen device itu, jadi langsung terlihat di MyLapak utama saat dibuka / Refresh / login / sync online berikutnya. Bukan push instan saat app tertutup.</p>
+<div class="note" id="devFbStatus">Belum terhubung Firebase.</div>
+<label>Config Firebase (JSON, sama seperti di MyLapak &gt; Login &amp; Cloud)</label>
+<textarea id="devFbCfg" style="width:100%;min-height:80px" placeholder='{"apiKey":"...","authDomain":"...","projectId":"toko-mobile-app"}'></textarea>
+<p class="note">Susah ketik JSON di HP? Isi 3 kolom di bawah ini saja — app akan merakit JSON-nya sendiri, kolom JSON di atas boleh dikosongkan.</p>
+<label>apiKey (diawali AIza)</label><input type="text" id="devFbKey" placeholder="AIza...">
+<label>authDomain</label><input type="text" id="devFbDomain" placeholder="toko-mobile-app.firebaseapp.com">
+<label>projectId</label><input type="text" id="devFbPid" placeholder="toko-mobile-app">
+<div class="row" style="margin-top:10px">
+<button class="btn btn-green btn-sm" onclick="devFbLogin()">Simpan &amp; Login Google</button>
+<button class="btn btn-outline btn-sm" onclick="devFbLogout()">Keluar Firebase</button>
+</div>
+<p class="note">Login Google di versi web pakai popup. Di APK Dev, login Google butuh plugin FirebaseAuthentication (seperti di MyLapak utama); kalau plugin belum ada, buka versi web untuk cek perangkat.</p>
+</div>
+
+<div class="card" id="listCard">
+<h2>4. Daftar Client</h2>
+<label>Cari nama / kode / WA / Catatan</label><input type="text" id="searchBox" placeholder="Ketik untuk mencari..." oninput="renderCustomers()">
+<label>Filter</label>
+<select id="filterBox" onchange="renderCustomers()">
+<option value="all">Semua</option><option value="active">Aktif</option><option value="expiring">Mau habis (7 hari)</option><option value="expired">Habis</option><option value="lifetime">Lifetime</option><option value="revoked">Dicabut</option><option value="unsynced">Belum ditempel ke console</option>
+</select>
+<label>Urutkan</label><select id="sortBox" onchange="renderCustomers()"><option value="exp">Tanggal hangus terdekat</option><option value="name">Nama A-Z</option><option value="created">Terbaru dibuat</option></select>
+<div id="custList" style="margin-top:14px"></div>
+<div class="note" id="custCount"></div>
+<div id="devPanel" class="hidden" style="margin-top:14px;border-top:1px solid #ddd;padding-top:10px">
+<h3>Perangkat Terdaftar — <span id="devPanelCode"></span></h3>
+<div id="devPanelSummary" class="note"></div>
+<div id="devPanelList"></div>
+<div class="row" style="margin-top:10px">
+<button class="btn btn-outline btn-sm" onclick="devReloadDevices()">Muat Ulang Daftar</button>
+<button class="btn btn-outline btn-sm" onclick="devClosePanel()">Tutup</button>
+</div>
+</div>
+</div>
+
+
+<div class="card" id="settingMenu">
+<h2>Setting</h2>
+<p class="note">Pilih menu di bawah. Card menu yang lo pilih akan muncul sendiri, menu lain disembunyikan sampai lo kembali.</p>
+<button class="setting-item" onclick="openSettingCard('themeCard','Tema Aplikasi')"><span class="si-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0 0 20c1.5 0 2-1 2-2s-1-2-2-2a4 4 0 0 1-4-4c0-2 1-3 3-3s3-1 3-3-1-3-3-3z"/></svg></span><span class="si-grow">Tema Aplikasi<small>Default (biru logo) atau Gelap</small></span><span class="si-chev">›</span></button>
+<button class="setting-item" onclick="openSettingCard('settingCard','Pengaturan &amp; Kunci')"><span class="si-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="si-grow">Pengaturan &amp; Kunci<small>Setup PIN, info perangkat, kunci app</small></span><span class="si-chev">›</span></button>
+<button class="setting-item" onclick="openSettingCard('scanCard','Cek / Scan APK')"><span class="si-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></span><span class="si-grow">Cek / Scan APK<small>Cek lokal: PIN, perangkat, Client, backup</small></span><span class="si-chev">›</span></button>
+<button class="setting-item" onclick="openSettingCard('backupCard','Backup &amp; Restore')"><span class="si-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span><span class="si-grow">Backup &amp; Restore<small>Export .json, export CSV, restore file</small></span><span class="si-chev">›</span></button>
+<button class="setting-item" onclick="openSettingCard('deleteAllCard','Hapus Semua Data')"><span class="si-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></span><span class="si-grow">Hapus Semua Data<small>Konfirmasi ganda, Firestore tidak ikut terhapus</small></span><span class="si-chev">›</span></button>
+<button class="setting-item" onclick="openSettingCard('aboutCard','Tentang APK')"><span class="si-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span><span class="si-grow">Tentang APK<small>Versi, package, kunci, dan logo</small></span><span class="si-chev">›</span></button>
+</div>
+
+<div class="card hidden" id="backupCard">
+<h2>5. Backup &amp; Restore</h2>
+<p class="note">Backup = file .json berisi semua data Client. Simpan file ini di tempat aman (bukan di HP ini saja). Restore = masukkan file backup untuk mengembalikan data. File backup terkunci PIN lama: tanpa PIN lama, file tidak bisa di-restore dari layar kunci.</p>
+<div class="row" style="margin-top:10px"><button class="btn btn-green grow" onclick="exportBackup()">Export backup (.json)</button><button class="btn btn-outline grow" onclick="exportCSV()">Export CSV</button></div>
+<label style="margin-top:14px">Restore dari file (di dalam app, setelah PIN benar)</label><input type="file" id="importFile" accept=".json,application/json">
+<label>PIN backup (PIN saat backup dibuat)</label><input type="password" id="restorePinApp" inputmode="numeric" maxlength="6" placeholder="6 angka">
+<label><input type="checkbox" id="updateExistingCheck"> Update data kode yang sudah ada (kalau tidak dicentang, kode duplikat dilewati)</label>
+<div class="row" style="margin-top:10px"><button class="btn btn-outline grow" onclick="importBackup()">Restore file di atas</button></div>
+<div class="warn"><b>Penting:</b> Backup tidak berisi PIN dalam bentuk asli, hanya cek PIN terenkripsi. Jangan kirim file backup ke orang lain, karena isinya data Client + kode lisensi.</div>
+</div>
+
+<div class="card hidden" id="settingCard">
+<h2>6. Pengaturan &amp; kunci</h2>
+<p class="note" id="deviceInfo"></p>
+<label>PIN lama</label><input type="password" id="oldPin" inputmode="numeric" maxlength="6">
+<label>PIN baru (6 angka)</label><input type="password" id="newPin" inputmode="numeric" maxlength="6">
+<div class="row" style="margin-top:10px"><button class="btn btn-outline grow" onclick="changePin()">Ganti PIN</button><button class="btn btn-red grow" onclick="lockApp()">Kunci app sekarang</button></div>
+<div class="danger"><b>Catatan kunci perangkat, jujur:</b> Di file HTML ini, kunci = PIN + ID instalasi browser ini. Kalau file ini dibuka di HP/browser lain, browser itu kosong, jadi ia akan minta atur PIN baru. Kunci perangkat yang benar-benar mengunci ke satu HP hanya jalan di versi APK, karena APK bisa membaca Android ID HP itu. Di APK nanti: HP lain yang install APK akan tampil layar terkunci dan tidak bisa masuk tanpa PIN + file backup lama. Orang yang membongkar APK tetap bisa bypass secara teknis, karena kunci tersimpan lokal, bukan di server. Kunci server 100% perlu backend, itu di luar jalur lokal ini.</div>
+<div class="note" style="margin-top:12px">Data tersimpan lokal di HP/browser ini saja, bukan di Firestore. Dokumen lisensi tetap harus ditempel manual ke console. Kalau mencabut lisensi di sini, ubah juga status di console jadi <b>revoked</b>, kalau tidak, HP Client tetap menganggap kode aktif.</div>
+</div>
+
+<div class="card hidden" id="scanCard">
+<h2>Cek / Scan APK</h2>
+<p class="note">Cek kesehatan app ini dari data lokal saja. App tidak bisa memverifikasi dokumen di Firestore, karena rules melarang list collection licenses. Tanda Sudah ditempel di bawah ini hanya tanda manual yang lo klik, bukan verifikasi Firestore.</p>
+<div style="margin-top:12px"><button class="btn btn-green" onclick="runScan()">Jalankan Cek / Scan</button></div>
+<div id="scanResult" class="note" style="margin-top:12px"></div>
+</div>
+
+<div class="card hidden" id="deleteAllCard">
+<h2>Hapus Semua Data</h2>
+<p class="note">Menghapus semua data lokal: client, log, PIN, dan ikatan perangkat. Dokumen di Firestore TIDAK ikut terhapus, jadi kode Client tetap valid. Tindakan ini tidak bisa dibatalkan.</p>
+<div style="margin-top:12px"><button class="btn btn-red" style="width:100%" onclick="showDeleteAllConfirm()">Hapus Semua Data</button></div>
+<div id="deleteAllConfirm" class="hidden" style="margin-top:12px">
+<label><input type="checkbox" id="deleteBackupCheck"> Saya sudah export backup</label>
+<label>PIN saat ini (6 angka)</label><input type="password" id="deletePin" inputmode="numeric" maxlength="6">
+<div style="margin-top:12px"><button class="btn btn-red" style="width:100%" onclick="confirmDeleteAll()">Ya, hapus semua data lokal</button></div>
+</div>
+</div>
+
+<div class="card hidden" id="aboutCard">
+<h2>Tentang APK</h2>
+<img class="about-logo" src="logo-dev.png" alt="MyLapak Developer">
+<p class="note">MyLapak-Dev v1.3.1 • My Lapak • Data lokal saja, bukan di Firestore.<br>Package APK: com.miauwproject.mylapakadmin • Kunci: PIN 6 angka + Android ID (di APK).<br>Istilah di app ini: Client = pembeli app, Kode lisensi = kode ML-XXXX-XXXX-XXXX.</p>
+</div>
+
+
+<div class="card hidden" id="themeCard">
+<h2>Tema Aplikasi</h2>
+<p class="note">Default = warna senada logo baru MyLapak-Dev. Gelap = latar Navy, teks Off White, aksen Light Blue. Tema langsung berubah dan tersimpan di HP ini.</p>
+<div style="margin:12px 0"><span class="palette-swatch" style="background:#1769FF"></span><span class="palette-swatch" style="background:#102A56"></span><span class="palette-swatch" style="background:#38BDF8"></span><span class="palette-swatch" style="background:#0BD6A0"></span><span class="palette-swatch" style="background:#F8FAFF"></span></div>
+<p class="note">Electric Blue #1769FF • Navy #102A56 • Light Blue #38BDF8 • Cyan #0BD6A0 • Off White #F8FAFF</p>
+<div class="row" style="margin-top:14px"><button class="theme-btn" id="themeDefaultBtn" onclick="setTheme('default')">Default</button><button class="theme-btn" id="themeDarkBtn" onclick="setTheme('gelap')">Gelap</button></div>
+<div style="margin-top:14px"><button class="btn btn-outline" style="width:100%" onclick="goBack()">Kembali ke Setting</button></div>
+</div>
+
+<div class="card hidden" id="viewExtend">
+<h2>Perpanjang — <span id="extTitleName"></span></h2>
+<p class="note">Kode lisensi sudah terisi otomatis, tidak perlu diketik ulang. Pilih tombol cepat, atau isi tanggal manual. Hitungan tombol cepat dari tanggal hangus lama, kalau tanggal lama sudah lewat, dari hari ini.</p>
+<label>Kode lisensi — otomatis</label><input type="text" id="extCode" readonly>
+<label>Tanggal hangus lama</label><input type="text" id="extOldExp" readonly>
+<label>Tanggal hangus baru</label><input type="date" id="extNewExp">
+<div class="extbtns" style="margin-top:12px">
+<button class="btn btn-outline" onclick="calcExtend('days',7)">+7 hari</button>
+<button class="btn btn-outline" onclick="calcExtend('months',3)">+3 bulan</button>
+<button class="btn btn-outline" onclick="calcExtend('unlimited',0)">Unlimited</button>
+</div>
+<label>Catatan perpanjangan (opsional)</label><input type="text" id="extNote" placeholder="cth: Bayar 150rb, 28 Okt">
+<div style="margin-top:14px"><button class="btn btn-green" onclick="saveExtend()">Simpan perpanjangan</button></div>
+<div id="extConsoleCard" class="hidden" style="margin-top:14px">
+<h3>Tempel ke console — <span id="extConsoleTitle"></span></h3>
+<p class="note" id="extConsoleNote"></p>
+<div class="note" id="extConsoleFields"></div>
+<div class="row" style="margin-top:10px"><button class="btn btn-outline grow" onclick="copyExtendAll()">Salin semua</button><button class="btn btn-green grow" onclick="markExtendSynced()">Tandai sudah ditempel</button></div>
+<p class="note">Dokumen yang sama, jangan buat dokumen baru. Sampai lo klik Tandai sudah ditempel, card client tampil badge Belum ditempel dan log-nya tercatat (lokal, belum ditempel).</p>
+</div>
+<div style="margin-top:14px"><button class="btn btn-outline" style="width:100%" onclick="goBack()">Kembali</button></div>
+</div>
+
+<div class="card hidden guide" id="viewGuide">
+<h2>Panduan MyLapak-Dev v1.3.1</h2>
+<h3>Apa yang baru di v1.2.0</h3>
+<ul>
+<li>Nama app jadi MyLapak-Dev, warna Default senada logo baru: Electric Blue #1769FF, Navy #102A56, Light Blue #38BDF8, Cyan #0BD6A0, Off White #F8FAFF. Package tetap sama supaya update tidak hilang data.</li>
+<li>Tombol Kembali dan Bantuan pindah dari header ke page: ada di bar halaman di atas konten, bukan di header hijau lagi.</li>
+<li>Bantuan jadi sliver bar di page: bar halaman (Kembali + judul + Bantuan) menempel di atas konten, tersembunyi otomatis saat lo scroll ke bawah, muncul lagi saat scroll ke atas.</li>
+<li>Tema: Default dan Gelap, pilih di Setting &gt; Tema Aplikasi, tersimpan di HP. Gelap pakai latar Navy, teks Off White, aksen Light Blue.</li>
+<li>Nav bawah pakai ikon garis profesional: Client (orang), Generator (kode), Setting (gerigi), warna ikut tema.</li>
+<li>Setting jadi menu: tab Setting tampil daftar menu dulu, klik menu baru card-nya muncul sendiri. Menu tidak diubah namanya, hanya mekanisme tampilannya. Kembali dari card akan balik ke daftar menu Setting.</li>
+<li>Icon pack baru: launcher, logo header, dan logo Tentang pakai icon MyLapak-Dev yang lo kirim.</li>
+</ul>
+<h3>Apa yang baru di v1.1.0</h3>
+<ul>
+<li>Navigasi bawah: Client, Generator, Setting. Header hijau gelap, tanpa role atau profil, karena app ini khusus developer.</li>
+<li>Perpanjang ringkas di card Client: kode lisensi terisi otomatis, cuma isi tanggal baru, tombol +7 hari, +3 bulan, dan Unlimited berdampingan.</li>
+<li>Log per Client: 1 outer card per Client, di dalamnya 2 inner card (Data dan Log). Log hide/show, teks kecil 9px, scroll di dalam card, nomor urut dari 1, waktu lengkap dengan jam, tanggal lama merah ke baru hijau, tanpa judul kolom.</li>
+<li>Tombol Back di header dan tombol Back HP memakai fungsi kembali yang sama.</li>
+<li>Perbaikan inspeksi: migrasi Log data lama, kunci perangkat tidak bisa dilewati kalau plugin gagal, badge Belum ditempel untuk perubahan yang belum ke console, restore cek PIN dan laporan duplikat, Hapus Semua Data konfirmasi ganda.</li>
+<li>Fitur tambahan: pencarian tetap ada plus cari di Catatan dan urutan, tombol WA dari reminder, export CSV, Salin semua untuk perpanjang/upgrade.</li>
+</ul>
+<h3>Cara pakai Client</h3>
+<p>Tab Client menampilkan daftar Client (dulu disebut Pembeli). Cari lewat kotak Cari nama / kode / WA / Catatan, filter status, dan urutkan lewat kotak Urutkan. Tiap Client = 1 outer card: inner card Data di atas (nama, paket, tanggal hangus, kode lisensi, WA, status, console), inner card Log abu di bawah (tersembunyi default, klik Lihat Log untuk buka, Sembunyikan Log untuk tutup). Tombol di card: Salin kode, Tempel console, Tandai sudah ditempel, Perpanjang, Cabut (lokal), Hapus.</p>
+<h3>Cara pakai Generator</h3>
+<p>Pilih paket Trial (gratis 7 hari), Langganan (Rp150rb / 3 bulan), atau Lifetime (Rp350rb, beli putus). Isi nama, WA, catatan, klik Generate kode baru, lalu klik Simpan Client supaya muncul di Client. Setelah itu ikuti kartu Hasil — tempel ke console: collection licenses, Document ID = kode (jangan Auto-ID), field semua string: type, expiresAt (kecuali Lifetime, field ini tidak dibuat), status active. Save, lalu klik Tandai sudah ditempel. Kalau Generate belum Simpan lalu pindah tab atau tutup app, draft-nya tersimpan dan muncul lagi saat app dibuka. Untuk kode yang sudah ada di console, pakai Tambah Client lama, isi kode dengan format ML-XXXX-XXXX-XXXX, paket, dan tanggal hangus, lalu Tambah.</p>
+<h3>Cara pakai Perpanjang dan Upgrade</h3>
+<p>Di card Client, klik Perpanjang. Kode lisensi sudah terisi otomatis. Tanggal hangus lama tampil sebagai pembanding. Klik +7 hari untuk Trial, +3 bulan untuk Langganan, atau isi tanggal manual. Klik Unlimited kalau Client upgrade ke Lifetime: paket berubah jadi Lifetime, tanggal hangus dihapus, bukan tambah tanggal. Klik Simpan perpanjangan, lalu ikuti kartu tempel console: untuk perpanjang, ubah 1 field expiresAt saja di dokumen yang sama; untuk upgrade, ubah type jadi lifetime dan HAPUS field expiresAt, status tetap active. Klik Tandai sudah ditempel setelah Save di console. Sampai ditandai, card tampil badge Belum ditempel. Di HP Client, kode tidak perlu diketik ulang, cukup buka app online atau Refresh.</p>
+<h3>Cara baca Log</h3>
+<p>Log ada di inner card abu di tiap Client, teks 9px, scroll di dalam card kalau sudah banyak baris. Satu baris per entri: nomor, waktu lengkap tanggal + jam, spasi lebar, aksi, lalu tanggal lama merah ke baru hijau di baris yang sama. Nomor urut dari 1, nomor 1 = entri paling lama di bawah, nomor paling besar = entri terbaru di atas. Nomor tidak berubah saat entri baru masuk. Contoh: 50 | 2026-10-28 09:40 | Diperpanjang 2027-01-28-&gt;2027-04-28. Log tersimpan lokal dan ikut backup, bukan di Firestore.</p>
+<h3>Cara pakai Setting</h3>
+<p>Setting berisi: Setup PIN (ganti PIN, setelah ganti PIN export backup baru, karena backup lama akan mengembalikan PIN lama saat restore), Cek / Scan APK (cek lokal: PIN, perangkat, jumlah Client, mau habis, habis, belum ditempel, backup terakhir; ingat, console tidak bisa diverifikasi dari app), Backup Data (export .json), Restore Data (pilih file, isi PIN backup, centang Update kalau mau timpa kode yang sudah ada, kalau tidak dicentang kode duplikat dilewati dan dilaporkan), Info Perangkat (Android ID terikat dan sumber), Kunci App Sekarang, Hapus Semua Data (konfirmasi ganda + centang sudah backup + PIN, Firestore tidak ikut terhapus), Tentang APK.</p>
+<h3>Backup, Restore, dan Pindah HP</h3>
+<p>Export backup secara berkala, simpan file .json di tempat aman, bukan cuma di HP ini. Restore di HP baru: dari layar kunci, pilih file backup + PIN lama, app akan mengikat ulang ke HP baru. HP lama tidak otomatis terhapus dari jauh, jadi sebelum HP lama dijual atau diberikan, hapus data lokal di HP lama. Kalau lupa PIN, satu-satunya jalan adalah restore backup + PIN lama.</p>
+<h3>Kalau ada masalah</h3>
+<ul>
+<li>Kode tidak valid di HP Client: cek dokumen di console, bukan status di app ini. Pastikan collection licenses, Document ID = kode, field string, type dan status active, dan expiresAt belum lewat (kecuali Lifetime tanpa expiresAt).</li>
+<li>Perpanjang sudah disimpan tapi HP Client masih lama/habis: cek badge Belum ditempel di card Client, kemungkinan lo belum Save di console atau belum klik Tandai sudah ditempel.</li>
+<li>App terkunci Perangkat tidak dikenali: HP ini bukan HP terikat. Masuk hanya lewat Restore Backup + PIN lama.</li>
+<li>Restore 0 ditambahkan: kemungkinan semua kode sudah ada di daftar dan Update tidak dicentang, atau format kode di file salah. Cek laporan restore yang tampil setelah import.</li>
+<li>Hapus Client di app ini tidak mencabut lisensi: untuk mencabut, klik Cabut (lokal), lalu ubah status di console jadi revoked, lalu Tandai sudah ditempel.</li>
+</ul>
+<div style="margin-top:14px"><button class="btn btn-outline" style="width:100%" onclick="goBack()">Kembali</button></div>
+</div>
+
+</main>
+<nav id="bottomNav" class="hidden">
+<button data-tab="client" class="active" onclick="showTab('client')"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="lbl">Client</span></button>
+<button data-tab="generator" onclick="showTab('generator')"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span><span class="lbl">Generator</span></button>
+<button data-tab="setting" onclick="showTab('setting')"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span><span class="lbl">Setting</span></button>
+</nav>
+
+<div id="toast">Tersalin</div>
+<script>
+var CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+var PKGS = {
+  trial: { type: 'trial', days: 7, label: 'Trial', preview: 'Trial sampai ', maxDevices: 1 },
+  langganan: { type: 'langganan', months: 3, label: 'Langganan', preview: 'Langganan sampai ', maxDevices: 5 },
+  lifetime: { type: 'lifetime', label: 'Lifetime', preview: 'Lifetime', maxDevices: 3 }
+};
+var sel = 'langganan';
+var cur = null;
+var customers = [];
+var LS_CUST = 'ml_admin_customers_v2';
+var LS_PIN = 'ml_admin_pin_hash_v2';
+var LS_DEV = 'ml_admin_device_id_v2';
+var LS_DEV_BOUND = 'ml_admin_device_bound_v1';
+var LS_DEV_SOURCE = 'ml_admin_device_source_v1';
+var currentDeviceId = null;
+var currentDeviceSource = 'install';
+var deviceResolved = false;
+
+function pad(n){ return (n < 10 ? '0' : '') + n; }
+function fmt(d){ return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+function parseDate(s){ var p = s.split('-'); return new Date(parseInt(p[0],10), parseInt(p[1],10)-1, parseInt(p[2],10)); }
+function todayStr(){ return fmt(new Date()); }
+function daysLeft(exp){
+  if (!exp) return null;
+  var t = new Date(); t.setHours(0,0,0,0);
+  var e = parseDate(exp); e.setHours(0,0,0,0);
+  return Math.round((e - t) / 86400000);
+}
+function addMonths(d, m){
+  var nd = new Date(d.getFullYear(), d.getMonth(), 1);
+  nd.setMonth(nd.getMonth() + m);
+  var last = new Date(nd.getFullYear(), nd.getMonth() + 1, 0).getDate();
+  nd.setDate(Math.min(d.getDate(), last));
+  return nd;
+}
+function randCode(){
+  var out = '';
+  var buf = new Uint32Array(12);
+  if (window.crypto && window.crypto.getRandomValues) window.crypto.getRandomValues(buf);
+  else for (var i = 0; i < 12; i++) buf[i] = Math.floor(Math.random() * 4294967296);
+  for (var i = 0; i < 12; i++) out += CHARS[buf[i] % CHARS.length];
+  return 'ML-' + out.slice(0, 4) + '-' + out.slice(4, 8) + '-' + out.slice(8, 12);
+}
+async function sha256(s){
+  if (window.crypto && window.crypto.subtle) {
+    var buf = await window.crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+    return Array.from(new Uint8Array(buf)).map(function(b){ return ('0' + b.toString(16)).slice(-2); }).join('');
+  }
+  var h = 0; for (var i = 0; i < s.length; i++) { h = ((h << 5) - h + s.charCodeAt(i)) | 0; }
+  return 'fallback-' + (h >>> 0).toString(16);
+}
+function showToast(msg){
+  var t = document.getElementById('toast');
+  t.textContent = msg || 'Tersalin';
+  t.style.display = 'block';
+  setTimeout(function(){ t.style.display = 'none'; }, 1500);
+}
+function copyStr(s){
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(s).then(function(){ showToast('Tersalin'); }, function(){ fallbackCopy(s); });
+  } else fallbackCopy(s);
+}
+function fallbackCopy(s){
+  var ta = document.createElement('textarea');
+  ta.value = s; document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); showToast('Tersalin'); } catch (e) {}
+  document.body.removeChild(ta);
+}
+function copyText(id){ copyStr(document.getElementById(id).textContent.trim()); }
+function copyVal(id){ copyStr(document.getElementById(id).textContent.trim()); }
+function loadCustomers(){
+  try { customers = JSON.parse(localStorage.getItem(LS_CUST) || '[]'); } catch (e) { customers = []; }
+  if (!Array.isArray(customers)) customers = [];
+}
+function saveCustomers(){ localStorage.setItem(LS_CUST, JSON.stringify(customers)); }
+async function fetchAndroidDeviceId(){
+  try{
+    if(!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform())) return null;
+    var plug = (window.Capacitor.Plugins && window.Capacitor.Plugins.Device) || (window.Capacitor.registerPlugin ? window.Capacitor.registerPlugin('Device') : null);
+    if(!plug || !plug.getId) return null;
+    var res = await plug.getId();
+    var id = res && (res.identifier || res.id);
+    if(id) return 'android:' + String(id);
+    return null;
+  }catch(e){ return null; }
+}
+async function resolveDevice(){
+  if(deviceResolved) return;
+  var timeout = new Promise(function(res){ setTimeout(function(){ res(null); }, 3000); });
+  var androidId = null;
+  try{ androidId = await Promise.race([fetchAndroidDeviceId(), timeout]); }catch(e){ androidId = null; }
+  if(androidId){ currentDeviceId = androidId; currentDeviceSource = 'android'; }
+  else{ currentDeviceId = getDeviceId(); currentDeviceSource = 'install'; }
+  deviceResolved = true;
+}
+function boundDeviceId(){ return localStorage.getItem(LS_DEV_BOUND) || ''; }
+function isDeviceMismatch(){
+  var b = boundDeviceId();
+  if(!b) return false;
+  if(currentDeviceSource !== 'android') return false;
+  return currentDeviceId !== b;
+}
+function bindCurrentDevice(){
+  if(!currentDeviceId) return;
+  localStorage.setItem(LS_DEV_BOUND, currentDeviceId);
+  localStorage.setItem(LS_DEV_SOURCE, currentDeviceSource);
+}
+function showLockCard(which){
+  ['deviceCheckCard','deviceLockCard','pinSetupCard','pinLockCard'].forEach(function(id){
+    var el = document.getElementById(id); if(el) el.classList.add('hidden');
+  });
+  var el = document.getElementById(which); if(el) el.classList.remove('hidden');
+}
+function getDeviceId(){
+  var id = localStorage.getItem(LS_DEV);
+  if (!id) { id = 'install-' + randCode().replace(/-/g, '').toLowerCase() + '-' + Date.now(); localStorage.setItem(LS_DEV, id); }
+  return id;
+}
+function dispStatus(c){
+  if (c.status === 'revoked') return { label: 'Dicabut', cls: 'badge-grey' };
+  if (!c.exp) return { label: 'Aktif - Lifetime', cls: 'badge-green' };
+  var d = daysLeft(c.exp);
+  if (d < 0) return { label: 'Habis', cls: 'badge-red' };
+  if (d <= 7) return { label: 'Mau habis - ' + d + ' hari lagi', cls: 'badge-amber' };
+  return { label: 'Aktif - ' + d + ' hari lagi', cls: 'badge-green' };
+}
+function renderReminder(){
+  var card = document.getElementById('reminderCard');
+  var body = document.getElementById('reminderBody');
+  var expiring = [], expired = [];
+  customers.forEach(function(c){
+    if (c.status === 'revoked' || !c.exp) return;
+    var d = daysLeft(c.exp);
+    if (d < 0) expired.push(c);
+    else if (d <= 7) expiring.push(c);
+  });
+  if (!expiring.length && !expired.length) { card.classList.add('hidden'); return; }
+  card.classList.remove('hidden');
+  var html = '';
+  if (expiring.length) {
+    html += '<b>Mau habis dalam 7 hari (' + expiring.length + '):</b><br>';
+    expiring.sort(function(a,b){ return daysLeft(a.exp) - daysLeft(b.exp); });
+    expiring.forEach(function(c){ html += '- ' + (c.name || '(tanpa nama)') + ' (' + c.code + ') - ' + daysLeft(c.exp) + ' hari lagi, hangus ' + c.exp + '<br>'; });
+  }
+  if (expired.length) {
+    html += '<b>Sudah habis (' + expired.length + '):</b><br>';
+    expired.forEach(function(c){ html += '- ' + (c.name || '(tanpa nama)') + ' (' + c.code + ') - hangus ' + c.exp + '<br>'; });
+  }
+  html += 'Hubungi Client sebelum tanggal hangus untuk perpanjangan.';
+  body.innerHTML = html;
+}
+function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function renderCustomers(){
+  renderReminder();
+  var q = (document.getElementById('searchBox').value || '').toLowerCase();
+  var f = document.getElementById('filterBox').value;
+  var list = document.getElementById('custList');
+  var shown = customers.filter(function(c){
+    var hay = ((c.name || '') + ' ' + c.code + ' ' + (c.phone || '')).toLowerCase();
+    if (q && hay.indexOf(q) === -1) return false;
+    if (f === 'active') { var s = dispStatus(c); return s.label.indexOf('Aktif') === 0; }
+    if (f === 'expiring') { return c.exp && c.status !== 'revoked' && daysLeft(c.exp) >= 0 && daysLeft(c.exp) <= 7; }
+    if (f === 'expired') { return c.exp && c.status !== 'revoked' && daysLeft(c.exp) < 0; }
+    if (f === 'lifetime') return !c.exp && c.status !== 'revoked';
+    if (f === 'revoked') return c.status === 'revoked';
+    if (f === 'unsynced') return !c.consoleSynced;
+    return true;
+  });
+  shown.sort(function(a,b){
+    if (!a.exp && !b.exp) return 0;
+    if (!a.exp) return 1;
+    if (!b.exp) return -1;
+    return daysLeft(a.exp) - daysLeft(b.exp);
+  });
+  document.getElementById('custCount').textContent = 'Menampilkan ' + shown.length + ' dari ' + customers.length + ' Client.';
+  if (!shown.length) { list.innerHTML = '<p class="note">Belum ada Client yang cocok. Generate kode baru lalu Simpan Client, atau tambah Client lama.</p>'; return; }
+  var html = '';
+  shown.forEach(function(c){
+    var s = dispStatus(c);
+    html += '<div class="cust"><div class="row"><b class="grow">' + esc(c.name || '(tanpa nama)') + '</b><span class="badge ' + s.cls + '">' + esc(s.label) + '</span></div>';
+    html += '<div class="meta">Paket: ' + esc(PKGS[c.type] ? PKGS[c.type].label : c.type) + ' | Kode: ' + esc(c.code) + '<br>';
+    html += 'Dibuat: ' + esc(c.created || '-') + ' | Hangus: ' + esc(c.exp || 'tanpa tanggal (Lifetime)') + '<br>';
+    if (c.phone) html += 'WA: ' + esc(c.phone) + '<br>';
+    if (c.note) html += 'Catatan: ' + esc(c.note) + '<br>';
+    html += 'Console: ' + (c.consoleSynced ? 'Sudah ditempel' : 'Belum ditempel') + '<br>';
+    var _mx = devMaxForType(c.type, c.maxDevices);
+    html += 'Maks perangkat: ' + _mx + ' HP';
+    var _sum = devDeviceSummary[c.code];
+    if (_sum) { html += ' | Perangkat: ' + _sum.active + ' / ' + _sum.max + ' HP aktif' + (_sum.active >= _sum.max ? ' — penuh' : ''); } else { html += ' | Perangkat: —'; }
+    html += '</div>';
+    html += '<div class="row" style="margin-top:10px">';
+    html += '<button class="btn btn-outline btn-sm" onclick="copyStr(\'' + c.code + '\')">Salin kode</button>';
+    html += '<button class="btn btn-outline btn-sm" onclick="loadConsole(\'' + c.code + '\')">Tempel console</button>';
+    html += '<button class="btn btn-outline btn-sm" onclick="devOpenPanel(\'' + c.code + '\')">Lihat perangkat</button>';
+    html += '<button class="btn btn-outline btn-sm" onclick="toggleSync(\'' + c.code + '\')">' + (c.consoleSynced ? 'Batalkan tanda tempel' : 'Tandai sudah ditempel') + '</button>';
+    if (c.status !== 'revoked') html += '<button class="btn btn-red btn-sm" onclick="revokeLocal(\'' + c.code + '\')">Cabut (lokal)</button>';
+    html += '<button class="btn btn-outline btn-sm" onclick="deleteCust(\'' + c.code + '\')">Hapus</button>';
+    html += '</div></div>';
+  });
+  list.innerHTML = html;
+}
+function findCust(code){ for (var i = 0; i < customers.length; i++) if (customers[i].code === code) return customers[i]; return null; }
+function toggleSync(code){ var c = findCust(code); if (!c) return; c.consoleSynced = !c.consoleSynced; saveCustomers(); renderCustomers(); showToast(c.consoleSynced ? 'Ditandai sudah ditempel' : 'Tanda ditempel dibatalkan'); }
+function deleteCust(code){ if (!confirm('Hapus Client ' + code + ' dari daftar lokal ini? Dokumen di Firestore tidak ikut terhapus.')) return; customers = customers.filter(function(c){ return c.code !== code; }); saveCustomers(); renderCustomers(); }
+function revokeLocal(code){ var c = findCust(code); if (!c) return; if (!confirm('Tandai ' + code + ' sebagai dicabut di daftar lokal? Ingat: ubah juga status di console jadi revoked, kalau tidak HP Client tetap menganggap aktif.')) return; c.status = 'revoked'; saveCustomers(); renderCustomers(); }
+function loadConsole(code){
+  var c = findCust(code); if (!c) return;
+  cur = { code: c.code, type: c.type, exp: c.exp || null, made: c.created || todayStr(), maxDevices: devMaxForType(c.type, c.maxDevices) };
+  document.getElementById('docId').textContent = cur.code;
+  document.getElementById('vType').textContent = cur.type;
+  document.getElementById('vStatus').textContent = c.status === 'revoked' ? 'revoked' : 'active';
+  document.getElementById('vMaxDevices').textContent = String(devMaxForType(c.type, c.maxDevices));
+  var rowExp = document.getElementById('rowExp');
+  if (cur.exp) { rowExp.classList.remove('hidden'); document.getElementById('vExp').textContent = cur.exp; document.getElementById('expNote').textContent = 'Lisensi valid sampai tanggal itu (masih jalan di tanggal ' + cur.exp + ', hangus besoknya).'; document.getElementById('preview').textContent = 'Di HP Client muncul: ' + (PKGS[cur.type] ? PKGS[cur.type].preview : '') + (cur.type === 'lifetime' ? '' : cur.exp); }
+  else { rowExp.classList.add('hidden'); document.getElementById('expNote').textContent = 'Lifetime: field expiresAt TIDAK dibuat. Kalau keisi, lisensi bakal hangus di tanggal itu.'; document.getElementById('preview').textContent = 'Di HP Client muncul: Lifetime'; }
+  document.getElementById('madeNote').textContent = 'Dibuat: ' + cur.made + ' • Paket: ' + (PKGS[cur.type] ? PKGS[cur.type].label : cur.type);
+  document.getElementById('syncNote').textContent = 'Status console Client ini: ' + (c.consoleSynced ? 'Sudah ditempel' : 'Belum ditempel');
+  document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+  showToast('Data console dimuat untuk ' + code);
+}
+function generate(){
+  var p = PKGS[sel];
+  var today = new Date();
+  var exp = null;
+  if (p.days) { exp = new Date(today); exp.setDate(exp.getDate() + p.days); }
+  if (p.months) { exp = addMonths(today, p.months); }
+  cur = { code: randCode(), type: p.type, exp: exp ? fmt(exp) : null, made: fmt(today), maxDevices: p.maxDevices };
+  document.getElementById('docId').textContent = cur.code;
+  document.getElementById('vType').textContent = cur.type;
+  document.getElementById('vStatus').textContent = 'active';
+  document.getElementById('vMaxDevices').textContent = String((typeof p !== 'undefined' && p && p.maxDevices) || devMaxForType(cur.type, cur.maxDevices));
+  var rowExp = document.getElementById('rowExp');
+  var expNote = document.getElementById('expNote');
+  if (cur.exp) {
+    rowExp.classList.remove('hidden');
+    document.getElementById('vExp').textContent = cur.exp;
+    expNote.textContent = 'Lisensi valid sampai tanggal itu (masih jalan di tanggal ' + cur.exp + ', hangus besoknya).';
+    document.getElementById('preview').textContent = 'Di HP Client muncul: ' + p.preview + cur.exp;
+  } else {
+    rowExp.classList.add('hidden');
+    expNote.textContent = 'Lifetime: field expiresAt TIDAK dibuat. Kalau keisi, lisensi bakal hangus di tanggal itu.';
+    document.getElementById('preview').textContent = 'Di HP Client muncul: Lifetime';
+  }
+  document.getElementById('madeNote').textContent = 'Dibuat: ' + cur.made + ' • Paket: ' + p.label;
+  document.getElementById('syncNote').textContent = 'Belum disimpan sebagai Client. Klik Simpan Client di bawah.';
+}
+function saveCurrentCustomer(){
+  if (!cur) { generate(); }
+  var name = document.getElementById('buyer').value.trim();
+  var phone = document.getElementById('buyerPhone').value.trim();
+  var note = document.getElementById('buyerNote').value.trim();
+  if (findCust(cur.code)) { showToast('Kode ini sudah ada di daftar'); return; }
+  customers.push({ code: cur.code, type: cur.type, exp: cur.exp, created: cur.made, name: name, phone: phone, note: note, status: 'active', consoleSynced: false, maxDevices: cur.maxDevices || devMaxForType(cur.type, null) });
+  saveCustomers(); renderCustomers(); showToast('Client disimpan');
+}
+function addOldCustomer(){
+  var code = document.getElementById('oldCode').value.trim().toUpperCase();
+  var name = document.getElementById('oldName').value.trim();
+  var phone = document.getElementById('oldPhone').value.trim();
+  var type = document.getElementById('oldPkg').value;
+  var exp = document.getElementById('oldExp').value || null;
+  if (!code) { alert('Isi kode dulu.'); return; }
+  if (type !== 'lifetime' && !exp) { alert('Isi tanggal hangus untuk Trial/Langganan.'); return; }
+  if (type === 'lifetime') exp = null;
+  if (findCust(code)) { alert('Kode ini sudah ada di daftar.'); return; }
+  customers.push({ code: code, type: type, exp: exp, created: todayStr(), name: name, phone: phone, note: '', status: 'active', consoleSynced: true, maxDevices: devMaxForType(type, null) });
+  saveCustomers(); renderCustomers(); showToast('Pelanggan lama ditambahkan');
+  document.getElementById('oldCode').value = ''; document.getElementById('oldName').value = ''; document.getElementById('oldPhone').value = ''; document.getElementById('oldExp').value = '';
+}
+function exportBackup(){
+  var pinHash = localStorage.getItem(LS_PIN) || '';
+  var data = { app: 'my-lapak-admin-lisensi', version: 2, exportedAt: new Date().toISOString(), pinCheck: pinHash, customers: customers };
+  var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'my-lapak-clients-backup-' + todayStr() + '.json';
+  a.click(); URL.revokeObjectURL(a.href);
+  showToast('Backup diunduh');
+}
+async function importBackupFile(file, pinForCheck){
+  var text = await file.text();
+  var data;
+  try { data = JSON.parse(text); } catch (e) { alert('File backup tidak valid (bukan JSON).'); return false; }
+  if (pinForCheck) {
+    var h = await sha256(pinForCheck);
+    if (data.pinCheck && data.pinCheck !== h) { alert('PIN lama salah untuk file backup ini.'); return false; }
+  }
+  var arr = data.customers || data;
+  if (!Array.isArray(arr)) { alert('File backup tidak berisi daftar Client.'); return false; }
+  var added = 0;
+  arr.forEach(function(c){
+    if (!c.code) return;
+    if (!findCust(c.code)) { customers.push(c); added++; }
+  });
+  saveCustomers(); renderCustomers();
+  showToast('Restore selesai, ' + added + ' Client baru ditambahkan');
+  return true;
+}
+function importBackup(){
+  var f = document.getElementById('importFile').files[0];
+  if (!f) { alert('Pilih file backup dulu.'); return; }
+  importBackupFile(f, null);
+}
+async function setupPin(){
+  var p1 = document.getElementById('pinNew').value.trim();
+  var p2 = document.getElementById('pinNew2').value.trim();
+  if (!/^[0-9]{6}$/.test(p1)) { alert('PIN harus 6 angka.'); return; }
+  if (p1 !== p2) { alert('PIN tidak sama, ulangi.'); return; }
+  var h = await sha256(p1);
+  localStorage.setItem(LS_PIN, h);
+  bindCurrentDevice(); loadCustomers(); showApp();
+}
+async function unlockPin(){
+  if(isDeviceMismatch()){ showLockCard('deviceLockCard'); document.getElementById('pinError').textContent = ''; return; }
+  var p = document.getElementById('pinInput').value.trim();
+  var h = await sha256(p);
+  if (h === localStorage.getItem(LS_PIN)) { if(!boundDeviceId()) bindCurrentDevice(); loadCustomers(); showApp(); }
+  else { document.getElementById('pinError').textContent = 'PIN salah. Coba lagi.'; }
+}
+async function restoreFromDeviceLock(){
+  var f = document.getElementById('devRestoreFile').files[0];
+  var pin = document.getElementById('devRestorePin').value.trim();
+  if (!f) { alert('Pilih file backup dulu.'); return; }
+  if (!/^[0-9]{6}$/.test(pin)) { alert('Masukkan PIN lama 6 angka.'); return; }
+  var ok = await importBackupFile(f, pin);
+  if (ok) {
+    var h = await sha256(pin);
+    localStorage.setItem(LS_PIN, h);
+    bindCurrentDevice(); loadCustomers(); showApp();
+  }
+}
+async function restoreFromLock(){
+  var f = document.getElementById('restoreFile').files[0];
+  var pin = document.getElementById('restorePin').value.trim();
+  if (!f) { alert('Pilih file backup dulu.'); return; }
+  if (!/^[0-9]{6}$/.test(pin)) { alert('Masukkan PIN lama 6 angka.'); return; }
+  var ok = await importBackupFile(f, pin);
+  if (ok) {
+    var h = await sha256(pin);
+    localStorage.setItem(LS_PIN, h);
+    bindCurrentDevice(); loadCustomers(); showApp();
+  }
+}
+async function changePin(){
+  var oldP = document.getElementById('oldPin').value.trim();
+  var newP = document.getElementById('newPin').value.trim();
+  var hOld = await sha256(oldP);
+  if (hOld !== localStorage.getItem(LS_PIN)) { alert('PIN lama salah.'); return; }
+  if (!/^[0-9]{6}$/.test(newP)) { alert('PIN baru harus 6 angka.'); return; }
+  localStorage.setItem(LS_PIN, await sha256(newP));
+  document.getElementById('oldPin').value = ''; document.getElementById('newPin').value = '';
+  showToast('PIN diganti');
+}
+function lockApp(){
+  document.getElementById('appMain').classList.add('hidden');
+  document.getElementById('lockScreen').classList.remove('hidden');
+  if(isDeviceMismatch()) showLockCard('deviceLockCard');
+  else showLockCard('pinLockCard');
+  document.getElementById('pinInput').value = '';
+}
+function showApp(){
+  document.getElementById('lockScreen').classList.add('hidden');
+  document.getElementById('appMain').classList.remove('hidden');
+  document.getElementById('deviceInfo').textContent = 'ID perangkat saat ini (' + currentDeviceSource + '): ' + currentDeviceId + '. ID terikat: ' + (boundDeviceId() || '(belum terikat)') + '. Bila sumber = android dan ID saat ini berbeda dengan ID terikat, app terkunci dan hanya bisa dibuka lewat Restore Backup + PIN lama.';
+  renderCustomers();
+}
+document.getElementById('pkgs').addEventListener('click', function(e){
+  var b = e.target.closest('.pkg');
+  if (!b) return;
+  sel = b.getAttribute('data-pkg');
+  var btns = document.querySelectorAll('.pkg');
+  for (var i = 0; i < btns.length; i++) btns[i].classList.toggle('sel', btns[i] === b);
+  generate();
+});
+document.getElementById('genBtn').addEventListener('click', generate);
+document.getElementById('saveCustBtn').addEventListener('click', saveCurrentCustomer);
+document.getElementById('markSyncedBtn').addEventListener('click', function(){
+  if (!cur) return;
+  var c = findCust(cur.code);
+  if (!c) { alert('Simpan Client dulu, baru tandai sudah ditempel.'); return; }
+  c.consoleSynced = true; saveCustomers(); renderCustomers(); showToast('Ditandai sudah ditempel');
+});
+document.getElementById('copyAllBtn').addEventListener('click', function(){
+  if (!cur) generate();
+  var buyer = document.getElementById('buyer').value.trim();
+  var lines = [];
+  if (buyer) lines.push('Client: ' + buyer + ' (catatan saja, bukan field Firestore)');
+  lines.push('Document ID: ' + cur.code);
+  lines.push('type (string): ' + cur.type);
+  if (cur.exp) lines.push('expiresAt (string): ' + cur.exp);
+  lines.push('status (string): active');
+  lines.push('maxDevices (number): ' + (cur.maxDevices || devMaxForType(cur.type, null)));
+  lines.push('Dibuat: ' + cur.made);
+  copyStr(lines.join('\n'));
+});
+(async function init(){
+  loadCustomers();
+  showLockCard('deviceCheckCard');
+  await resolveDevice();
+  var pinHash = localStorage.getItem(LS_PIN);
+  document.getElementById('lockScreen').classList.remove('hidden');
+  if (isDeviceMismatch()) {
+    showLockCard('deviceLockCard');
+  } else if (!pinHash) {
+    showLockCard('pinSetupCard');
+  } else {
+    showLockCard('pinLockCard');
+  }
+  generate();
+})();
+</script>
+<script>
+
+// ===== v1.1 patch: menimpa fungsi v1.0 yang perlu diubah =====
+var LS_DRAFT = 'ml_admin_draft_v1';
+var LS_LASTBACKUP = 'ml_admin_lastbackup_v1';
+var currentTab = 'client';
+var tabHistory = ['client'];
+var detailStack = [];
+var extendCode = null;
+var extMode = 'extend';
+var extPending = null;
+var TAB_GROUPS = {
+  client: ['reminderCard','devFbCard','listCard'],
+  generator: ['genPkgCard','resultCard','oldCustCard'],
+  setting: ['settingMenu']
+};
+function nowTime(){
+  var d = new Date();
+  return fmt(d) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+}
+function ensureLogs(c){
+  if (!c) return false;
+  if (Array.isArray(c.logs)) return false;
+  c.logs = [];
+  c.logs.push({no:1, time: nowTime(), action:'Migrasi dari v1.0', old:'', new:(c.exp || 'Lifetime'), note:'Dibuat '+(c.created||'-')+', Paket '+(c.type||'')+', Hangus '+(c.exp||'Lifetime')+', Console: '+(c.consoleSynced?'Sudah ditempel':'Belum ditempel')});
+  return true;
+}
+function addLog(c, action, oldVal, newVal, note){
+  ensureLogs(c);
+  c.logs.push({no: c.logs.length+1, time: nowTime(), action: action, old: oldVal||'', new: newVal||'', note: note||''});
+}
+function loadCustomers(){
+  try { customers = JSON.parse(localStorage.getItem(LS_CUST) || '[]'); } catch (e) { customers = []; }
+  if (!Array.isArray(customers)) customers = [];
+  var changed = false;
+  customers.forEach(function(c){ if (ensureLogs(c)) changed = true; });
+  if (changed) saveCustomers();
+}
+function isDeviceMismatch(){
+  var b = boundDeviceId();
+  if (!b) return false;
+  if (b.indexOf('android:') === 0) {
+    return currentDeviceSource !== 'android' || currentDeviceId !== b;
+  }
+  return currentDeviceId !== b;
+}
+function renderLogHTML(c){
+  ensureLogs(c);
+  var html = '<div class="logcard"><b>Log (' + c.logs.length + ' baris)</b><div class="logscroll">';
+  var rev = c.logs.slice().reverse();
+  rev.forEach(function(l){
+    var line = esc(String(l.no)) + '  ' + esc(l.time) + '    ' + esc(l.action);
+    if (l.old || l.new) {
+      if (l.old && l.new) line += ' <span class="log-old">' + esc(l.old) + '</span>-&gt;<span class="log-new">' + esc(l.new) + '</span>';
+      else if (l.new) line += ' <span class="log-new">' + esc(l.new) + '</span>';
+      else line += ' <span class="log-old">' + esc(l.old) + '</span>';
+    }
+    if (l.note) line += ' ' + esc(l.note);
+    html += '<div class="logline">' + line + '</div>';
+  });
+  html += '</div></div>';
+  return html;
+}
+function toggleLog(code, btn){
+  var el = document.getElementById('logwrap-' + code.replace(/[^A-Za-z0-9]/g,''));
+  if (!el) return;
+  el.classList.toggle('hidden');
+  if (btn) btn.textContent = el.classList.contains('hidden') ? 'Lihat Log' : 'Sembunyikan Log';
+}
+function renderReminder(){
+  var card = document.getElementById('reminderCard');
+  var body = document.getElementById('reminderBody');
+  if (!card || !body) return;
+  var expiring = [], expired = [], unsynced = [];
+  customers.forEach(function(c){
+    if (!c.consoleSynced || c.pendingSync) unsynced.push(c);
+    if (c.status === 'revoked' || !c.exp) return;
+    var d = daysLeft(c.exp);
+    if (d < 0) expired.push(c);
+    else if (d <= 7) expiring.push(c);
+  });
+  if (!expiring.length && !expired.length && !unsynced.length) { card.classList.add('hidden'); return; }
+  card.classList.remove('hidden');
+  var html = '';
+  function waLink(c, expText){
+    if (!c.phone) return '';
+    var digits = String(c.phone).replace(/[^0-9]/g,'');
+    if (digits.charAt(0) === '0') digits = '62' + digits.slice(1);
+    var msg = 'Halo, lisensi My Lapak Anda ' + expText + ', mau perpanjang? Kode: ' + c.code;
+    return ' <a href="https://wa.me/' + digits + '?text=' + encodeURIComponent(msg) + '" target="_blank">WA</a>';
+  }
+  if (unsynced.length) {
+    html += '<b>Belum ditempel ke console (' + unsynced.length + '):</b><br>';
+    unsynced.forEach(function(c){ html += '- ' + esc(c.name || '(tanpa nama)') + ' (' + esc(c.code) + ')' + (c.pendingSync ? ' — ' + esc(c.pendingAction || 'perubahan') + ' belum ditempel' : ' — belum ditempel') + '<br>'; });
+  }
+  if (expiring.length) {
+    html += '<b>Mau habis dalam 7 hari (' + expiring.length + '):</b><br>';
+    expiring.sort(function(a,b){ return daysLeft(a.exp) - daysLeft(b.exp); });
+    expiring.forEach(function(c){ html += '- ' + esc(c.name || '(tanpa nama)') + ' (' + esc(c.code) + ') - ' + daysLeft(c.exp) + ' hari lagi, hangus ' + esc(c.exp) + waLink(c, 'hangus tanggal ' + c.exp) + '<br>'; });
+  }
+  if (expired.length) {
+    html += '<b>Sudah habis (' + expired.length + '):</b><br>';
+    expired.forEach(function(c){ html += '- ' + esc(c.name || '(tanpa nama)') + ' (' + esc(c.code) + ') - hangus ' + esc(c.exp) + waLink(c, 'sudah habis tanggal ' + c.exp) + '<br>'; });
+  }
+  html += 'Hubungi Client sebelum tanggal hangus untuk perpanjangan.';
+  body.innerHTML = html;
+}
+function renderCustomers(){
+  renderReminder();
+  var qEl = document.getElementById('searchBox');
+  var q = qEl ? (qEl.value || '').toLowerCase() : '';
+  var fEl = document.getElementById('filterBox');
+  var f = fEl ? fEl.value : 'all';
+  var sEl = document.getElementById('sortBox');
+  var s = sEl ? sEl.value : 'exp';
+  var list = document.getElementById('custList');
+  if (!list) return;
+  var shown = customers.filter(function(c){
+    var hay = ((c.name || '') + ' ' + c.code + ' ' + (c.phone || '') + ' ' + (c.note || '')).toLowerCase();
+    if (q && hay.indexOf(q) === -1) return false;
+    if (f === 'active') { var st = dispStatus(c); return st.label.indexOf('Aktif') === 0; }
+    if (f === 'expiring') { return c.exp && c.status !== 'revoked' && daysLeft(c.exp) >= 0 && daysLeft(c.exp) <= 7; }
+    if (f === 'expired') { return c.exp && c.status !== 'revoked' && daysLeft(c.exp) < 0; }
+    if (f === 'lifetime') return !c.exp && c.status !== 'revoked';
+    if (f === 'revoked') return c.status === 'revoked';
+    if (f === 'unsynced') return !c.consoleSynced || !!c.pendingSync;
+    return true;
+  });
+  shown.sort(function(a,b){
+    if (s === 'name') return String(a.name||'').localeCompare(String(b.name||''));
+    if (s === 'created') return String(b.created||'').localeCompare(String(a.created||''));
+    if (!a.exp && !b.exp) return 0;
+    if (!a.exp) return 1;
+    if (!b.exp) return -1;
+    return daysLeft(a.exp) - daysLeft(b.exp);
+  });
+  var cc = document.getElementById('custCount');
+  if (cc) cc.textContent = 'Menampilkan ' + shown.length + ' dari ' + customers.length + ' Client.';
+  if (!shown.length) { list.innerHTML = '<p class="note">Belum ada Client yang cocok. Generate kode baru lalu Simpan Client, atau tambah Client lama.</p>'; return; }
+  var html = '';
+  shown.forEach(function(c){
+    ensureLogs(c);
+    var st = dispStatus(c);
+    var safe = c.code.replace(/[^A-Za-z0-9]/g,'');
+    html += '<div class="client-outer"><div class="cust"><div class="row"><b class="grow">' + esc(c.name || '(tanpa nama)') + '</b><span class="badge ' + st.cls + '">' + esc(st.label) + '</span></div>';
+    html += '<div class="meta">Paket: ' + esc(PKGS[c.type] ? PKGS[c.type].label : c.type) + ' | Kode lisensi: ' + esc(c.code) + '<br>';
+    html += 'Dibuat: ' + esc(c.created || '-') + ' | Hangus: ' + esc(c.exp || 'tanpa tanggal (Lifetime)') + '<br>';
+    if (c.phone) html += 'WA: ' + esc(c.phone) + '<br>';
+    if (c.note) html += 'Catatan: ' + esc(c.note) + '<br>';
+    html += 'Console: ' + (c.consoleSynced ? 'Sudah ditempel' : 'Belum ditempel');
+    if (c.pendingSync) html += ' • <b>Belum ditempel: ' + esc(c.pendingAction || 'perubahan') + '</b>';
+    html += '<br>';
+    var _mx2 = devMaxForType(c.type, c.maxDevices);
+    html += 'Maks perangkat: ' + _mx2 + ' HP';
+    var _sum2 = devDeviceSummary[c.code];
+    if (_sum2) { html += ' | Perangkat: ' + _sum2.active + ' / ' + _sum2.max + ' HP aktif' + (_sum2.active >= _sum2.max ? ' — penuh' : ''); } else { html += ' | Perangkat: —'; }
+    html += '</div>';
+    html += '<div class="row" style="margin-top:10px">';
+    html += '<button class="btn btn-outline btn-sm" onclick="copyStr(\'' + c.code + '\')">Salin kode</button>';
+    html += '<button class="btn btn-outline btn-sm" onclick="loadConsole(\'' + c.code + '\')">Tempel console</button>';
+    html += '<button class="btn btn-outline btn-sm" onclick="devOpenPanel(\'' + c.code + '\')">Lihat perangkat</button>';
+    html += '<button class="btn btn-outline btn-sm" onclick="toggleSync(\'' + c.code + '\')">' + (c.consoleSynced ? 'Batalkan tanda tempel' : 'Tandai sudah ditempel') + '</button>';
+    if (c.status !== 'revoked') {
+      html += '<button class="btn btn-green btn-sm" onclick="openExtend(\'' + c.code + '\')">Perpanjang</button>';
+      html += '<button class="btn btn-red btn-sm" onclick="revokeLocal(\'' + c.code + '\')">Cabut (lokal)</button>';
+    }
+    html += '<button class="btn btn-outline btn-sm" onclick="toggleLog(\'' + c.code + '\', this)">Lihat Log</button>';
+    html += '<button class="btn btn-outline btn-sm" onclick="deleteCust(\'' + c.code + '\')">Hapus</button>';
+    html += '</div></div>';
+    html += '<div id="logwrap-' + safe + '" class="hidden">' + renderLogHTML(c) + '</div></div>';
+  });
+  list.innerHTML = html;
+}
+function generate(){
+  var p = PKGS[sel];
+  var today = new Date();
+  var exp = null;
+  if (p.days) { exp = new Date(today); exp.setDate(exp.getDate() + p.days); }
+  if (p.months) { exp = addMonths(today, p.months); }
+  cur = { code: randCode(), type: p.type, exp: exp ? fmt(exp) : null, made: fmt(today), maxDevices: p.maxDevices };
+  try { localStorage.setItem(LS_DRAFT, JSON.stringify(cur)); } catch(e) {}
+  document.getElementById('docId').textContent = cur.code;
+  document.getElementById('vType').textContent = cur.type;
+  document.getElementById('vStatus').textContent = 'active';
+  document.getElementById('vMaxDevices').textContent = String((typeof p !== 'undefined' && p && p.maxDevices) || devMaxForType(cur.type, cur.maxDevices));
+  var rowExp = document.getElementById('rowExp');
+  var expNote = document.getElementById('expNote');
+  if (cur.exp) {
+    rowExp.classList.remove('hidden');
+    document.getElementById('vExp').textContent = cur.exp;
+    expNote.textContent = 'Lisensi valid sampai tanggal itu (masih jalan di tanggal ' + cur.exp + ', hangus besoknya).';
+    document.getElementById('preview').textContent = 'Di HP Client muncul: ' + p.preview + cur.exp;
+  } else {
+    rowExp.classList.add('hidden');
+    expNote.textContent = 'Lifetime: field expiresAt TIDAK dibuat. Kalau keisi, lisensi bakal hangus di tanggal itu.';
+    document.getElementById('preview').textContent = 'Di HP Client muncul: Lifetime';
+  }
+  document.getElementById('madeNote').textContent = 'Dibuat: ' + cur.made + ' • Paket: ' + p.label;
+  document.getElementById('syncNote').textContent = 'Belum disimpan sebagai Client. Klik Simpan Client di bawah.';
+}
+function saveCurrentCustomer(){
+  if (!cur) { generate(); }
+  var name = document.getElementById('buyer').value.trim();
+  var phone = document.getElementById('buyerPhone').value.trim();
+  var note = document.getElementById('buyerNote').value.trim();
+  if (findCust(cur.code)) { showToast('Kode ini sudah ada di daftar'); return; }
+  var nc = { code: cur.code, type: cur.type, exp: cur.exp, created: cur.made, name: name, phone: phone, note: note, status: 'active', consoleSynced: false, pendingSync: false, pendingAction: '', logs: [], maxDevices: cur.maxDevices || devMaxForType(cur.type, null) };
+  nc.logs.push({no:1, time: nowTime(), action:'Dibuat', old:'', new:(cur.exp || 'Lifetime'), note:'Paket ' + cur.type});
+  customers.push(nc);
+  try { localStorage.removeItem(LS_DRAFT); } catch(e) {}
+  saveCustomers(); renderCustomers(); showToast('Client disimpan');
+}
+function addOldCustomer(){
+  var code = document.getElementById('oldCode').value.trim().toUpperCase();
+  var name = document.getElementById('oldName').value.trim();
+  var phone = document.getElementById('oldPhone').value.trim();
+  var type = document.getElementById('oldPkg').value;
+  var exp = document.getElementById('oldExp').value || null;
+  if (!code) { alert('Isi kode dulu.'); return; }
+  if (!/^ML-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(code)) { alert('Format kode salah. Harus ML-XXXX-XXXX-XXXX, 12 karakter dari A-Z dan 2-9 tanpa 0/O/1/I.'); return; }
+  if (type !== 'lifetime' && !exp) { alert('Isi tanggal hangus untuk Trial/Langganan.'); return; }
+  if (type === 'lifetime') exp = null;
+  if (findCust(code)) { alert('Kode ini sudah ada di daftar.'); return; }
+  var nc = { code: code, type: type, exp: exp, created: todayStr(), name: name, phone: phone, note: '', status: 'active', consoleSynced: true, pendingSync: false, pendingAction: '', logs: [], maxDevices: devMaxForType(type, null) };
+  nc.logs.push({no:1, time: nowTime(), action:'Ditambahkan Client lama', old:'', new:(exp || 'Lifetime'), note:'Console sudah ditempel (asumsi dari input)'});
+  customers.push(nc);
+  saveCustomers(); renderCustomers(); showToast('Client lama ditambahkan');
+  document.getElementById('oldCode').value = ''; document.getElementById('oldName').value = ''; document.getElementById('oldPhone').value = ''; document.getElementById('oldExp').value = '';
+}
+function toggleSync(code){
+  var c = findCust(code); if (!c) return;
+  if (c.pendingSync) {
+    var act = c.pendingAction || 'perubahan';
+    c.pendingSync = false; c.pendingAction = ''; c.consoleSynced = true;
+    addLog(c, 'Ditempel ke console', '', '', act + ' sudah ditempel');
+    saveCustomers(); renderCustomers(); showToast('Perubahan sudah ditempel');
+    return;
+  }
+  c.consoleSynced = !c.consoleSynced;
+  if (c.consoleSynced) addLog(c, 'Ditempel ke console', '', '', '');
+  saveCustomers(); renderCustomers(); showToast(c.consoleSynced ? 'Ditandai sudah ditempel' : 'Tanda ditempel dibatalkan');
+}
+function revokeLocal(code){
+  var c = findCust(code); if (!c) return;
+  if (!confirm('Tandai ' + code + ' sebagai dicabut di daftar lokal? Ingat: ubah juga status di console jadi revoked, kalau tidak HP Client tetap menganggap aktif.')) return;
+  c.status = 'revoked'; c.pendingSync = true; c.pendingAction = 'Cabut';
+  addLog(c, 'Dicabut', (c.exp || 'Lifetime'), '', '(lokal, belum ditempel)');
+  saveCustomers(); renderCustomers();
+  alert('Langkah console untuk cabut: buka dokumen ' + code + ' di collection licenses, ubah status jadi revoked, Save, lalu di card Client klik Tandai sudah ditempel.');
+}
+function deleteCust(code){
+  if (!confirm('Hapus Client ' + code + ' dari daftar lokal ini? Log Client ini ikut terhapus. Dokumen di Firestore tidak ikut terhapus.')) return;
+  customers = customers.filter(function(c){ return c.code !== code; });
+  saveCustomers(); renderCustomers();
+}
+function exportBackup(){
+  var pinHash = localStorage.getItem(LS_PIN) || '';
+  var data = { app: 'my-lapak-admin-lisensi', version: 3, exportedAt: new Date().toISOString(), pinCheck: pinHash, customers: customers };
+  var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'my-lapak-pelanggan-backup-' + todayStr() + '.json';
+  a.click(); URL.revokeObjectURL(a.href);
+  try { localStorage.setItem(LS_LASTBACKUP, new Date().toISOString()); } catch(e) {}
+  showToast('Backup diunduh');
+}
+function exportCSV(){
+  var rows = [['Nama','WA','Kode lisensi','Paket','Hangus','Status','Console']];
+  customers.forEach(function(c){
+    var st = dispStatus(c).label;
+    rows.push([c.name||'', c.phone||'', c.code, c.type, c.exp||'Lifetime', st, (c.consoleSynced?'Sudah ditempel':'Belum ditempel') + (c.pendingSync ? ' (Belum ditempel: '+(c.pendingAction||'')+')' : '')]);
+  });
+  var csv = rows.map(function(r){ return r.map(function(v){ return '"' + String(v).replace(/"/g,'""') + '"'; }).join(','); }).join('\n');
+  var blob = new Blob([csv], { type: 'text/csv' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'my-lapak-clients-' + todayStr() + '.csv';
+  a.click(); URL.revokeObjectURL(a.href);
+  showToast('CSV diunduh');
+}
+async function importBackupFile(file, pinForCheck, updateExisting){
+  var text = await file.text();
+  var data;
+  try { data = JSON.parse(text); } catch (e) { alert('File backup tidak valid (bukan JSON).'); return false; }
+  if (pinForCheck) {
+    var h = await sha256(pinForCheck);
+    if (data.pinCheck && data.pinCheck !== h) { alert('PIN lama salah untuk file backup ini.'); return false; }
+  }
+  var arr = data.customers || data;
+  if (!Array.isArray(arr)) { alert('File backup tidak berisi daftar Client.'); return false; }
+  var added = 0, skipped = 0, invalid = 0, updated = 0;
+  arr.forEach(function(c){
+    if (!c.code) { invalid++; return; }
+    if (!/^ML-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(String(c.code).toUpperCase())) { invalid++; return; }
+    ensureLogs(c);
+    var ex = findCust(c.code);
+    if (ex) {
+      if (updateExisting) { var idx = customers.indexOf(ex); customers[idx] = c; updated++; }
+      else skipped++;
+      return;
+    }
+    customers.push(c); added++;
+  });
+  saveCustomers(); renderCustomers();
+  alert('Restore selesai. Ditambahkan: ' + added + ', Di-update: ' + updated + ', Dilewati (sudah ada): ' + skipped + ', Dilewati (format salah): ' + invalid + '.');
+  showToast('Restore selesai, ' + added + ' Client baru');
+  return true;
+}
+function importBackup(){
+  var f = document.getElementById('importFile').files[0];
+  if (!f) { alert('Pilih file backup dulu.'); return; }
+  var pinEl = document.getElementById('restorePinApp');
+  var pin = pinEl ? pinEl.value.trim() : '';
+  if (!pin) { alert('Isi PIN backup dulu (PIN saat backup dibuat). Restore di dalam app tetap cek PIN.'); return; }
+  var updEl = document.getElementById('updateExistingCheck');
+  importBackupFile(f, pin, updEl && updEl.checked);
+}
+async function changePin(){
+  var oldP = document.getElementById('oldPin').value.trim();
+  var newP = document.getElementById('newPin').value.trim();
+  var hOld = await sha256(oldP);
+  if (hOld !== localStorage.getItem(LS_PIN)) { alert('PIN lama salah.'); return; }
+  if (!/^[0-9]{6}$/.test(newP)) { alert('PIN baru harus 6 angka.'); return; }
+  localStorage.setItem(LS_PIN, await sha256(newP));
+  document.getElementById('oldPin').value = ''; document.getElementById('newPin').value = '';
+  showToast('PIN diganti');
+  alert('PIN diganti. Export backup baru sekarang, karena backup lama akan mengembalikan PIN lama saat restore.');
+}
+function runScan(){
+  var el = document.getElementById('scanResult'); if (!el) return;
+  var pinOk = !!localStorage.getItem(LS_PIN);
+  var bound = boundDeviceId();
+  var expiring = customers.filter(function(c){ return c.exp && c.status !== 'revoked' && daysLeft(c.exp) >= 0 && daysLeft(c.exp) <= 7; }).length;
+  var expired = customers.filter(function(c){ return c.exp && c.status !== 'revoked' && daysLeft(c.exp) < 0; }).length;
+  var unsynced = customers.filter(function(c){ return !c.consoleSynced || !!c.pendingSync; }).length;
+  var lastB = localStorage.getItem(LS_LASTBACKUP);
+  var totalLogs = 0; customers.forEach(function(c){ ensureLogs(c); totalLogs += c.logs.length; });
+  var html = '';
+  html += (pinOk ? '✅' : '❌') + ' PIN aktif: ' + (pinOk ? 'Ya' : 'Tidak, atur PIN dulu') + '<br>';
+  html += (bound ? '✅' : '⚠️') + ' Perangkat terikat: ' + (bound ? bound + ' (' + (localStorage.getItem(LS_DEV_SOURCE) || '') + ')' : 'Belum terikat') + '<br>';
+  html += '✅ Jumlah Client: ' + customers.length + ' • Total baris Log: ' + totalLogs + '<br>';
+  html += '⚠️ Mau habis (7 hari): ' + expiring + ' • Habis: ' + expired + ' • Belum ditempel: ' + unsynced + '<br>';
+  html += 'ℹ️ Backup terakhir: ' + (lastB ? new Date(lastB).toLocaleString('id-ID') : 'Belum pernah (export backup sekarang)') + '<br>';
+  html += 'ℹ️ Versi app: 1.2.0 • Data lokal saja.<br>';
+  html += '<b>Catatan jujur:</b> Cek ini tidak memverifikasi Firestore. Tanda Sudah ditempel hanya tanda manual yang lo klik.';
+  el.innerHTML = html;
+}
+function showDeleteAllConfirm(){
+  var el = document.getElementById('deleteAllConfirm'); if (el) el.classList.toggle('hidden');
+}
+async function confirmDeleteAll(){
+  var chk = document.getElementById('deleteBackupCheck');
+  var pinEl = document.getElementById('deletePin');
+  if (!chk || !chk.checked) { alert('Centang dulu: Saya sudah export backup.'); return; }
+  var pin = pinEl ? pinEl.value.trim() : '';
+  var h = await sha256(pin);
+  if (h !== localStorage.getItem(LS_PIN)) { alert('PIN salah. Hapus Semua Data dibatalkan.'); return; }
+  if (!confirm('Yakin hapus SEMUA data lokal? Client, Log, PIN, dan ikatan perangkat akan hilang. Firestore tidak ikut terhapus.')) return;
+  [LS_CUST, LS_PIN, LS_DEV_BOUND, LS_DEV_SOURCE, LS_DRAFT, LS_LASTBACKUP].forEach(function(k){ try{ localStorage.removeItem(k); }catch(e){} });
+  alert('Semua data lokal dihapus. App akan kembali ke layar Atur PIN.');
+  location.reload();
+}
+function openExtend(code){
+  var c = findCust(code); if (!c) return;
+  extendCode = code; extMode = 'extend'; extPending = null;
+  document.getElementById('extTitleName').textContent = (c.name || code) + ' (' + (PKGS[c.type] ? PKGS[c.type].label : c.type) + ')';
+  document.getElementById('extCode').value = c.code;
+  document.getElementById('extOldExp').value = c.exp || 'Lifetime (tanpa tanggal)';
+  document.getElementById('extNewExp').value = c.exp || '';
+  document.getElementById('extNote').value = '';
+  document.getElementById('extConsoleCard').classList.add('hidden');
+  if (!c.exp) {
+    alert('Client ini sudah Lifetime, tidak perlu perpanjang.');
+  }
+  openDetail('viewExtend');
+}
+function calcExtend(kind, val){
+  var c = findCust(extendCode); if (!c) return;
+  if (kind === 'unlimited') {
+    extMode = 'unlimited';
+    document.getElementById('extNewExp').value = '';
+    document.getElementById('extConsoleTitle').textContent = 'Upgrade ke Lifetime';
+    document.getElementById('extConsoleNote').textContent = 'Ubah dokumen yang sama di console: type jadi lifetime, HAPUS field expiresAt, status tetap active.';
+    document.getElementById('extConsoleFields').innerHTML = 'type (string): lifetime<br>expiresAt: HAPUS field ini<br>status (string): active';
+    document.getElementById('extConsoleCard').classList.remove('hidden');
+    return;
+  }
+  extMode = 'extend';
+  var baseStr = c.exp;
+  if (!baseStr || baseStr < todayStr()) baseStr = todayStr();
+  var base = parseDate(baseStr);
+  var nd = null;
+  if (kind === 'days') { nd = new Date(base); nd.setDate(nd.getDate() + val); }
+  if (kind === 'months') { nd = addMonths(base, val); }
+  var ns = fmt(nd);
+  document.getElementById('extNewExp').value = ns;
+  document.getElementById('extConsoleTitle').textContent = 'Perpanjang';
+  document.getElementById('extConsoleNote').textContent = 'Ubah 1 field di dokumen yang sama di console: expiresAt jadi tanggal baru di bawah, type dan status tidak berubah.';
+  document.getElementById('extConsoleFields').innerHTML = 'type (string): ' + esc(c.type) + '<br>expiresAt (string): ' + esc(ns) + '<br>status (string): active';
+  document.getElementById('extConsoleCard').classList.remove('hidden');
+}
+function copyExtendAll(){
+  var c = findCust(extendCode); if (!c) return;
+  var lines = [];
+  lines.push('Document ID: ' + c.code);
+  if (extMode === 'unlimited') {
+    lines.push('type (string): lifetime');
+    lines.push('expiresAt: HAPUS field ini');
+    lines.push('status (string): active');
+  } else {
+    lines.push('type (string): ' + c.type);
+    lines.push('expiresAt (string): ' + (document.getElementById('extNewExp').value || ''));
+    lines.push('status (string): active');
+  }
+  copyStr(lines.join('\n'));
+}
+function saveExtend(){
+  var c = findCust(extendCode); if (!c) return;
+  var note = document.getElementById('extNote').value.trim();
+  var oldExp = c.exp;
+  if (extMode === 'unlimited') {
+    c.type = 'lifetime'; c.exp = null; c.pendingSync = true; c.pendingAction = 'Upgrade ke Lifetime';
+    addLog(c, 'Upgrade ke Lifetime', (oldExp || 'Lifetime'), 'Lifetime', (note ? note + ' ' : '') + '(lokal, belum ditempel)');
+  } else {
+    var ns = document.getElementById('extNewExp').value;
+    if (!ns) { alert('Isi tanggal hangus baru dulu, atau klik +7 hari / +3 bulan / Unlimited.'); return; }
+    c.exp = ns; c.pendingSync = true; c.pendingAction = 'Diperpanjang';
+    addLog(c, 'Diperpanjang', (oldExp || 'Lifetime'), ns, (note ? note + ' ' : '') + '(lokal, belum ditempel)');
+    document.getElementById('extConsoleTitle').textContent = 'Perpanjang';
+    document.getElementById('extConsoleNote').textContent = 'Ubah 1 field di dokumen yang sama di console: expiresAt jadi ' + ns + '.';
+    document.getElementById('extConsoleFields').innerHTML = 'type (string): ' + esc(c.type) + '<br>expiresAt (string): ' + esc(ns) + '<br>status (string): active';
+    document.getElementById('extConsoleCard').classList.remove('hidden');
+  }
+  saveCustomers(); renderCustomers(); showToast('Perpanjangan disimpan (lokal)');
+}
+function markExtendSynced(){
+  var c = findCust(extendCode); if (!c) return;
+  var act = c.pendingAction || 'Perubahan';
+  c.pendingSync = false; c.pendingAction = ''; c.consoleSynced = true;
+  addLog(c, 'Ditempel ke console', '', '', act + ' sudah ditempel');
+  saveCustomers(); renderCustomers(); showToast('Perubahan sudah ditempel');
+  goBack();
+}
+function updateBackBtn(){
+  var b = document.getElementById('pageBackBtn'); if (!b) return;
+  if (detailStack.length > 0 || tabHistory.length > 1) b.classList.remove('hidden');
+  else b.classList.add('hidden');
+}
+function showTab(tab){
+  currentTab = tab;
+  if (tabHistory[tabHistory.length-1] !== tab) tabHistory.push(tab);
+  detailStack = [];
+  var all = [];
+  Object.keys(TAB_GROUPS).forEach(function(k){ TAB_GROUPS[k].forEach(function(id){ all.push(id); }); });
+  all.forEach(function(id){ var el = document.getElementById(id); if (el) el.classList.add('hidden'); });
+  TAB_GROUPS[tab].forEach(function(id){ var el = document.getElementById(id); if (el) el.classList.remove('hidden'); });
+  ['viewExtend','viewGuide'].forEach(function(id){ var el = document.getElementById(id); if (el) el.classList.add('hidden'); });
+  var navBtns = document.querySelectorAll('#bottomNav button');
+  navBtns.forEach(function(btn){ btn.classList.toggle('active', btn.getAttribute('data-tab') === tab); });
+  if (tab === 'client') renderCustomers();
+  else { var rc = document.getElementById('reminderCard'); if (rc) rc.classList.add('hidden'); }
+  updateBackBtn();
+  window.scrollTo(0,0);
+}
+function openDetail(viewId){
+  detailStack.push(currentTab);
+  var all = [];
+  Object.keys(TAB_GROUPS).forEach(function(k){ TAB_GROUPS[k].forEach(function(id){ all.push(id); }); });
+  all.forEach(function(id){ var el = document.getElementById(id); if (el) el.classList.add('hidden'); });
+  ['viewExtend','viewGuide'].forEach(function(id){ var el = document.getElementById(id); if (el) el.classList.add('hidden'); });
+  var el = document.getElementById(viewId); if (el) el.classList.remove('hidden');
+  updateBackBtn();
+  window.scrollTo(0,0);
+}
+function openGuide(){ openDetail('viewGuide'); }
+function goBack(){
+  if (detailStack.length > 0) {
+    var prev = detailStack.pop();
+    if (prev === 'viewExtend' || prev === 'viewGuide') { showTab('client'); return true; }
+    showTab(prev);
+    // showTab clears detailStack, restore back visibility correctly
+    updateBackBtn();
+    return true;
+  }
+  if (tabHistory.length > 1) {
+    tabHistory.pop();
+    var prevTab = tabHistory[tabHistory.length-1];
+    currentTab = prevTab;
+    var all = [];
+    Object.keys(TAB_GROUPS).forEach(function(k){ TAB_GROUPS[k].forEach(function(id){ all.push(id); }); });
+    all.forEach(function(id){ var el = document.getElementById(id); if (el) el.classList.add('hidden'); });
+    TAB_GROUPS[prevTab].forEach(function(id){ var el = document.getElementById(id); if (el) el.classList.remove('hidden'); });
+    var navBtns = document.querySelectorAll('#bottomNav button');
+    navBtns.forEach(function(btn){ btn.classList.toggle('active', btn.getAttribute('data-tab') === prevTab); });
+    if (prevTab === 'client') renderCustomers();
+    updateBackBtn();
+    return true;
+  }
+  return false;
+}
+function lockApp(){
+  document.getElementById('appMain').classList.add('hidden');
+  var nav = document.getElementById('bottomNav'); if (nav) nav.classList.add('hidden');
+  var hb = document.getElementById('pageHelpBtn'); if (hb) hb.classList.add('hidden');
+  var bb = document.getElementById('pageBackBtn'); if (bb) bb.classList.add('hidden');
+  document.getElementById('lockScreen').classList.remove('hidden');
+  if(isDeviceMismatch()) showLockCard('deviceLockCard');
+  else showLockCard('pinLockCard');
+  document.getElementById('pinInput').value = '';
+  detailStack = []; tabHistory = ['client']; currentTab = 'client';
+}
+function showApp(){
+  document.getElementById('lockScreen').classList.add('hidden');
+  document.getElementById('appMain').classList.remove('hidden');
+  var nav = document.getElementById('bottomNav'); if (nav) nav.classList.remove('hidden');
+  var hb = document.getElementById('pageHelpBtn'); if (hb) hb.classList.remove('hidden');
+  document.getElementById('deviceInfo').textContent = 'ID perangkat saat ini (' + currentDeviceSource + '): ' + currentDeviceId + '. ID terikat: ' + (boundDeviceId() || '(belum terikat)') + '. Bila sumber = android dan ID saat ini berbeda dengan ID terikat, app terkunci dan hanya bisa dibuka lewat Restore Backup + PIN lama.';
+  try {
+    var draft = localStorage.getItem(LS_DRAFT);
+    if (draft && !findCust(JSON.parse(draft).code)) {
+      var d = JSON.parse(draft);
+      cur = d;
+      document.getElementById('docId').textContent = cur.code;
+      document.getElementById('vType').textContent = cur.type;
+      document.getElementById('vStatus').textContent = 'active';
+  document.getElementById('vMaxDevices').textContent = String((typeof p !== 'undefined' && p && p.maxDevices) || devMaxForType(cur.type, cur.maxDevices));
+      if (cur.exp) { document.getElementById('rowExp').classList.remove('hidden'); document.getElementById('vExp').textContent = cur.exp; }
+      else document.getElementById('rowExp').classList.add('hidden');
+      document.getElementById('madeNote').textContent = 'Dibuat: ' + cur.made + ' • Draft belum disimpan — klik Simpan Client.';
+      document.getElementById('syncNote').textContent = 'Draft Generate dari sesi sebelumnya, belum disimpan sebagai Client.';
+    }
+  } catch(e) {}
+  tabHistory = ['client']; detailStack = []; currentTab = 'client';
+  showTab('client');
+}
+// Android Back = in-app Back, fungsi yang sama
+try {
+  var AppPlug = (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) || null;
+  if (AppPlug && AppPlug.addListener) {
+    AppPlug.addListener('backButton', function(){
+      var handled = false;
+      try { handled = goBack(); } catch(e) { handled = false; }
+      if (!handled) { try { AppPlug.exitApp(); } catch(e2) {} }
+    });
+  }
+} catch(e) {}
+// Manual date change in extend = mode extend (bukan unlimited)
+try {
+  var extDateEl = document.getElementById('extNewExp');
+  if (extDateEl) extDateEl.addEventListener('change', function(){
+    if (extMode === 'unlimited') return;
+    extMode = 'extend';
+    var c = findCust(extendCode);
+    if (!c) return;
+    var ns = extDateEl.value;
+    if (!ns) return;
+    document.getElementById('extConsoleTitle').textContent = 'Perpanjang';
+    document.getElementById('extConsoleNote').textContent = 'Ubah 1 field di dokumen yang sama di console: expiresAt jadi ' + ns + '.';
+    document.getElementById('extConsoleFields').innerHTML = 'type (string): ' + esc(c.type) + '<br>expiresAt (string): ' + esc(ns) + '<br>status (string): active';
+    document.getElementById('extConsoleCard').classList.remove('hidden');
+  });
+} catch(e) {}
+
+</script>
+<script>
+
+// ===== v1.2 patch: tema, pageBar sliver, Setting jadi menu =====
+var LS_THEME = 'ml_admin_theme_v1';
+var SETTING_CARDS = ['backupCard','settingCard','scanCard','deleteAllCard','aboutCard','themeCard'];
+var SETTING_TITLES = { backupCard:'Backup & Restore', settingCard:'Pengaturan & Kunci', scanCard:'Cek / Scan APK', deleteAllCard:'Hapus Semua Data', aboutCard:'Tentang APK', themeCard:'Tema Aplikasi' };
+function getTheme(){ try { return localStorage.getItem(LS_THEME) || 'default'; } catch(e) { return 'default'; } }
+function setTheme(t){
+  try { localStorage.setItem(LS_THEME, t); } catch(e) {}
+  if (t === 'gelap') document.documentElement.setAttribute('data-theme','gelap');
+  else document.documentElement.removeAttribute('data-theme');
+  var db = document.getElementById('themeDefaultBtn'); if (db) db.classList.toggle('on', t !== 'gelap');
+  var gb = document.getElementById('themeDarkBtn'); if (gb) gb.classList.toggle('on', t === 'gelap');
+  var logo = document.getElementById('appLogo'); if (logo) logo.src = (t === 'gelap') ? 'icon-dark.png' : 'icon.png';
+}
+function setPageTitle(txt){
+  var el = document.getElementById('pageBarTitle'); if (el) el.textContent = txt;
+}
+function hideAllCards(){
+  var all = [];
+  Object.keys(TAB_GROUPS).forEach(function(k){ TAB_GROUPS[k].forEach(function(id){ all.push(id); }); });
+  SETTING_CARDS.forEach(function(id){ all.push(id); });
+  all.push('settingMenu');
+  all.forEach(function(id){ var el = document.getElementById(id); if (el) el.classList.add('hidden'); });
+  ['viewExtend','viewGuide'].forEach(function(id){ var el = document.getElementById(id); if (el) el.classList.add('hidden'); });
+}
+function showTab(tab){
+  currentTab = tab;
+  if (tabHistory[tabHistory.length-1] !== tab) tabHistory.push(tab);
+  detailStack = [];
+  hideAllCards();
+  if (tab === 'setting') {
+    var sm = document.getElementById('settingMenu'); if (sm) sm.classList.remove('hidden');
+    setPageTitle('Setting');
+  } else {
+    TAB_GROUPS[tab].forEach(function(id){ var el = document.getElementById(id); if (el) el.classList.remove('hidden'); });
+    setPageTitle(tab === 'client' ? 'Client' : 'Generator');
+  }
+  var navBtns = document.querySelectorAll('#bottomNav button');
+  navBtns.forEach(function(btn){ btn.classList.toggle('active', btn.getAttribute('data-tab') === tab); });
+  if (tab === 'client') renderCustomers();
+  else { var rc = document.getElementById('reminderCard'); if (rc) rc.classList.add('hidden'); }
+  updateBackBtn();
+  window.scrollTo(0,0);
+  var pb = document.getElementById('pageBar'); if (pb) pb.classList.remove('hide');
+}
+function openDetail(viewId){
+  detailStack.push(currentTab);
+  hideAllCards();
+  var el = document.getElementById(viewId); if (el) el.classList.remove('hidden');
+  setPageTitle(viewId === 'viewExtend' ? 'Perpanjang' : 'Panduan');
+  updateBackBtn();
+  window.scrollTo(0,0);
+  var pb = document.getElementById('pageBar'); if (pb) pb.classList.remove('hide');
+}
+function openSettingCard(cardId, title){
+  detailStack.push('settingMenu');
+  hideAllCards();
+  var el = document.getElementById(cardId); if (el) el.classList.remove('hidden');
+  setPageTitle(title || SETTING_TITLES[cardId] || 'Setting');
+  updateBackBtn();
+  window.scrollTo(0,0);
+  var pb = document.getElementById('pageBar'); if (pb) pb.classList.remove('hide');
+  if (cardId === 'themeCard') { var t = getTheme(); var db = document.getElementById('themeDefaultBtn'); if (db) db.classList.toggle('on', t !== 'gelap'); var gb = document.getElementById('themeDarkBtn'); if (gb) gb.classList.toggle('on', t === 'gelap'); }
+}
+function goBack(){
+  if (detailStack.length > 0) {
+    var prev = detailStack.pop();
+    if (prev === 'settingMenu') {
+      hideAllCards();
+      var sm = document.getElementById('settingMenu'); if (sm) sm.classList.remove('hidden');
+      setPageTitle('Setting');
+      updateBackBtn();
+      window.scrollTo(0,0);
+      return true;
+    }
+    if (prev === 'viewExtend' || prev === 'viewGuide') { showTab('client'); return true; }
+    showTab(prev);
+    updateBackBtn();
+    return true;
+  }
+  if (tabHistory.length > 1) {
+    tabHistory.pop();
+    var prevTab = tabHistory[tabHistory.length-1];
+    currentTab = prevTab;
+    hideAllCards();
+    if (prevTab === 'setting') {
+      var sm2 = document.getElementById('settingMenu'); if (sm2) sm2.classList.remove('hidden');
+      setPageTitle('Setting');
+    } else {
+      TAB_GROUPS[prevTab].forEach(function(id){ var el = document.getElementById(id); if (el) el.classList.remove('hidden'); });
+      setPageTitle(prevTab === 'client' ? 'Client' : 'Generator');
+    }
+    var navBtns = document.querySelectorAll('#bottomNav button');
+    navBtns.forEach(function(btn){ btn.classList.toggle('active', btn.getAttribute('data-tab') === prevTab); });
+    if (prevTab === 'client') renderCustomers();
+    updateBackBtn();
+    return true;
+  }
+  return false;
+}
+function updateBackBtn(){
+  var b = document.getElementById('pageBackBtn'); if (!b) return;
+  if (detailStack.length > 0 || tabHistory.length > 1) b.classList.remove('hidden');
+  else b.classList.add('hidden');
+}
+// Sliver auto-hide: pageBar (di page, bukan header) sembunyi saat scroll ke bawah, muncul saat scroll ke atas
+(function(){
+  var lastY = 0;
+  window.addEventListener('scroll', function(){
+    var pb = document.getElementById('pageBar');
+    if (!pb) return;
+    var y = window.scrollY || window.pageYOffset || 0;
+    if (y > 80 && y > lastY + 5) pb.classList.add('hide');
+    else if (y < lastY - 5 || y <= 80) pb.classList.remove('hide');
+    lastY = y;
+  }, { passive: true });
+})();
+// Terapkan tema tersimpan + logo sesuai tema
+setTheme(getTheme());
+
+</script>
+
+<script>
+// ===== v1.3.0 devices: daftar perangkat Firestore, sumber sama dengan MyLapak utama =====
+var DEV_FB = null;
+var DEV_FB_CFG_KEY = 'ml_admin_fbconfig_v1';
+var devDeviceSummary = {};
+var devPanelCode = null;
+function devMaxForType(t, explicit){
+  var e = parseInt(explicit, 10);
+  if (!isNaN(e) && e > 0) return e;
+  if (t === 'trial') return 1;
+  if (t === 'langganan') return 5;
+  if (t === 'lifetime' || t === 'putus') return 3;
+  return 1;
+}
+function devFbConfig(){
+  try { return JSON.parse(localStorage.getItem(DEV_FB_CFG_KEY) || 'null'); } catch(e) { return null; }
+}
+function devFbSetStatus(txt){
+  var el = document.getElementById('devFbStatus');
+  if (el) el.textContent = txt;
+}
+function devLoadFirebase(cfg){
+  return new Promise(function(res, rej){
+    if (window.firebase && firebase.apps && firebase.apps.length) return res();
+    var add = function(src, ok){
+      var s = document.createElement('script');
+      s.src = src; s.onload = ok; s.onerror = rej;
+      document.head.appendChild(s);
+    };
+    add('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js', function(){
+      add('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js', function(){
+        add('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js', res);
+      });
+    });
+  });
+}
+async function devFbLogin(){
+  var ta = document.getElementById('devFbCfg');
+  var raw = ta ? ta.value.trim() : '';
+  var cfg = null;
+  var keyEl = document.getElementById('devFbKey'), domEl = document.getElementById('devFbDomain'), pidEl = document.getElementById('devFbPid');
+  var fromFields = function(){ var k = keyEl ? keyEl.value.trim() : '', d = domEl ? domEl.value.trim() : '', p = pidEl ? pidEl.value.trim() : ''; if (!k) return null; return { apiKey: k, authDomain: d || 'toko-mobile-app.firebaseapp.com', projectId: p || 'toko-mobile-app' }; };
+  try { cfg = raw ? JSON.parse(raw) : devFbConfig(); } catch(e) { cfg = fromFields(); if (!cfg) { showToast('Config JSON tidak valid — isi 3 kolom apiKey / authDomain / projectId di bawah, tidak perlu ketik JSON'); return; } }
+  if (!cfg || !cfg.apiKey) { cfg = fromFields(); }
+  if (cfg && cfg.apiKey && keyEl) { try { keyEl.value = cfg.apiKey; if (domEl) domEl.value = cfg.authDomain || ''; if (pidEl) pidEl.value = cfg.projectId || ''; } catch(e) {} }
+  if (!cfg || !cfg.apiKey) { showToast('Isi config Firebase dulu (apiKey wajib)'); return; }
+  try { localStorage.setItem(DEV_FB_CFG_KEY, JSON.stringify(cfg)); } catch(e) {}
+  try {
+    await devLoadFirebase(cfg);
+    if (!firebase.apps.length) firebase.initializeApp(cfg);
+    var auth = firebase.auth();
+    var db = firebase.firestore();
+    if (window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()) {
+      var P = (window.Capacitor.Plugins && window.Capacitor.Plugins.FirebaseAuthentication) || null;
+      if (P && P.signInWithGoogle) {
+        var rs = await P.signInWithGoogle();
+        var gid = rs && rs.credential && rs.credential.idToken;
+        if (!gid) throw new Error('Token Google tidak didapat dari plugin');
+        await auth.signInWithCredential(firebase.auth.GoogleAuthProvider.credential(gid));
+      } else {
+        throw new Error('Plugin FirebaseAuthentication belum ada di APK Dev — buka versi web untuk login Google');
+      }
+    } else {
+      await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+    }
+    DEV_FB = { auth: auth, db: db };
+    var u = auth.currentUser;
+    devFbSetStatus('Terhubung Firebase sebagai ' + (u ? (u.email || u.uid) : 'login') + '. Ketuk Lihat perangkat di Client untuk memuat daftar.');
+    showToast('Firebase terhubung');
+  } catch(e) {
+    DEV_FB = null;
+    devFbSetStatus('Gagal terhubung Firebase: ' + (e.message || e));
+    showToast('Gagal: ' + (e.message || e));
+  }
+}
+async function devFbLogout(){
+  try { if (DEV_FB && DEV_FB.auth) await DEV_FB.auth.signOut(); } catch(e) {}
+  DEV_FB = null;
+  devFbSetStatus('Belum terhubung Firebase.');
+  showToast('Keluar Firebase');
+}
+function devFbRestore(){
+  var cfg = devFbConfig();
+  var ta = document.getElementById('devFbCfg');
+  if (cfg && ta) { try { ta.value = JSON.stringify(cfg); } catch(e) {} }
+  try { var ke = document.getElementById('devFbKey'), de = document.getElementById('devFbDomain'), pe = document.getElementById('devFbPid'); if (cfg) { if (ke) ke.value = cfg.apiKey || ''; if (de) de.value = cfg.authDomain || ''; if (pe) pe.value = cfg.projectId || ''; } } catch(e) {}
+  if (!cfg || !cfg.apiKey) return;
+  devLoadFirebase(cfg).then(function(){
+    if (!firebase.apps.length) firebase.initializeApp(cfg);
+    var auth = firebase.auth();
+    auth.onAuthStateChanged(function(u){
+      if (u) {
+        DEV_FB = { auth: auth, db: firebase.firestore() };
+        devFbSetStatus('Terhubung Firebase sebagai ' + (u.email || u.uid) + '. Ketuk Lihat perangkat di Client untuk memuat daftar.');
+      }
+    });
+  }).catch(function(){});
+}
+function devSafeId(s){ return String(s || '').replace(/[^A-Za-z0-9_-]/g, ''); }
+function devOpenPanel(code){
+  devPanelCode = code;
+  var panel = document.getElementById('devPanel');
+  if (panel) panel.classList.remove('hidden');
+  var cc = document.getElementById('devPanelCode');
+  if (cc) cc.textContent = code;
+  devLoadDevices(code);
+  if (panel) panel.scrollIntoView({ behavior: 'smooth' });
+}
+function devClosePanel(){
+  devPanelCode = null;
+  var panel = document.getElementById('devPanel');
+  if (panel) panel.classList.add('hidden');
+}
+function devReloadDevices(){ if (devPanelCode) devLoadDevices(devPanelCode); }
+async function devLoadDevices(code){
+  var listEl = document.getElementById('devPanelList');
+  var sumEl = document.getElementById('devPanelSummary');
+  if (!DEV_FB || !DEV_FB.db) {
+    if (sumEl) sumEl.textContent = 'Belum terhubung Firebase. Tempel config di kartu Firebase di atas, lalu Login Google, lalu ketuk Muat Ulang Daftar.';
+    if (listEl) listEl.innerHTML = '<p class="note">Belum terhubung Firebase — daftar perangkat tidak bisa dibaca. Hubungkan dulu, karena daftar ini dibaca dari Firestore, bukan dari daftar lokal.</p>';
+    return null;
+  }
+  if (listEl) listEl.innerHTML = '<p class="note">Memuat...</p>';
+  try {
+    var snap = await DEV_FB.db.collection('licenses').doc(code).collection('devices').get();
+    var arr = [];
+    snap.forEach(function(d){ var v = d.data() || {}; v._id = d.id; arr.push(v); });
+    arr.sort(function(a, b){ return String(b.lastSeen || '').localeCompare(String(a.lastSeen || '')); });
+    var active = arr.filter(function(d){ return d.active !== false; }).length;
+    var cust = (typeof findCust === 'function') ? findCust(code) : null;
+    var max = devMaxForType(cust ? cust.type : null, cust ? cust.maxDevices : null);
+    devDeviceSummary[code] = { active: active, max: max, total: arr.length };
+    if (sumEl) sumEl.textContent = 'Perangkat: ' + active + ' / ' + max + ' HP aktif' + (active >= max ? ' — penuh' : ' — tersedia ' + (max - active) + ' slot') + ' (total ' + arr.length + ' tercatat, termasuk nonaktif).';
+    if (!arr.length) {
+      if (listEl) listEl.innerHTML = '<p class="note">Belum ada perangkat terdaftar untuk kode ini.</p>';
+    } else {
+      var out = '';
+      arr.forEach(function(d){
+        var did = devSafeId(d._id);
+        var isAct = d.active !== false;
+        out += '<div class="cust" style="margin-top:10px"><div class="row"><b class="grow">' + esc(d.model || d.deviceId || d._id) + '</b><span class="badge">' + (isAct ? 'Aktif' : 'Nonaktif') + (d.isDeveloper ? ' • Developer' : '') + '</span></div>';
+        out += '<div class="meta">' + esc(d.platform || '') + ' • Terakhir terlihat: ' + esc(String(d.lastSeen || '').slice(0, 10) || '-') + '<br>';
+        out += esc(d.userName || '') + ' (' + esc(d.role || '') + ')<br>';
+        out += 'Sumber: ' + esc(d.source || '-') + (d.appVersion ? ' • App v' + esc(String(d.appVersion)) : '') + '</div>';
+        out += '<div class="row" style="margin-top:10px">';
+        if (isAct) out += '<button class="btn btn-red btn-sm" onclick="devDeactivateDevice(\'' + code + '\',\'' + did + '\')">Nonaktifkan</button>';
+        else out += '<button class="btn btn-green btn-sm" onclick="devReactivateDevice(\'' + code + '\',\'' + did + '\')">Aktifkan lagi</button>';
+        out += '</div></div>';
+      });
+      if (listEl) listEl.innerHTML = out;
+    }
+    if (typeof renderCustomers === 'function') renderCustomers();
+    return arr;
+  } catch(e) {
+    if (listEl) listEl.innerHTML = '<p class="note">Gagal memuat daftar perangkat: ' + esc(e.message || e) + '. Pastikan sudah login Google, config benar, dan rules devices sudah dipublish.</p>';
+    return null;
+  }
+}
+async function devDeactivateDevice(code, did){
+  if (!DEV_FB || !DEV_FB.db) { showToast('Hubungkan Firebase dulu'); return; }
+  if (!confirm('Nonaktifkan perangkat ini? Slot akan bebas untuk HP baru. Perubahan ini langsung terlihat di MyLapak utama saat dibuka / Refresh berikutnya.')) return;
+  try {
+    await DEV_FB.db.collection('licenses').doc(code).collection('devices').doc(did).set({ active: false, deactivatedAt: new Date().toISOString() }, { merge: true });
+    showToast('Perangkat dinonaktifkan');
+    await devLoadDevices(code);
+  } catch(e) { showToast('Gagal: ' + (e.message || e)); }
+}
+async function devReactivateDevice(code, did){
+  if (!DEV_FB || !DEV_FB.db) { showToast('Hubungkan Firebase dulu'); return; }
+  try {
+    var snap = await DEV_FB.db.collection('licenses').doc(code).collection('devices').get();
+    var active = 0;
+    snap.forEach(function(d){ var v = d.data() || {}; if (v.active !== false) active++; });
+    var cust = (typeof findCust === 'function') ? findCust(code) : null;
+    var max = devMaxForType(cust ? cust.type : null, cust ? cust.maxDevices : null);
+    if (active >= max) {
+      showToast('Slot penuh: ' + active + ' / ' + max + ' HP aktif. Nonaktifkan HP lain dulu, tidak bisa aktifkan lagi.');
+      alert('Slot penuh: ' + active + ' / ' + max + ' HP aktif. Nonaktifkan HP lain dulu.');
+      return;
+    }
+    if (!confirm('Aktifkan lagi perangkat ini? Slot tersedia: ' + (max - active) + ' HP.')) return;
+    await DEV_FB.db.collection('licenses').doc(code).collection('devices').doc(did).set({ active: true, reactivatedAt: new Date().toISOString() }, { merge: true });
+    showToast('Perangkat diaktifkan lagi');
+    await devLoadDevices(code);
+  } catch(e) { showToast('Gagal: ' + (e.message || e)); }
+}
+try { devFbRestore(); } catch(e) {}
+</script>
+</body>
+</html>
