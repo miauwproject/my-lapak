@@ -567,8 +567,8 @@ header .logo svg{width:26px;height:26px}
     <label data-t="shop_addr">Alamat</label><input id="setAddr" data-t-ph="ph_shopaddr" placeholder="cth: Jl. Mawar No. 10">
     <label data-t="shop_phone">No. HP / WA</label><input id="setPhone" data-t-ph="ph_wa" placeholder="cth: 0812...">
     <label data-t="shop_email">Email toko (untuk kirim struk)</label><input id="setEmail" data-t-ph="ph_shopemail" type="email" placeholder="cth: warung@email.com">
-    <label data-t="shop_logo">Logo toko (upload)</label><input type="file" accept="image/*" onchange="uploadLogo(event)"><div id="logoPrev"></div>
-    <label data-t="shop_banner">Banner toko (upload, tampil di katalog &amp; beranda)</label><input type="file" accept="image/*" onchange="uploadBanner(event)"><div id="bannerPrev"></div>
+    <label data-t="shop_logo">Logo toko (upload)</label><input type="file" accept="image/*" onchange="uploadLogo(event)"><div id="logoPrev"></div><button class="btn btn-outline btn-sm" style="margin-top:6px" onclick="delShopLogo()">Hapus Logo</button>
+    <label data-t="shop_banner">Banner toko (upload, tampil di katalog &amp; beranda)</label><input type="file" accept="image/*" onchange="uploadBanner(event)"><div id="bannerPrev"></div><button class="btn btn-outline btn-sm" style="margin-top:6px" onclick="delShopBanner()">Hapus Banner</button>
     <div class="helpbox">📐 <b>Rekomendasi ukuran (tampilan HP):</b><br>✂️ Logo & banner bisa di-crop dulu sesuai rasio (1:1 / 16:9) saat upload.<br>• Logo: kotak 1:1, min 200×200px (tampil kecil di header).<br>• Banner: landscape 16:9, mis. 900×450px — konten penting di tengah, karena banner dipotong menyesuaikan lebar HP.<br>• Foto produk: kotak 1:1, min 400×400px.<br>Semua foto diperkecil otomatis saat upload (logo max 300px, banner max 900px, foto produk max 400px), jadi file besar tetap aman.</div>
     <button class="btn btn-green btn-sm" data-t="save_profile" onclick="saveShop()">Simpan Profil</button>
     <div id="tokoCodeRow" style="display:none;margin-top:12px"><label data-t="shop_code">Kode Toko</label><div style="display:flex;gap:8px;align-items:center"><div id="tokoCodeBig" style="font-size:22px;font-weight:800;letter-spacing:4px"></div><button class="btn btn-outline btn-sm" data-t="copy_code" onclick="copyShopCode()">Salin</button></div></div>
@@ -1100,7 +1100,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 const LS={get(k,d){try{const v=localStorage.getItem('wapp3_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('wapp3_'+k,JSON.stringify(v))}catch(e){}},del(k){localStorage.removeItem('wapp3_'+k)}};
 
 /* ================= v7.2: BAHASA, FLOAT BAR, BACK ================= */
-const APP_VERSION_CODE=11;const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
+const APP_VERSION_CODE=12;const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
 const L={id:{
 nav_dashboard:'Beranda',nav_kasir:'Pesanan',nav_produk:'Produk',nav_laporan:'Laporan',nav_ownerdash:'Dashboard',online_label:'Order Online',
 back:'‹ Kembali',floatbar:'BANTUAN',
@@ -2960,6 +2960,8 @@ function fillSettings(){document.getElementById('setShop').value=shop.name;docum
  document.getElementById('logoPrev').innerHTML=photoOK(shop.logo)?`<img src="${shop.logo}" style="width:64px;height:64px;object-fit:cover;border-radius:14px">`:'';
  document.getElementById('bannerPrev').innerHTML=photoOK(shop.banner)?`<img src="${shop.banner}" style="width:100%;max-height:120px;object-fit:cover;border-radius:12px">`:'';
  renderCloudCard();renderCatalogBox();refreshPinBox();refreshThemeBox();}
+function delShopLogo(){if(!shop.logo){toast('Tidak ada logo yang dihapus');return}if(!confirm('Hapus logo toko? Header akan kembali ke ikon default.'))return;shop.logo='';document.getElementById('logoPrev').innerHTML='';renderShopBrand();saveShop();}
+function delShopBanner(){if(!shop.banner){toast('Tidak ada banner yang dihapus');return}if(!confirm('Hapus banner toko? Banner di Beranda & katalog akan hilang.'))return;shop.banner='';document.getElementById('bannerPrev').innerHTML='';renderDash();saveShop();}
 async function saveShop(){const n=document.getElementById('setShop').value.trim();if(!n){toast(tr('i18n_097'));return}
  shop.name=n;shop.address=document.getElementById('setAddr').value.trim();shop.phone=document.getElementById('setPhone').value.trim();shop.email=document.getElementById('setEmail').value.trim();
  await persist('shop');renderDash();toast(tr('i18n_120'))}
