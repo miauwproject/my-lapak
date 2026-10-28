@@ -1,7 +1,7 @@
 {
-  "versionCode": 13,
-  "versionName": "1.0.4",
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.0.4-code13/my-lapak_v1.0.4-code13.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4wLjQtY29kZTEzL215LWxhcGFrX3YxLjAuNC1jb2RlMTMuYXBr",
-  "notes": "Patch: ikon baru M di menu login awal, favicon, dan logo default header/wizard."
+  "versionCode": 14,
+  "versionName": "1.0.5",
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.0.5-code14/my-lapak_v1.0.5-code14.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4wLjUtY29kZTE0L215LWxhcGFrX3YxLjAuNS1jb2RlMTQuYXBr",
+  "notes": "Fitur baru: Contact Developer di Pengaturan — kirim tiket Bug / Pertanyaan / Minta Fitur / Lainnya, Tiket Saya dengan status dan balasan developer, lampiran foto maks 3 (JPG/PNG, total maks 500KB). Perlu publish rules tiket manual di Console sebelum fitur tiket jalan."
 }
