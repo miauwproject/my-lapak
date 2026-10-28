@@ -1,7 +1,7 @@
 {
-  "versionCode": 11,
+  "versionCode": 12,
   "versionName": "1.0.4",
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.0.4/my-lapak_v1.0.4.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4wLjQvbXktbGFwYWtfdjEuMC40LmFwaw==",
-  "notes": "Hutang pindah ke Laporan, tombol Produk simetris, kategori pakai selector, Grafik Owner baru, dan bahasa diperbaiki."
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.0.4-code12/my-lapak_v1.0.4-code12.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4wLjQtY29kZTEyL215LWxhcGFrX3YxLjAuNC1jb2RlMTIuYXBr",
+  "notes": "Patch: tambah tombol Hapus Logo dan Hapus Banner di Profil Toko."
 }
