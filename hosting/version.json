@@ -1,7 +1,7 @@
 {
-  "versionCode": 16,
+  "versionCode": 17,
   "versionName": "1.0.5",
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.0.5-code16/my-lapak_v1.0.5-code16.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4wLjUtY29kZTE2L215LWxhcGFrX3YxLjAuNS1jb2RlMTYuYXBr",
-  "notes": "Patch tiket (versi ditahan 1.0.5): foto lampiran kini bisa diketuk untuk dilihat penuh (strip geser ke samping bila banyak), tiket yang diflag developer tampil badge Perlu update versi."
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.0.5-code17/my-lapak_v1.0.5-code17.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4wLjUtY29kZTE3L215LWxhcGFrX3YxLjAuNS1jb2RlMTcuYXBr",
+  "notes": "Patch notifikasi (versi ditahan 1.0.5): balasan developer kini ditandai balon merah di tombol gear dan menu Contact Developer, badge Balasan baru di kartu tiket, plus toast saat masuk app / Refresh."
 }
