@@ -1,7 +1,7 @@
 {
-  "versionCode": 22,
+  "versionCode": 23,
   "versionName": "1.0.5",
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.0.5-code22/my-lapak_v1.0.5-code22.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4wLjUtY29kZTIyL215LWxhcGFrX3YxLjAuNS1jb2RlMjIuYXBr",
-  "notes": "Kontrol developer global (versi ditahan 1.0.5): email developer yang diatur dari MyLapak-Dev kini dikenali sebagai developer di semua toko client, dengan kode toko apa pun (maks 3 email); daftar dibaca tiap login cloud, fallback email utama."
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.0.5-code23/my-lapak_v1.0.5-code23.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4wLjUtY29kZTIzL215LWxhcGFrX3YxLjAuNS1jb2RlMjMuYXBr",
+  "notes": "Patch (versi ditahan 1.0.5): tombol Sign in with another account di layar Gabung/Buat Toko agar akun tidak stuck di wizard; gabung toko tetap jalan meski cek duplikat ditolak rules; tombol Keluar/Ganti Akun di Profil kini tampil saat login cloud."
 }
