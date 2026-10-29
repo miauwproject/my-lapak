@@ -1,7 +1,7 @@
 {
-  "versionCode": 21,
+  "versionCode": 22,
   "versionName": "1.0.5",
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.0.5-code21/my-lapak_v1.0.5-code21.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4wLjUtY29kZTIxL215LWxhcGFrX3YxLjAuNS1jb2RlMjEuYXBr",
-  "notes": "Patch tiket (versi ditahan 1.0.5): kartu tiket Selesai kini hanya menampilkan badge Tutup saja (teks status di header kartu dihilangkan); kunci tiket Selesai tetap berlaku."
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.0.5-code22/my-lapak_v1.0.5-code22.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4wLjUtY29kZTIyL215LWxhcGFrX3YxLjAuNS1jb2RlMjIuYXBr",
+  "notes": "Kontrol developer global (versi ditahan 1.0.5): email developer yang diatur dari MyLapak-Dev kini dikenali sebagai developer di semua toko client, dengan kode toko apa pun (maks 3 email); daftar dibaca tiap login cloud, fallback email utama."
 }
