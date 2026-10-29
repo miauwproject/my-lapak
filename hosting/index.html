@@ -1116,7 +1116,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 const LS={get(k,d){try{const v=localStorage.getItem('wapp3_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('wapp3_'+k,JSON.stringify(v))}catch(e){}},del(k){localStorage.removeItem('wapp3_'+k)}};
 
 /* ================= v7.2: BAHASA, FLOAT BAR, BACK ================= */
-const APP_VERSION_CODE=21;const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
+const APP_VERSION_CODE=22;const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
 const L={id:{
 nav_dashboard:'Beranda',nav_kasir:'Pesanan',nav_produk:'Produk',nav_laporan:'Laporan',nav_ownerdash:'Dashboard',online_label:'Order Online',
 back:'‹ Kembali',floatbar:'BANTUAN',
@@ -1452,7 +1452,33 @@ const DEFAULT_ROLE_PERMS={
 const LEGACY_PERM={produk:'produk_stok',produk_add:'produk_stok',produk_del:'produk_stok',produk_edit:'ubah_harga',stok:'produk_stok',online:'order',laporan:'laporan_harian',settings:'profil_tema',users:'kelola_role',dashboard:'kasir'};
 function getRolePerms(role){const s=settings.rolePerms||{};return s[role]||DEFAULT_ROLE_PERMS[role]||[]}
 function isOwner(){return MY_ROLE==='owner'}
-function isDeveloper(){if(MODE==='local')return false;return !!(CUR_USER&&DEVELOPER_UID&&CUR_USER.uid===DEVELOPER_UID)}
+const GLOBAL_DEV_PRIMARY='miauwdesu.project@gmail.com';
+let GLOBAL_DEV_EMAILS=[GLOBAL_DEV_PRIMARY];
+async function loadGlobalDevEmails(){
+  let ok=false;
+  try{
+    if(FB&&FB.db){
+      const snap=await FB.db.collection('appConfig').doc('developers').get();
+      if(snap.exists){
+        const arr=snap.data().emails||[];
+        const clean=[];
+        arr.forEach(function(e){const v=String(e||'').trim().toLowerCase();if(v&&v.indexOf('@')>0&&clean.indexOf(v)<0&&v!==GLOBAL_DEV_PRIMARY)clean.push(v);});
+        GLOBAL_DEV_EMAILS=[GLOBAL_DEV_PRIMARY].concat(clean.slice(0,2));
+        LS.set('globalDevEmailsCache',GLOBAL_DEV_EMAILS);
+        ok=true;
+      }
+    }
+  }catch(e){}
+  if(!ok){
+    const cached=LS.get('globalDevEmailsCache',null);
+    if(Array.isArray(cached)&&cached.length){
+      const cl=[];
+      cached.forEach(function(v){const s2=String(v||'').trim().toLowerCase();if(s2&&s2!==GLOBAL_DEV_PRIMARY&&cl.indexOf(s2)<0)cl.push(s2);});
+      GLOBAL_DEV_EMAILS=[GLOBAL_DEV_PRIMARY].concat(cl.slice(0,2));
+    }else GLOBAL_DEV_EMAILS=[GLOBAL_DEV_PRIMARY];
+  }
+}
+function isDeveloper(){if(MODE==='local')return false;if(CUR_USER&&CUR_USER.email&&GLOBAL_DEV_EMAILS.includes(CUR_USER.email.trim().toLowerCase()))return true;return !!(CUR_USER&&DEVELOPER_UID&&CUR_USER.uid===DEVELOPER_UID)}
 let DEVELOPER_UID='',OWNER_UID='',SHOP_HOLIDAY=false,SHOP_HOLIDAY_NOTE='',SHOP_WIPED_AT='',SHOP_RESET_AT='';
 let notes=[],returns=[],activityCloud=[],loggedOrderIds=[];
 try{loggedOrderIds=LS.get('loggedOrders',[])}catch(e){}
@@ -1460,7 +1486,7 @@ let notesUnsub=null,notesFirstSnap=true,seenNoteIds=new Set();
 function roleLabel(r){return ROLES[r]||r}
 function registerCustomRoles(){const rp=settings.rolePerms||{};Object.keys(rp).forEach(r=>{if(r!=='admin'&&r!=='kasir'&&!ROLES[r])ROLES[r]=r})}
 function roleTagHTML(role){const m={kasir:['Kasir','#f3f4f6','#4b5563'],admin:['Admin','#dbeafe','#1e40af'],owner:['Owner','#dcfce7','#166534'],developer:['Developer','#ede9fe','#5b21b6']};const v=m[role]||['','', ''];if(!v[0])return '';return '<span class="rtag '+(role==='developer'?'dev':role)+'" style="background:'+v[1]+';color:'+v[2]+'">'+v[0]+'</span>'}
-function memberRoleTag(name,uid){if(!name||name==='Online')return '';if(MODE==='local')return roleTagHTML('owner');const u=uid?shopUsers.find(x=>x.uid===uid):null;const v=u||shopUsers.find(x=>x.name===name);if(!v)return '';if(v.uid===DEVELOPER_UID)return roleTagHTML('developer');return roleTagHTML(normRole(v.role))}
+function memberRoleTag(name,uid){if(!name||name==='Online')return '';if(MODE==='local')return roleTagHTML('owner');const u=uid?shopUsers.find(x=>x.uid===uid):null;const v=u||shopUsers.find(x=>x.name===name);if(!v)return '';if(v.uid===DEVELOPER_UID||(v.email&&GLOBAL_DEV_EMAILS.includes(v.email.trim().toLowerCase())))return roleTagHTML('developer');return roleTagHTML(normRole(v.role))}
 function fmtHM(ts){try{return new Date(ts).toLocaleTimeString(LANG==='en'?'en-GB':'id-ID',{hour:'2-digit',minute:'2-digit'})}catch(e){return ''}}
 function fmtDateFull(ts){try{return new Date(ts).toLocaleDateString(LANG==='en'?'en-GB':'id-ID',{day:'numeric',month:'short',year:'numeric'})}catch(e){return ''}}
 let MODE='local',FB=null,CUR_USER=null,MY_ROLE='owner',SHOP_ID=null,SHOP_CODE='';
@@ -1599,6 +1625,7 @@ function emailRegister(){if(needsCloudConfirm()){askCloudConfirm('r');return}con
 async function onLogin(u){
   CUR_USER={uid:u.uid,name:u.displayName||(u.email?u.email.split('@')[0]:'Pengguna'),email:u.email||'',photo:u.photoURL||''};
   MODE='cloud';LS.set('cloudEver','1');
+  await loadGlobalDevEmails();
   const ud=await FB.db.collection('users').doc(u.uid).get();
   if(ud.exists){const _d=ud.data(),_old=LS.get(profileKey(),null);if(!_old||(_d.profileUpdatedAt&&(!_old.profileUpdatedAt||_d.profileUpdatedAt>_old.profileUpdatedAt))){LS.set(profileKey(),{name:_d.name||'',birth:_d.birth||'',wa:_d.wa||_d.phone||'',address:_d.address||'',avatar:_d.avatar||'',profileUpdatedAt:_d.profileUpdatedAt||''})}}
   document.getElementById('authScreen').style.display='none';
@@ -2667,9 +2694,9 @@ function renderOdCards(){const _gc=document.getElementById('odGraphCard');if(_gc
 }
 function showWhatsNew(){
   const _tt=document.getElementById('tourTip'); if(_tt&&_tt.style.display==='block')return;
-  if(LS.get('whatsnew_105c21'))return;
-  LS.set('whatsnew_105c21','1');
-  openModal('<div class="mhead">Apa yang baru di 1.0.5</div><div style="font-size:14px;line-height:1.6"><p>• Contact Developer di Pengaturan: kirim tiket kendala / pertanyaan / permintaan fitur langsung ke developer, lengkap dengan info toko dan versi app otomatis.</p><p>• Tiket Saya: lihat status dan balasan developer, dan kirim balasan lanjutan ke tiket yang sama.</p><p>• Lampiran foto maks 3 per tiket (JPG/PNG, total maks 500KB), dikompres otomatis sebelum dikirim.</p><p>• Tiket: waktu kirim dan balasan kini tampil WIB (contoh: 29 Okt 2026, 13:27 WIB).</p><p>• Balasan developer kini bisa melampirkan foto (maks 3, total maks 500KB), tampil di Tiket Saya.</p><p>• Tiket Saya: foto lampiran kini bisa diketuk untuk dilihat penuh (strip foto geser ke samping bila banyak), dan tiket yang diflag developer tampil badge "Perlu update versi".</p><p>• Notifikasi balasan developer: balon merah di tombol gear dan menu Contact Developer, badge "Balasan baru" di kartu tiket, plus toast saat masuk app / Refresh bila ada balasan yang belum dibaca.</p><p>• Tiket yang sudah Selesai kini menampilkan kesimpulan developer (kategori + keterangan action).</p><p>• Tiket yang sudah Selesai kini terkunci (badge Tutup): kolom balasan hilang, hanya riwayat dan kesimpulan yang bisa dilihat.</p><p>• Tiket yang sudah Selesai kini hanya menampilkan badge "Tutup" saja (teks status di header kartu dihilangkan).</p></div><div class="mfoot rowbtns"><button class="btn btn-green" onclick="closeModal()">Mengerti</button></div>');
+  if(LS.get('whatsnew_105c22'))return;
+  LS.set('whatsnew_105c22','1');
+  openModal('<div class="mhead">Apa yang baru di 1.0.5</div><div style="font-size:14px;line-height:1.6"><p>• Kontrol developer global: email developer yang diatur dari app MyLapak-Dev kini dikenali sebagai developer di semua toko client, dengan kode toko apa pun (maks 3 email).</p><p>• Daftar email dibaca tiap login cloud; kalau gagal dibaca, app memakai daftar terakhir yang tersimpan, dan email utama tetap berlaku.</p></div><div class="mfoot rowbtns"><button class="btn btn-green" onclick="closeModal()">Mengerti</button></div>');
 }
 
 /* ---------- TIKET CONTACT DEVELOPER (v1.0.5) ---------- */
@@ -3007,7 +3034,7 @@ function renderUsers(){
  if(MODE==='local'){const p=getProfile();list=[{uid:'local',name:p.name||shop.name||'Owner',email:'Mode offline',role:'owner',birth:p.birth||'',wa:p.wa||'',address:p.address||'',avatar:p.avatar||'',last:'Hari ini'}]}
  else{list=shopUsers.map(u=>({uid:u.uid,name:u.name,email:u.email||'',role:normRole(u.role),birth:u.birth||'',wa:u.wa||u.phone||'',address:u.address||'',avatar:u.avatar||'',last:u.lastActive?fmtDT(u.lastActive):(u.joinedAt?fmtDate(u.joinedAt.slice(0,10)):'-')}))}
  const viewerCanEdit=isDeveloper()||isOwner();
- document.getElementById('userList').innerHTML=list.length?list.map(u=>{const isSelf=MODE!=='local'&&CUR_USER&&u.uid===CUR_USER.uid;const _mask=MODE==='cloud'&&MY_ROLE==='kasir'&&!isSelf;const isOwn=u.role==='owner';const isDevRow=MODE!=='local'&&u.uid===DEVELOPER_UID;const waBtn=!isSelf&&!_mask&&(u.wa||'').replace(/\D/g,'').length>=9?'<button class="wa-ic-btn" aria-label="Chat WA" onclick="chatWA(\''+esc(u.wa)+'\')"><svg viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="11.5" r="8" fill="#ffffff"/><polygon points="7.5,17.5 5,21 10.5,19" fill="#ffffff"/><path d="M9.4,14.3 A5,5 0 0 1 14.6,9.7" stroke="#25D366" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="9.4" cy="14.3" r="1.2" fill="#25D366"/><circle cx="14.6" cy="9.7" r="1.2" fill="#25D366"/></svg></button>':'';const roleOpts=Object.keys(ROLES).map(r=>'<option value="'+r+'" '+(u.role===r?'selected':'')+'>'+roleLabel(r)+'</option>').join('');const controls=(MODE==='local'||isSelf||(isOwn&&!isDeveloper()))?'':('<select '+(viewerCanEdit?'':'disabled ')+'onchange="setRole(\''+u.uid+'\',this.value)" style="width:auto;margin:0;padding:6px 8px;font-size:13px;'+(viewerCanEdit?'':'opacity:.5')+'">'+(isDeveloper()?roleOpts:Object.keys(ROLES).filter(r=>r!=='owner').map(r=>'<option value="'+r+'" '+(u.role===r?'selected':'')+'>'+roleLabel(r)+'</option>').join(''))+'</select><button class="btn btn-red btn-sm" '+(viewerCanEdit?'':'disabled style="opacity:.5" ')+'onclick="removeUser(\''+u.uid+'\')">Keluarkan</button>');return '<div class="member-row"><div class="list-item" style="border:none;padding:0"><div style="width:44px;height:44px;border-radius:50%;background:var(--line);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;overflow:hidden">'+avHTML(u.avatar)+'</div><div class="inf"><div class="nm">'+esc(u.name)+' '+(isSelf?'<span class="badge blue">kamu</span>':'')+(isDevRow?'<span class="rtag dev">Developer</span>':'')+'</div><div class="sub">'+(isDevRow?'Developer':roleLabel(u.role))+(_mask?'':(u.email?' · '+esc(u.email):''))+'</div><div class="sub">'+(_mask?'':(u.birth?'🎂 '+esc(u.birth)+' · ':'')+(u.wa?'📱 '+esc(u.wa):''))+'</div>'+(_mask?'':(u.address?'<div class="sub">📍 '+esc(u.address)+'</div>':''))+'<div class="sub">Terakhir aktif: '+esc(u.last)+'</div></div></div><div class="m-actions">'+controls+waBtn+'</div></div>'}).join(''):'<div class="empty">Belum ada pengguna.</div>';}
+ document.getElementById('userList').innerHTML=list.length?list.map(u=>{const isSelf=MODE!=='local'&&CUR_USER&&u.uid===CUR_USER.uid;const _mask=MODE==='cloud'&&MY_ROLE==='kasir'&&!isSelf&&!isDeveloper();const isOwn=u.role==='owner';const isDevRow=MODE!=='local'&&(u.uid===DEVELOPER_UID||(u.email&&GLOBAL_DEV_EMAILS.includes(u.email.trim().toLowerCase())));const waBtn=!isSelf&&!_mask&&(u.wa||'').replace(/\D/g,'').length>=9?'<button class="wa-ic-btn" aria-label="Chat WA" onclick="chatWA(\''+esc(u.wa)+'\')"><svg viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="11.5" r="8" fill="#ffffff"/><polygon points="7.5,17.5 5,21 10.5,19" fill="#ffffff"/><path d="M9.4,14.3 A5,5 0 0 1 14.6,9.7" stroke="#25D366" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="9.4" cy="14.3" r="1.2" fill="#25D366"/><circle cx="14.6" cy="9.7" r="1.2" fill="#25D366"/></svg></button>':'';const roleOpts=Object.keys(ROLES).map(r=>'<option value="'+r+'" '+(u.role===r?'selected':'')+'>'+roleLabel(r)+'</option>').join('');const controls=(MODE==='local'||isSelf||(isOwn&&!isDeveloper()))?'':('<select '+(viewerCanEdit?'':'disabled ')+'onchange="setRole(\''+u.uid+'\',this.value)" style="width:auto;margin:0;padding:6px 8px;font-size:13px;'+(viewerCanEdit?'':'opacity:.5')+'">'+(isDeveloper()?roleOpts:Object.keys(ROLES).filter(r=>r!=='owner').map(r=>'<option value="'+r+'" '+(u.role===r?'selected':'')+'>'+roleLabel(r)+'</option>').join(''))+'</select><button class="btn btn-red btn-sm" '+(viewerCanEdit?'':'disabled style="opacity:.5" ')+'onclick="removeUser(\''+u.uid+'\')">Keluarkan</button>');return '<div class="member-row"><div class="list-item" style="border:none;padding:0"><div style="width:44px;height:44px;border-radius:50%;background:var(--line);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;overflow:hidden">'+avHTML(u.avatar)+'</div><div class="inf"><div class="nm">'+esc(u.name)+' '+(isSelf?'<span class="badge blue">kamu</span>':'')+(isDevRow?'<span class="rtag dev">Developer</span>':'')+'</div><div class="sub">'+(isDevRow?'Developer':roleLabel(u.role))+(_mask?'':(u.email?' · '+esc(u.email):''))+'</div><div class="sub">'+(_mask?'':(u.birth?'🎂 '+esc(u.birth)+' · ':'')+(u.wa?'📱 '+esc(u.wa):''))+'</div>'+(_mask?'':(u.address?'<div class="sub">📍 '+esc(u.address)+'</div>':''))+'<div class="sub">Terakhir aktif: '+esc(u.last)+'</div></div></div><div class="m-actions">'+controls+waBtn+'</div></div>'}).join(''):'<div class="empty">Belum ada pengguna.</div>';}
 async function setRole(uid,role){
  if(MODE!=='cloud'){toast(tr('i18n_066'));renderUsers();return}
  const _t=shopUsers.find(x=>x.uid===uid);if(!_t)return;
@@ -3755,7 +3782,7 @@ function openActivityAll(){openModal('<div class="mhead">📜 Semua Log Aktivita
 function renderActivityCard(){const el=document.getElementById('actDashCard');if(!el)return;if(!(isOwner()||isDeveloper())){el.style.display='none';return}el.style.display='';const prev=document.getElementById('actDashBody')?actCardState():null;el.innerHTML='<h3>📜 Log Aktivitas</h3><input class="logsearch" id="actDashSearch" placeholder="Cari nama / aktivitas..." oninput="renderActivityBody()"><div class="logfilt"><select id="actDashFwaktu" onchange="actWaktuChg()"><option>Semua</option><option>Hari ini</option><option>Minggu ini</option><option>Bulan ini</option><option>Pilih tanggal</option></select><input type="date" id="actDashFdate" style="display:none" onchange="renderActivityBody()"><select id="actDashFnama" onchange="renderActivityBody()"></select><select id="actDashFmenu" onchange="renderActivityBody()"></select></div><div class="logscroll" id="actDashBody2"></div><button class="btn btn-outline btn-sm" style="margin-top:10px;width:100%" onclick="openActivityAll()">Lihat Semua Aktivitas</button>';const names=['Semua',...new Set(getActivity().map(a=>a.by))];const menus=['Semua',...new Set(getActivity().map(a=>a.menu||'-'))];document.getElementById('actDashFnama').innerHTML=names.map(o=>'<option>'+esc(o)+'</option>').join('');document.getElementById('actDashFmenu').innerHTML=menus.map(o=>'<option>'+esc(o)+'</option>').join('');if(prev){const set=(id,v)=>{const e=document.getElementById(id);if(!e||v===undefined||v==='')return;if(e.tagName==='SELECT'&&!Array.from(e.options).some(o=>o.value===v))return;e.value=v};set('actDashSearch',prev.q);set('actDashFwaktu',prev.waktuSel);const d=document.getElementById('actDashFdate');if(d){d.value=prev.waktuDate||'';d.style.display=prev.waktuSel==='Pilih tanggal'?'':'none'}set('actDashFnama',prev.nama);set('actDashFmenu',prev.menu)}renderActivityBody()}
 function fmtHM(ts){if(!ts)return '';try{return new Date(ts).toLocaleString(LANG==='en'?'en-GB':'id-ID',{hour:'2-digit',minute:'2-digit'})}catch(e){return String(ts).slice(11,16)}}
 function fmtDateFull(ts){if(!ts)return '';try{return new Date(ts).toLocaleDateString(LANG==='en'?'en-GB':'id-ID',{day:'numeric',month:'short',year:'numeric'})}catch(e){return String(ts).slice(0,10)}}
-function memberRoleOf(name){if(!name)return '';if(MODE==='local')return 'owner';const u=shopUsers.find(x=>x.name===name);if(!u)return '';if(u.uid===DEVELOPER_UID)return 'developer';return normRole(u.role)}
+function memberRoleOf(name){if(!name)return '';if(MODE==='local')return 'owner';const u=shopUsers.find(x=>x.name===name);if(!u)return '';if(u.uid===DEVELOPER_UID||(u.email&&GLOBAL_DEV_EMAILS.includes(u.email.trim().toLowerCase())))return 'developer';return normRole(u.role)}
 let lastSyncSuspect=false;
 async function manualRefresh(){if(aturState)aturCancel();try{await cload();const me=shopUsers.find(x=>CUR_USER&&x.uid===CUR_USER.uid);if(me)MY_ROLE=normRole(me.role);applyPerms();if(curView==='dashboard')renderDash();else if(curView==='kasir')renderKasir();else if(curView==='produk')renderProduk();else if(curView==='pengguna')renderUsers();else if(curView==='laporan'){renderLap();renderEmailSettings();renderLapSend();renderHist()}else if(curView==='stok')renderStok();else if(curView==='ownerdash')renderOdTab();else if(curView==='notes')renderNotes();else if(curView==='toko')fillSettings();else if(curView==='tampilan')renderTampilan();else if(curView==='pengeluaran')renderExp();else if(curView==='hutang')renderHutang();else if(curView==='pengaturan'){renderSettingMenu();fillSettings()}else if(curView==='profil')renderProfil();else if(curView==='cloud')renderCloudCard();else if(curView==='pin')refreshPinBox();else if(curView==='role')renderRoleMatrix();else if(curView==='panduan')renderPanduan();else if(curView==='tiket')tiketLoad();else if(curView==='admin')renderAdminDash();if(lastSyncSuspect){toast(tr('i18n_036'))}else{checkUpdate();tiketNotifRefresh(true);toast(tr('i18n_024'))}}catch(e){toast(tr('i18n_037'))}}
 const NOTE_CATS={Masalah:['Masalah','#dc2626'],Komplain:['Komplain Pembeli','#ea580c'],Info:['Info','#2563eb'],Lainnya:['Lainnya','#888888']};
