@@ -1,7 +1,7 @@
 {
-  "versionCode": 29,
+  "versionCode": 30,
   "versionName": "1.0.5",
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.0.5-code29/my-lapak_v1.0.5-code29.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4wLjUtY29kZTI5L215LWxhcGFrX3YxLjAuNS1jb2RlMjkuYXBr",
-  "notes": "Patch order online: card tidak tertutup sendiri, popup + badge Pesanan, log gabung per order, cancel online masuk History Pembatalan, batas waktu bayar bisa diatur, badge role diperbaiki, + listener realtime."
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.0.5-code30/my-lapak_v1.0.5-code30.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4wLjUtY29kZTMwL215LWxhcGFrX3YxLjAuNS1jb2RlMzAuYXBr",
+  "notes": "Patch gabungan: Batalkan tiap step order online, Pesanan dirapikan (grid + log ringkas + minimize), kartu produk Pesanan = kartu Produk, tombol melayang auto-hide standar, crop foto full sentuhan di semua upload."
 }
