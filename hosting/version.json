@@ -1,7 +1,7 @@
 {
-  "versionCode": 25,
+  "versionCode": 26,
   "versionName": "1.0.5",
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.0.5-code25/my-lapak_v1.0.5-code25.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4wLjUtY29kZTI1L215LWxhcGFrX3YxLjAuNS1jb2RlMjUuYXBr",
-  "notes": "V1.0.5 Stable: order tidak hilang saat diproses, baris retur di semua log transaksi, katalog: testimoni di bawah + WA lingkaran kecil + ketuk produk lihat detail, Riwayat Testimoni pindah ke Dashboard, toast update ikut tema."
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.0.5-code26/my-lapak_v1.0.5-code26.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4wLjUtY29kZTI2L215LWxhcGFrX3YxLjAuNS1jb2RlMjYuYXBr",
+  "notes": "V1.0.5 Stable: fix spam bubble order baru, keranjang tidak hilang saat app tutup, ongkir + Catatan masuk chat customer, picker order manual jadi card produk, fitur Cancel Order dengan persetujuan owner."
 }
