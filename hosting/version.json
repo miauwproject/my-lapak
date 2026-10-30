@@ -1,7 +1,7 @@
 {
-  "versionCode": 27,
+  "versionCode": 28,
   "versionName": "1.0.5",
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.0.5-code27/my-lapak_v1.0.5-code27.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4wLjUtY29kZTI3L215LWxhcGFrX3YxLjAuNS1jb2RlMjcuYXBr",
-  "notes": "V1.0.5 Stable: tambah produk masuk keranjang dulu (bukan langsung pembayaran), ikon keranjang selalu tampil di semua halaman, layout input resi memanjang, tombol chat kirim tidak lagi diam bila gagal."
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.0.5-code28/my-lapak_v1.0.5-code28.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4wLjUtY29kZTI4L215LWxhcGFrX3YxLjAuNS1jb2RlMjguYXBr",
+  "notes": "V1.0.5 Stable: Pengaturan pindah ke navigasi bawah (ikon gear seragam), header anti-meluber (nama jadi ellipsis, tidak dorong tombol)."
 }
