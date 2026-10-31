@@ -1,7 +1,7 @@
 {
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.0.5-code30/my-lapak_v1.0.5-code30.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4wLjUtY29kZTMwL215LWxhcGFrX3YxLjAuNS1jb2RlMzAuYXBr",
-  "notes": "Patch gabungan: Batalkan tiap step order online, Pesanan dirapikan (grid + log ringkas + minimize), kartu produk Pesanan = kartu Produk, tombol melayang auto-hide standar, crop foto full sentuhan di semua upload.",
-  "versionCode": 30,
-  "versionName": "1.0.5"
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code32/my-lapak_v1.1.0-code32.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTMyL215LWxhcGFrX3YxLjEuMC1jb2RlMzIuYXBr",
+  "notes": "1.1.0: desain cancel baru (approval owner, 5 kategori, order ulang + kompensasi + klaim kurir), tag Time out di Log, setting batas bayar pindah ke Pesanan, autohide fix, voice command Kasir, nada order masuk, Cek Kesehatan baru, ikon metode pembayaran, share location toko.",
+  "versionCode": 32,
+  "versionName": "1.1.0"
 }
