@@ -1,7 +1,7 @@
 {
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code41/my-lapak_v1.1.0-code41.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTQxL215LWxhcGFrX3YxLjEuMC1jb2RlNDEuYXBr",
-  "notes": "1.1.0 stabil (code41): (1) Batalkan Retur — retur yang salah bisa dibatalkan dari detail Riwayat Retur, stok, hutang, dan omzet dibalik; (2) perbaikan notif update Beranda — banner tetap muncul walau kuota cloud gagal, plus tombol Cek Update di Pengaturan > Lisensi.",
-  "versionCode": 41,
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code42/my-lapak_v1.1.0-code42.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTQyL215LWxhcGFrX3YxLjEuMC1jb2RlNDIuYXBr",
+  "notes": "1.1.0 stabil (code42): (1) Backup kini tersimpan jelas di folder Download dengan nama file; (2) History Pembatalan ikut terhapus saat Reset/Hapus Data; (3) perbaikan night mode — semua tombol dan tulisan terbaca di tema gelap.",
+  "versionCode": 42,
   "versionName": "1.1.0"
 }
