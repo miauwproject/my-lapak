@@ -4302,7 +4302,7 @@ const catIcon=c=>CAT_ICONS[c]||'📦';
 async function initCatalog(code,cfgB64){
   document.getElementById('catalogView').classList.add('active');
   try{
-    CAT.cfg=JSON.parse(atob(cfgB64));
+    CAT.cfg=cfgB64?JSON.parse(atob(cfgB64)):fbConfig();
     await loadFirebase(CAT.cfg);
     if(!firebase.apps.length)firebase.initializeApp(CAT.cfg);
     const db=firebase.firestore();
@@ -5706,7 +5706,7 @@ document.getElementById('lapDate').addEventListener('change',renderLap);
 (function init(){
   applyLang();setupBackButton();applyTheme();
   const q=new URLSearchParams(location.search);
-  if(q.get('katalog')&&q.get('cfg')){initCatalog(q.get('katalog'),q.get('cfg'));return}
+  if(q.get('katalog')){initCatalog(q.get('katalog'),q.get('cfg'));return}
   const cfg=fbConfig();
   if(cfg){showAuth()}
   else{MODE='local';MY_ROLE='owner';lload();
