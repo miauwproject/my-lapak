@@ -1029,7 +1029,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <div id="catCartBack" class="cat-cart-back" onclick="closeCatCart()"></div>
   <div id="catCartCard" class="cat-cart-card"><button class="modal-x" onclick="closeCatCart()">✕</button><h2 style="padding-right:36px">🛒 Keranjang</h2><div id="catCartBody"></div></div>
   <div id="catBar" onclick="openCatCart()"><div><div style="font-size:12px;opacity:.85" id="catCount">0 item</div><div class="t" id="catTotal">Rp 0</div></div><div style="font-size:24px">🛒 ›</div></div>
-  <div id="catTestiWidget" style="display:none;margin:16px 14px 100px"></div><div id="catHolidayBar">Toko sedang libur - checkout ditutup sementara</div>
+  <div id="catTestiWidget" style="display:none;position:fixed;left:14px;right:14px;bottom:14px;z-index:30"></div><div id="catHolidayBar">Toko sedang libur - checkout ditutup sementara</div>
 </div>
 
 <!-- AUTH -->
@@ -4346,7 +4346,7 @@ function catQInput(id){catQUpd(id)}
 function catQuickAdd(id){if(CAT.holiday){toast(tr('i18n_149'));return}const p=CAT.products.find(x=>x.id===id);if(!p)return;if(p.stock<=0){toast(tr('i18n_136'));return;}let v=catQGet(id);if(v>p.stock)v=p.stock;if(v<=0){delete CAT.cart[id];catBar();closeModal();return;}CAT.cart[id]=v;catBar();closeModal();openCatCart()}
 function catBar(){const ids=Object.keys(CAT.cart),n=ids.reduce((a,id)=>a+CAT.cart[id],0),t=ids.reduce((a,id)=>{const p=CAT.products.find(x=>x.id===id);return a+(p?p.price*CAT.cart[id]:0)},0);
   document.getElementById('catCount').textContent=n+' item';document.getElementById('catTotal').textContent=rp(t);
-  document.getElementById('catBar').classList.toggle('show',n>0);catTestiPlace();if(CAT.shopId)LS.set('catcart_'+CAT.shopId,CAT.cart);}
+  document.getElementById('catBar').classList.toggle('show',n>0);var _tw=document.getElementById('catTestiWidget');if(_tw)_tw.style.bottom=(n>0?'146px':'14px');catTestiPlace();if(CAT.shopId)LS.set('catcart_'+CAT.shopId,CAT.cart);}
 function catQtyChg(id,delta){const p=CAT.products.find(x=>x.id===id);if(!p){delete CAT.cart[id];catBar();closeCatCart();return}const cur=CAT.cart[id]||0;if(delta>0&&cur>=p.stock){toast(tr('i18n_137'));return}const nq=cur+delta;if(nq<=0){delete CAT.cart[id];toast(p.name+' dihapus dari keranjang')}else CAT.cart[id]=nq;catBar();if(!Object.keys(CAT.cart).length)closeCatCart();else openCatCart();}
 function openCatCart(){const ids=Object.keys(CAT.cart);if(!ids.length)return;closeModal();
   let rows='',total=0;ids.forEach(id=>{const p=CAT.products.find(x=>x.id===id);if(!p)return;const st=p.price*CAT.cart[id];total+=st;
