@@ -1,1 +1,7 @@
-{"apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code40/my-lapak_v1.1.0-code40.apk", "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTQwL215LWxhcGFrX3YxLjEuMC1jb2RlNDAuYXBr", "notes": "1.1.0 stabil (code40): update fitur retur — (1) ketuk barang di Stok Saat Ini untuk langsung Opname / Barang Rusak / Retur Supplier tanpa pilih barang lagi, (2) form Retur Pembeli kini ada kolom Catatan opsional, (3) Riwayat Retur baru di tab Produk: ketuk entri untuk memeriksa stok, tandai Sesuai atau Perbaiki via Opname.", "versionCode": 40, "versionName": "1.1.0"}
+{
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code41/my-lapak_v1.1.0-code41.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTQxL215LWxhcGFrX3YxLjEuMC1jb2RlNDEuYXBr",
+  "notes": "1.1.0 stabil (code41): (1) Batalkan Retur — retur yang salah bisa dibatalkan dari detail Riwayat Retur, stok, hutang, dan omzet dibalik; (2) perbaikan notif update Beranda — banner tetap muncul walau kuota cloud gagal, plus tombol Cek Update di Pengaturan > Lisensi.",
+  "versionCode": 41,
+  "versionName": "1.1.0"
+}
