@@ -1,7 +1,7 @@
 {
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code42/my-lapak_v1.1.0-code42.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTQyL215LWxhcGFrX3YxLjEuMC1jb2RlNDIuYXBr",
-  "notes": "1.1.0 stabil (code42): (1) Backup kini tersimpan jelas di folder Download dengan nama file; (2) History Pembatalan ikut terhapus saat Reset/Hapus Data; (3) perbaikan night mode — semua tombol dan tulisan terbaca di tema gelap.",
-  "versionCode": 42,
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code43/my-lapak_v1.1.0-code43.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTQzL215LWxhcGFrX3YxLjEuMC1jb2RlNDMuYXBr",
+  "notes": "1.1.0 stabil (code43): (1) Form Kirim Pesanan kini menampilkan detail pelanggan (ID, HP, alamat, ekspedisi); (2) ID pesanan katalog disamakan (ORD-...) - nomor yang dilihat customer sama dengan yang tampil di Pesanan, ID lama tetap bisa dicocokkan; (3) perbaikan pairing lisensi - kode toko tidak lagi hilang dari daftar Otomatis saat client pairing.",
+  "versionCode": 43,
   "versionName": "1.1.0"
 }
