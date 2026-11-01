@@ -1,7 +1,1 @@
-{
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code36/my-lapak_v1.1.0-code36.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTM2L215LWxhcGFrX3YxLjEuMC1jb2RlMzYuYXBr",
-  "notes": "1.1.0 stabil (code36): voice command Kasir natural (kamus sinonim + panduan), perbaikan peta picker & padding Batas Waktu Bayar, plus semua fitur 1.1.0 (cancel approval, order ulang + kompensasi, tag Time out, nada order masuk, Cek Kesehatan, share location).",
-  "versionCode": 36,
-  "versionName": "1.1.0"
-}
+{"apkUrl":"https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code37/my-lapak_v1.1.0-code37.apk","apkUrlB64":"aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTM3L215LWxhcGFrX3YxLjEuMC1jb2RlMzcuYXBr","notes":"1.1.0 stabil (code37): template chat Proses Kirim (instruksi bayar + menit adaptif), tombol Sudah Bayar (Proses Kirim langsung aktif), thumbnail bukti langsung di form, tombol Batalkan jadi Menunggu Approval saat pengajuan pending.","versionCode":37,"versionName":"1.1.0"}
