@@ -1806,7 +1806,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 const LS={get(k,d){try{const v=localStorage.getItem('wapp3_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('wapp3_'+k,JSON.stringify(v))}catch(e){}},del(k){localStorage.removeItem('wapp3_'+k)}};
 
 /* ================= v7.2: BAHASA, FLOAT BAR, BACK ================= */
-const APP_VERSION_CODE=54;const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
+const APP_VERSION_CODE=55;const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
 const L={id:{
 nav_dashboard:'Beranda',nav_kasir:'Pesanan',nav_produk:'Produk',nav_laporan:'Laporan',nav_ownerdash:'Dashboard',nav_pengaturan:'Pengaturan',online_label:'Order Online',
 back:'‹ Kembali',floatbar:'BANTUAN',
@@ -2512,7 +2512,7 @@ function can(p){if(MODE==='local')return true;if(isDeveloper())return true;if(p=
 function need(p){if(!can(p)){toast(tr('i18n_002'));return false}return true}
 
 /* ---------- data ---------- */
-function lsave(){LS.set('products',products);LS.set('transactions',transactions);LS.set('expenses',expenses);LS.set('stocklogs',stockLogs);LS.set('orders',orders);LS.set('shop',shop);LS.set('settings',settings);LS.set('debts',debts);LS.set('notes',notes);LS.set('returns',returns)}
+function lsave(){LS.set('products',products);LS.set('transactions',transactions);LS.set('expenses',expenses);LS.set('stocklogs',stockLogs);LS.set('orders',orders);LS.set('shop',shop);LS.set('settings',settings);LS.set('debts',debts);LS.set('notes',notes);LS.set('returns',returns);try{if(MODE==='cloud'&&SHOP_ID)LS.set('dataShopId',SHOP_ID)}catch(e){}}
 function lload(){products=LS.get('products',[]);transactions=LS.get('transactions',[]);expenses=LS.get('expenses',[]);stockLogs=LS.get('stocklogs',[]);orders=LS.get('orders',[]);debts=LS.get('debts',[]);notes=LS.get('notes',[]);returns=LS.get('returns',[]);shop=LS.get('shop',{name:'Warung Saya',address:'',phone:'',bank:'',qris:'',logo:'',banner:'',lat:'',lng:'',mapsUrl:''});settings=LS.get('settings',{low:5})}
 function coll(n){return FB.db.collection('shops').doc(SHOP_ID).collection(n)}
 function mergeById(local,cloud,tomb){
@@ -2539,6 +2539,8 @@ async function csaveOnce(name){
 }
 async function csave(name){let _e=null;for(let a=0;a<3;a++){try{await csaveOnce(name);return}catch(e){_e=e;if(a<2)await new Promise(r=>setTimeout(r,400*(a+1)))}}throw _e}
 async function cload(){
+  lload();
+  try{const _ds=LS.get('dataShopId','');if(SHOP_ID&&_ds&&_ds!==SHOP_ID){products=[];transactions=[];expenses=[];orders=[];debts=[];stockLogs=[];notes=[];returns=[]}}catch(e){}
   const _cloadLastSync=settings.lastSync||'';
   const map={products:'products',transactions:'transactions',expenses:'expenses',orders:'orders',debts:'debts'};
   let _shopDoc=null;
