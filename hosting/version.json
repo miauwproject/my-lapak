@@ -1,7 +1,7 @@
 {
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code53/my-lapak_v1.1.0-code53.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTUzL215LWxhcGFrX3YxLjEuMC1jb2RlNTMuYXBr",
-  "notes": "1.1.0 stabil (code53): (1) Urutan produk A-Z / Z-A di halaman Produk dan Kasir; (2) Bahasa aplikasi dan dokumen (struk, laporan, email) dwibahasa Indonesia/English; (3) kumulatif beta44-52: checklist retur multi-item POS, Koreksi Transaksi Owner, ketuk baris stok, Batalkan Retur, widget testimoni katalog floating, konvensi stockLogs, tema maskot night mode, dan perbaikan katalog.",
-  "versionCode": 53,
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code54/my-lapak_v1.1.0-code54.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTU0L215LWxhcGFrX3YxLjEuMC1jb2RlNTQuYXBr",
+  "notes": "1.1.0 stabil (code54): perbaikan sync offline — transaksi/produk yang dibuat offline kini tersimpan lokal walau cloud gagal, dan saat online digabung ke cloud (bukan ditimpa) sehingga tidak hilang lagi; penghapusan produk/pengeluaran dicatat penandanya supaya tidak bangkit lagi saat gabung; wipe/reset tetap dihormati. Kumulatif code53: urutan A-Z/Z-A Produk+Kasir, dwibahasa app+dokumen, dan semua beta44-52.",
+  "versionCode": 54,
   "versionName": "1.1.0"
 }
