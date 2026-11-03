@@ -1806,7 +1806,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 const LS={get(k,d){try{const v=localStorage.getItem('wapp3_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('wapp3_'+k,JSON.stringify(v))}catch(e){}},del(k){localStorage.removeItem('wapp3_'+k)}};
 
 /* ================= v7.2: BAHASA, FLOAT BAR, BACK ================= */
-const APP_VERSION_CODE=58;const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
+const APP_VERSION_CODE=59;const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
 const L={id:{
 nav_dashboard:'Beranda',nav_kasir:'Pesanan',nav_produk:'Produk',nav_laporan:'Laporan',nav_ownerdash:'Dashboard',nav_pengaturan:'Pengaturan',online_label:'Order Online',
 back:'‹ Kembali',floatbar:'BANTUAN',
@@ -2526,21 +2526,33 @@ function recordTomb(cname,id){
   try{if(MODE==='cloud'&&FB&&SHOP_ID&&!CLOUD_BLOCKED)coll('deleted').doc(cname+'_'+id).set({coll:cname,id:id,ts:new Date().toISOString()}).catch(()=>{})}catch(e){}
 }
 function canonJSON(v){if(v===null||typeof v!=='object')return JSON.stringify(v);if(Array.isArray(v))return '['+v.map(canonJSON).join(',')+']';return '{'+Object.keys(v).sort().map(k=>JSON.stringify(k)+':'+canonJSON(v[k])).join(',')+'}'}
+let cloudSnap={};
+function csaveUseSnap(snap,local){return !!snap&&!(snap.length===0&&local.length>0)}
+function csaveDiff(local,cloud){
+  const byId={};local.forEach(it=>{byId[it.id]=it});
+  const cloudIds={},delIds=[],setDocs=[];
+  cloud.forEach(d=>{cloudIds[d.id]=1;const cur=byId[d.id];if(!cur)delIds.push(d.id);else if(canonJSON(d.data())!==canonJSON(cur))setDocs.push(cur)});
+  local.forEach(it=>{if(!cloudIds[it.id])setDocs.push(it)});
+  return{delIds:delIds,setDocs:setDocs};
+}
 async function csaveOnce(name){
-  const c=coll(name),snap=await c.get();
+  const c=coll(name);
   const data=JSON.parse(JSON.stringify({products,transactions,expenses,stockLogs,orders,debts,returns}[name]||[]));
-  const byId={};data.forEach(it=>{byId[it.id]=it});
-  const cloudIds={},delRefs=[],setDocs=[];
-  snap.forEach(d=>{cloudIds[d.id]=1;const cur=byId[d.id];if(!cur)delRefs.push(d.ref);else if(canonJSON(d.data())!==canonJSON(cur))setDocs.push(cur)});
-  data.forEach(it=>{if(!cloudIds[it.id])setDocs.push(it)});
+  let cloud;
+  if(csaveUseSnap(cloudSnap[name],data)){cloud=cloudSnap[name].map(v=>({id:v.id,data:()=>v}))}
+  else{const snap=await c.get();cloud=[];snap.forEach(d=>cloud.push({id:d.id,data:()=>d.data()}))}
+  const _df=csaveDiff(data,cloud);
+  const delRefs=_df.delIds.map(id=>c.doc(id));
+  const setDocs=_df.setDocs;
   for(let i=0;i<delRefs.length;i+=450){const batch=FB.db.batch();delRefs.slice(i,i+450).forEach(r=>batch.delete(r));await batch.commit()}
   for(let i=0;i<setDocs.length;i+=450){const batch=FB.db.batch();setDocs.slice(i,i+450).forEach(it=>batch.set(c.doc(it.id),JSON.parse(JSON.stringify(it))));await batch.commit()}
+  cloudSnap[name]=JSON.parse(JSON.stringify(data));
   if(name==='products')await FB.db.collection('shops').doc(SHOP_ID).set({name:shop.name,address:shop.address||'',phone:shop.phone||'',logo:shop.logo||'',banner:shop.banner||'',lat:shop.lat||'',lng:shop.lng||'',mapsUrl:shop.mapsUrl||'',code:SHOP_CODE,updatedAt:new Date().toISOString()},{merge:true});
 }
 async function csave(name){let _e=null;for(let a=0;a<3;a++){try{await csaveOnce(name);return}catch(e){_e=e;if(a<2)await new Promise(r=>setTimeout(r,400*(a+1)))}}throw _e}
 async function cload(){
   lload();
-  try{const _ds=LS.get('dataShopId','');if(SHOP_ID&&_ds&&_ds!==SHOP_ID){products=[];transactions=[];expenses=[];orders=[];debts=[];stockLogs=[];notes=[];returns=[]}}catch(e){}
+  try{const _ds=LS.get('dataShopId','');if(SHOP_ID&&_ds&&_ds!==SHOP_ID){products=[];transactions=[];expenses=[];orders=[];debts=[];stockLogs=[];notes=[];returns=[];cloudSnap={}}}catch(e){}
   const _cloadLastSync=settings.lastSync||'';
   const map={products:'products',transactions:'transactions',expenses:'expenses',orders:'orders',debts:'debts'};
   let _shopDoc=null;
@@ -2601,18 +2613,22 @@ async function cload(){
     if(arr.length===0&&_local.length>0&&!_allowEmpty){_suspect=true;continue}
     const _m=mergeById(_local,arr,_tomb[k]||null);
     if(k==='products')products=_m.merged;else if(k==='transactions')transactions=_m.merged;else if(k==='expenses')expenses=_m.merged;else if(k==='debts')debts=_m.merged;else orders=_m.merged;
-    for(const it of _m.push){try{await coll(map[k]).doc(it.id).set(JSON.parse(JSON.stringify(it)))}catch(e){}}}
+    let _pf=false;for(const it of _m.push){try{await coll(map[k]).doc(it.id).set(JSON.parse(JSON.stringify(it)))}catch(e){_pf=true}}
+    if(!_pf)cloudSnap[k]=JSON.parse(JSON.stringify(k==='products'?products:k==='transactions'?transactions:k==='expenses'?expenses:k==='debts'?debts:orders));}
   if(_suspect){lastSyncSuspect=true;toast(tr('i18n_023'))}else lastSyncSuspect=false;
   transactions.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));expenses.sort((a,b)=>(b.date||'').localeCompare(a.date||''));stockLogs.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));orders.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));debts.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));
   const uq=await FB.db.collection('users').where('shopId','==',SHOP_ID).get();shopUsers=[];uq.forEach(d=>shopUsers.push({uid:d.id,...d.data()}));
   if(MODE==='cloud'&&CUR_USER&&!isDeveloper()&&shopUsers.length&&!shopUsers.find(x=>x.uid===CUR_USER.uid)){toast(tr('i18n_004'));gLogout();return}
   await mergeCloudExtra(_tomb);markSynced();lsave();
 }
+async function refreshReturns(){
+  const rs=await coll('returns').get();const seen={},merged=[],push=[];rs.forEach(d=>{const v=d.data();v.id=d.id;merged.push(v);seen[d.id]=1});returns.forEach(n=>{if(!n.id)return;if(!seen[n.id]){merged.push(n);push.push(n)}});returns=merged;returns.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));let _rf=false;for(const n of push){try{await coll('returns').doc(n.id).set(JSON.parse(JSON.stringify(n)))}catch(e){_rf=true}}if(!_rf)cloudSnap.returns=JSON.parse(JSON.stringify(returns));
+}
 async function mergeCloudExtra(_tomb){
   if(MODE!=='cloud'||!FB||!SHOP_ID)return;
-  try{const ns=await coll('notes').get();const seen={},merged=[],push=[];ns.forEach(d=>{if(_tomb&&_tomb.notes&&_tomb.notes.has(d.id))return;const v=d.data();v.id=d.id;merged.push(v);seen[d.id]=1});notes.forEach(n=>{if(!n.id)return;if(_tomb&&_tomb.notes&&_tomb.notes.has(n.id))return;if(!seen[n.id]){merged.push(n);push.push(n)}});notes=merged;notes.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));for(const n of push){try{await coll('notes').doc(n.id).set(JSON.parse(JSON.stringify(n)))}catch(e){}}}catch(e){}
-  try{const rs=await coll('returns').get();const seen={},merged=[],push=[];rs.forEach(d=>{const v=d.data();v.id=d.id;merged.push(v);seen[d.id]=1});returns.forEach(n=>{if(!n.id)return;if(!seen[n.id]){merged.push(n);push.push(n)}});returns=merged;returns.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));for(const n of push){try{await coll('returns').doc(n.id).set(JSON.parse(JSON.stringify(n)))}catch(e){}}}catch(e){}
-  try{const ss=await coll('stockLogs').get();const seen={},merged=[],push=[];ss.forEach(d=>{const v=d.data();v.id=d.id;merged.push(v);seen[d.id]=1});try{const ls=await coll('stocklogs').get();ls.forEach(d=>{if(!seen[d.id]){const v=d.data();v.id=d.id;merged.push(v);seen[d.id]=1;push.push(v)}})}catch(e){}stockLogs.forEach(n=>{if(!n.id)return;if(!seen[n.id]){merged.push(n);push.push(n)}});stockLogs=merged;stockLogs.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));for(const n of push){try{await coll('stockLogs').doc(n.id).set(JSON.parse(JSON.stringify(n)))}catch(e){}}}catch(e){}
+  try{const ns=await coll('notes').get();const seen={},merged=[],push=[];ns.forEach(d=>{if(_tomb&&_tomb.notes&&_tomb.notes.has(d.id))return;const v=d.data();v.id=d.id;merged.push(v);seen[d.id]=1});notes.forEach(n=>{if(!n.id)return;if(_tomb&&_tomb.notes&&_tomb.notes.has(n.id))return;if(!seen[n.id]){merged.push(n);push.push(n)}});let _nf=false;notes=merged;notes.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));for(const n of push){try{await coll('notes').doc(n.id).set(JSON.parse(JSON.stringify(n)))}catch(e){_nf=true}}if(!_nf)cloudSnap.notes=JSON.parse(JSON.stringify(notes));}catch(e){}
+  try{await refreshReturns()}catch(e){}
+  try{const ss=await coll('stockLogs').get();const seen={},merged=[],push=[];ss.forEach(d=>{const v=d.data();v.id=d.id;merged.push(v);seen[d.id]=1});try{const ls=await coll('stocklogs').get();ls.forEach(d=>{if(!seen[d.id]){const v=d.data();v.id=d.id;merged.push(v);seen[d.id]=1;push.push(v)}})}catch(e){}stockLogs.forEach(n=>{if(!n.id)return;if(!seen[n.id]){merged.push(n);push.push(n)}});let _sf=false;stockLogs=merged;stockLogs.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));for(const n of push){try{await coll('stockLogs').doc(n.id).set(JSON.parse(JSON.stringify(n)))}catch(e){_sf=true}}if(!_sf)cloudSnap.stockLogs=JSON.parse(JSON.stringify(stockLogs));}catch(e){}
   try{const as=await coll('activity').orderBy('ts','desc').limit(200).get();const arr=[];as.forEach(d=>arr.push(d.data()));arr.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));activityCloud=arr.slice(0,200)}catch(e){}
 }
 async function persist(what){if(MODE==='cloud'&&FB&&SHOP_ID&&!CLOUD_BLOCKED){try{const _pc=LS.get('licenseCode','');if(_pc&&!isDeveloper()){const _pd=await getDeviceInfo();const _ps=await FB.db.collection('licenses').doc(_pc).collection('devices').doc(_pd.id).get();if(_ps.exists&&_ps.data()&&_ps.data().active===false){CLOUD_BLOCKED=true;CLOUD_BLOCK_REASON='Perangkat ini dinonaktifkan oleh Owner/Developer. Hubungi Owner/Developer.';DEVICE_STATUS='deactivated';try{renderCloudBlocked()}catch(e){}lsave();return true}}}catch(e){}if(what==='settings'){return await pushShopSettings()}try{await csave(what==='shop'?'products':what);lsave();return true}catch(e){toast('Gagal simpan cloud: '+e.message);lsave();return false}}else{lsave();return true}}
@@ -5855,7 +5871,24 @@ function fmtHM(ts){if(!ts)return '';try{return new Date(ts).toLocaleString(LANG=
 function fmtDateFull(ts){if(!ts)return '';try{return new Date(ts).toLocaleDateString(LANG==='en'?'en-GB':'id-ID',{day:'numeric',month:'short',year:'numeric'})}catch(e){return String(ts).slice(0,10)}}
 function memberRoleOf(name){if(!name)return '';if(MODE==='local')return 'owner';const u=shopUsers.find(x=>x.name===name);if(!u)return '';if(u.uid===DEVELOPER_UID||(u.email&&GLOBAL_DEV_EMAILS.includes(u.email.trim().toLowerCase())))return 'developer';return normRole(u.role)}
 let lastSyncSuspect=false;
-async function manualRefresh(){if(aturState)aturCancel();try{await cload();const me=shopUsers.find(x=>CUR_USER&&x.uid===CUR_USER.uid);if(me)MY_ROLE=normRole(me.role);applyPerms();if(curView==='dashboard')renderDash();else if(curView==='kasir')renderKasir();else if(curView==='produk')renderProduk();else if(curView==='pengguna')renderUsers();else if(curView==='laporan'){renderLap();renderEmailSettings();renderLapSend();renderHist()}else if(curView==='stok')renderStok();else if(curView==='ownerdash')renderOdTab();else if(curView==='notes')renderNotes();else if(curView==='toko')fillSettings();else if(curView==='tampilan')renderTampilan();else if(curView==='pengeluaran')renderExp();else if(curView==='hutang')renderHutang();else if(curView==='pengaturan'){renderSettingMenu();fillSettings()}else if(curView==='profil')renderProfil();else if(curView==='cloud')renderCloudCard();else if(curView==='pin')refreshPinBox();else if(curView==='role')renderRoleMatrix();else if(curView==='panduan')renderPanduan();else if(curView==='tiket')tiketLoad();else if(curView==='admin')renderAdminDash();if(lastSyncSuspect){toast(tr('i18n_036'))}else{checkUpdate();tiketNotifRefresh(true);toast(tr('i18n_024'))}}catch(e){toast(tr('i18n_037'))}}
+async function manualRefresh(){if(aturState)aturCancel();try{
+  /*LIGHT-REFRESH-START*/
+  if(MODE==='cloud'&&FB&&SHOP_ID&&!CLOUD_BLOCKED){
+    let _blocked=false;
+    try{const _dc=await checkDeviceAndCloud();if(!_dc.allowed){CLOUD_BLOCKED=true;CLOUD_BLOCK_REASON=_dc.reasonText||'Cloud nonaktif';DEVICE_STATUS=_dc.status||'blocked';_blocked=true;try{renderCloudBlocked()}catch(e){}}}catch(e){}
+    if(!_blocked){
+      let _full=false;
+      try{const sd=await FB.db.collection('shops').doc(SHOP_ID).get();if(sd.exists){const s=sd.data();if((s.wipedAt||'')!==SHOP_WIPED_AT||(s.resetAt||'')!==SHOP_RESET_AT){_full=true}else{shop.name=s.name||shop.name;shop.address=s.address||'';shop.phone=s.phone||'';SHOP_CODE=s.code||SHOP_CODE;SHOP_HOLIDAY=!!s.holiday;SHOP_HOLIDAY_NOTE=s.holidayNote||''}}}catch(e){}
+      if(_full){await cload()}
+      else{
+        try{await refreshReturns()}catch(e){}
+        try{const uq=await FB.db.collection('users').where('shopId','==',SHOP_ID).get();shopUsers=[];uq.forEach(d=>shopUsers.push({uid:d.id,...d.data()}));if(MODE==='cloud'&&CUR_USER&&!isDeveloper()&&shopUsers.length&&!shopUsers.find(x=>x.uid===CUR_USER.uid)){toast(tr('i18n_004'));gLogout();return}}catch(e){}
+        markSynced();
+      }
+    }
+  }else{await cload()}
+  /*LIGHT-REFRESH-END*/
+  const me=shopUsers.find(x=>CUR_USER&&x.uid===CUR_USER.uid);if(me)MY_ROLE=normRole(me.role);applyPerms();if(curView==='dashboard')renderDash();else if(curView==='kasir')renderKasir();else if(curView==='produk')renderProduk();else if(curView==='pengguna')renderUsers();else if(curView==='laporan'){renderLap();renderEmailSettings();renderLapSend();renderHist()}else if(curView==='stok')renderStok();else if(curView==='ownerdash')renderOdTab();else if(curView==='notes')renderNotes();else if(curView==='toko')fillSettings();else if(curView==='tampilan')renderTampilan();else if(curView==='pengeluaran')renderExp();else if(curView==='hutang')renderHutang();else if(curView==='pengaturan'){renderSettingMenu();fillSettings()}else if(curView==='profil')renderProfil();else if(curView==='cloud')renderCloudCard();else if(curView==='pin')refreshPinBox();else if(curView==='role')renderRoleMatrix();else if(curView==='panduan')renderPanduan();else if(curView==='tiket')tiketLoad();else if(curView==='admin')renderAdminDash();if(lastSyncSuspect){toast(tr('i18n_036'))}else{checkUpdate();tiketNotifRefresh(true);toast(tr('i18n_024'))}}catch(e){toast(tr('i18n_037'))}}
 const NOTE_CATS={Masalah:['Masalah','#dc2626'],Komplain:['Komplain Pembeli','#ea580c'],Info:['Info','#2563eb'],Lainnya:['Lainnya','#888888']};
 function noteCatPill(c){const v=NOTE_CATS[c]||NOTE_CATS.Lainnya;return '<span class="mpill" style="background:'+v[1]+'">'+v[0]+'</span>'}
 function noteCanMod(n){if(!CUR_USER)return false;return n.byUid===CUR_USER.uid||isOwner()||isDeveloper()}
