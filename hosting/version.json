@@ -1,7 +1,7 @@
 {
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code56/my-lapak_v1.1.0-code56.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTU2L215LWxhcGFrX3YxLjEuMC1jb2RlNTYuYXBr",
-  "notes": "1.1.0 stabil (code56): tutup duplikasi memo 1->4 (STANDAR SYNC) — gabungan sync kini memaksa id dokumen cloud saat dibaca dan membuang salinan lokal tanpa id, sehingga memo/retur/stok tidak lagi berlipat tiap login/Refresh; memo kembali 1 otomatis. Kumulatif code55: produk offline masuk online (lload + dataShopId); code54: persist local-first, merge 5 koleksi + tombstone, wipe/reset dihormati; code53: urutan A-Z/Z-A, dwibahasa, beta44-52.",
-  "versionCode": 56,
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code57/my-lapak_v1.1.0-code57.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTU3L215LWxhcGFrX3YxLjEuMC1jb2RlNTcuYXBr",
+  "notes": "1.1.0 stabil (code57): memo dihapus bangkit lagi (TERTUTUP) + bersihkan 16 duplikat. Akar bangkit: noteDel menghapus cloud + memori tapi tidak menyimpan ke LS, sehingga Refresh membaca LS basi dan mendorong memo yang sudah dihapus balik ke cloud. Fix: noteDel kini recordTomb + lsave; merge notes menghormati tombstone (pola code54); tombol Bersihkan duplikat di Catatan Toko (grup isi identik disisakan 1, sisanya dihapus + tombstone). Kumulatif code56: tutup pembuatan duplikat memo (paksa id cloud + buang lokal tanpa id); code55: produk offline masuk online; code54: persist local-first, merge 5 koleksi + tombstone.",
+  "versionCode": 57,
   "versionName": "1.1.0"
 }
