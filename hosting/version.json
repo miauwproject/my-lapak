@@ -1,7 +1,7 @@
 {
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code54/my-lapak_v1.1.0-code54.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTU0L215LWxhcGFrX3YxLjEuMC1jb2RlNTQuYXBr",
-  "notes": "1.1.0 stabil (code54): perbaikan sync offline — transaksi/produk yang dibuat offline kini tersimpan lokal walau cloud gagal, dan saat online digabung ke cloud (bukan ditimpa) sehingga tidak hilang lagi; penghapusan produk/pengeluaran dicatat penandanya supaya tidak bangkit lagi saat gabung; wipe/reset tetap dihormati. Kumulatif code53: urutan A-Z/Z-A Produk+Kasir, dwibahasa app+dokumen, dan semua beta44-52.",
-  "versionCode": 54,
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code55/my-lapak_v1.1.0-code55.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTU1L215LWxhcGFrX3YxLjEuMC1jb2RlNTUuYXBr",
+  "notes": "1.1.0 stabil (code55): produk offline masuk ke mode online — sync kini membaca dulu data simpanan HP sebelum digabung dengan cloud, sehingga produk/transaksi offline tidak lagi diabaikan saat login; penanda toko data mencegah data toko lain bocor ke toko baru, data mode lokal tetap digabung ke toko online. Kumulatif code54: persist local-first, merge 5 koleksi + tombstone hapus, wipe/reset dihormati; code53: urutan A-Z/Z-A, dwibahasa, beta44-52.",
+  "versionCode": 55,
   "versionName": "1.1.0"
 }
