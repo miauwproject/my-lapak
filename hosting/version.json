@@ -1,7 +1,7 @@
 {
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code55/my-lapak_v1.1.0-code55.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTU1L215LWxhcGFrX3YxLjEuMC1jb2RlNTUuYXBr",
-  "notes": "1.1.0 stabil (code55): produk offline masuk ke mode online — sync kini membaca dulu data simpanan HP sebelum digabung dengan cloud, sehingga produk/transaksi offline tidak lagi diabaikan saat login; penanda toko data mencegah data toko lain bocor ke toko baru, data mode lokal tetap digabung ke toko online. Kumulatif code54: persist local-first, merge 5 koleksi + tombstone hapus, wipe/reset dihormati; code53: urutan A-Z/Z-A, dwibahasa, beta44-52.",
-  "versionCode": 55,
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code56/my-lapak_v1.1.0-code56.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTU2L215LWxhcGFrX3YxLjEuMC1jb2RlNTYuYXBr",
+  "notes": "1.1.0 stabil (code56): tutup duplikasi memo 1->4 (STANDAR SYNC) — gabungan sync kini memaksa id dokumen cloud saat dibaca dan membuang salinan lokal tanpa id, sehingga memo/retur/stok tidak lagi berlipat tiap login/Refresh; memo kembali 1 otomatis. Kumulatif code55: produk offline masuk online (lload + dataShopId); code54: persist local-first, merge 5 koleksi + tombstone, wipe/reset dihormati; code53: urutan A-Z/Z-A, dwibahasa, beta44-52.",
+  "versionCode": 56,
   "versionName": "1.1.0"
 }
