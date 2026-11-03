@@ -1806,7 +1806,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 const LS={get(k,d){try{const v=localStorage.getItem('wapp3_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('wapp3_'+k,JSON.stringify(v))}catch(e){}},del(k){localStorage.removeItem('wapp3_'+k)}};
 
 /* ================= v7.2: BAHASA, FLOAT BAR, BACK ================= */
-const APP_VERSION_CODE=55;const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
+const APP_VERSION_CODE=56;const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
 const L={id:{
 nav_dashboard:'Beranda',nav_kasir:'Pesanan',nav_produk:'Produk',nav_laporan:'Laporan',nav_ownerdash:'Dashboard',nav_pengaturan:'Pengaturan',online_label:'Order Online',
 back:'‹ Kembali',floatbar:'BANTUAN',
@@ -2518,7 +2518,7 @@ function coll(n){return FB.db.collection('shops').doc(SHOP_ID).collection(n)}
 function mergeById(local,cloud,tomb){
   const byId={},merged=[],push=[];
   (cloud||[]).forEach(it=>{if(!it)return;if(!it.id){merged.push(it);return}if(tomb&&tomb.has(it.id))return;byId[it.id]=1;merged.push(it)});
-  (local||[]).forEach(it=>{if(!it)return;if(!it.id){merged.push(it);return}if(tomb&&tomb.has(it.id))return;if(!byId[it.id]){byId[it.id]=1;merged.push(it);push.push(it)}});
+  (local||[]).forEach(it=>{if(!it||!it.id)return;if(tomb&&tomb.has(it.id))return;if(!byId[it.id]){byId[it.id]=1;merged.push(it);push.push(it)}});
   return {merged:merged,push:push};
 }
 function recordTomb(cname,id){
@@ -2596,7 +2596,7 @@ async function cload(){
   else if(_newReset){transactions=[];expenses=[];orders=[];debts=[];stockLogs=[];returns=[]}
   const _allowEmpty=_newWipe||_newReset||(SHOP_WIPED_AT&&SHOP_WIPED_AT>_lastSync)||(SHOP_RESET_AT&&SHOP_RESET_AT>_lastSync);
   let _suspect=false;
-  for(const k of Object.keys(map)){const s2=await coll(map[k]).get();const arr=[];s2.forEach(d=>arr.push(d.data()));
+  for(const k of Object.keys(map)){const s2=await coll(map[k]).get();const arr=[];s2.forEach(d=>{const v=d.data();if(!v.id)v.id=d.id;arr.push(v)});
     const _local={products:products,transactions:transactions,expenses:expenses,orders:orders,debts:debts}[k]||[];
     if(arr.length===0&&_local.length>0&&!_allowEmpty){_suspect=true;continue}
     const _m=mergeById(_local,arr,_tomb[k]||null);
@@ -2610,9 +2610,9 @@ async function cload(){
 }
 async function mergeCloudExtra(){
   if(MODE!=='cloud'||!FB||!SHOP_ID)return;
-  try{const ns=await coll('notes').get();const seen={},merged=[],push=[];ns.forEach(d=>{merged.push(d.data());seen[d.id]=1});notes.forEach(n=>{if(!seen[n.id]){merged.push(n);push.push(n)}});notes=merged;notes.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));for(const n of push){try{await coll('notes').doc(n.id).set(JSON.parse(JSON.stringify(n)))}catch(e){}}}catch(e){}
-  try{const rs=await coll('returns').get();const seen={},merged=[],push=[];rs.forEach(d=>{merged.push(d.data());seen[d.id]=1});returns.forEach(n=>{if(!seen[n.id]){merged.push(n);push.push(n)}});returns=merged;returns.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));for(const n of push){try{await coll('returns').doc(n.id).set(JSON.parse(JSON.stringify(n)))}catch(e){}}}catch(e){}
-  try{const ss=await coll('stockLogs').get();const seen={},merged=[],push=[];ss.forEach(d=>{merged.push(d.data());seen[d.id]=1});try{const ls=await coll('stocklogs').get();ls.forEach(d=>{if(!seen[d.id]){merged.push(d.data());seen[d.id]=1;push.push(d.data())}})}catch(e){}stockLogs.forEach(n=>{if(!seen[n.id]){merged.push(n);push.push(n)}});stockLogs=merged;stockLogs.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));for(const n of push){try{await coll('stockLogs').doc(n.id).set(JSON.parse(JSON.stringify(n)))}catch(e){}}}catch(e){}
+  try{const ns=await coll('notes').get();const seen={},merged=[],push=[];ns.forEach(d=>{const v=d.data();v.id=d.id;merged.push(v);seen[d.id]=1});notes.forEach(n=>{if(!n.id)return;if(!seen[n.id]){merged.push(n);push.push(n)}});notes=merged;notes.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));for(const n of push){try{await coll('notes').doc(n.id).set(JSON.parse(JSON.stringify(n)))}catch(e){}}}catch(e){}
+  try{const rs=await coll('returns').get();const seen={},merged=[],push=[];rs.forEach(d=>{const v=d.data();v.id=d.id;merged.push(v);seen[d.id]=1});returns.forEach(n=>{if(!n.id)return;if(!seen[n.id]){merged.push(n);push.push(n)}});returns=merged;returns.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));for(const n of push){try{await coll('returns').doc(n.id).set(JSON.parse(JSON.stringify(n)))}catch(e){}}}catch(e){}
+  try{const ss=await coll('stockLogs').get();const seen={},merged=[],push=[];ss.forEach(d=>{const v=d.data();v.id=d.id;merged.push(v);seen[d.id]=1});try{const ls=await coll('stocklogs').get();ls.forEach(d=>{if(!seen[d.id]){const v=d.data();v.id=d.id;merged.push(v);seen[d.id]=1;push.push(v)}})}catch(e){}stockLogs.forEach(n=>{if(!n.id)return;if(!seen[n.id]){merged.push(n);push.push(n)}});stockLogs=merged;stockLogs.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));for(const n of push){try{await coll('stockLogs').doc(n.id).set(JSON.parse(JSON.stringify(n)))}catch(e){}}}catch(e){}
   try{const as=await coll('activity').orderBy('ts','desc').limit(200).get();const arr=[];as.forEach(d=>arr.push(d.data()));arr.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));activityCloud=arr.slice(0,200)}catch(e){}
 }
 async function persist(what){if(MODE==='cloud'&&FB&&SHOP_ID&&!CLOUD_BLOCKED){try{const _pc=LS.get('licenseCode','');if(_pc&&!isDeveloper()){const _pd=await getDeviceInfo();const _ps=await FB.db.collection('licenses').doc(_pc).collection('devices').doc(_pd.id).get();if(_ps.exists&&_ps.data()&&_ps.data().active===false){CLOUD_BLOCKED=true;CLOUD_BLOCK_REASON='Perangkat ini dinonaktifkan oleh Owner/Developer. Hubungi Owner/Developer.';DEVICE_STATUS='deactivated';try{renderCloudBlocked()}catch(e){}lsave();return true}}}catch(e){}if(what==='settings'){return await pushShopSettings()}try{await csave(what==='shop'?'products':what);lsave();return true}catch(e){toast('Gagal simpan cloud: '+e.message);lsave();return false}}else{lsave();return true}}
