@@ -1,7 +1,7 @@
 {
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code57/my-lapak_v1.1.0-code57.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTU3L215LWxhcGFrX3YxLjEuMC1jb2RlNTcuYXBr",
-  "notes": "1.1.0 stabil (code57): memo dihapus bangkit lagi (TERTUTUP) + bersihkan 16 duplikat. Akar bangkit: noteDel menghapus cloud + memori tapi tidak menyimpan ke LS, sehingga Refresh membaca LS basi dan mendorong memo yang sudah dihapus balik ke cloud. Fix: noteDel kini recordTomb + lsave; merge notes menghormati tombstone (pola code54); tombol Bersihkan duplikat di Catatan Toko (grup isi identik disisakan 1, sisanya dihapus + tombstone). Kumulatif code56: tutup pembuatan duplikat memo (paksa id cloud + buang lokal tanpa id); code55: produk offline masuk online; code54: persist local-first, merge 5 koleksi + tombstone.",
-  "versionCode": 57,
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code58/my-lapak_v1.1.0-code58.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTU4L215LWxhcGFrX3YxLjEuMC1jb2RlNTguYXBr",
+  "notes": "1.1.0 stabil (code58): header Beranda opsi 2 (disetujui user dari preview) - badge role di chip header disembunyikan, chip profile tetap pil avatar + nama dengan tinggi 36px (sama seperti tombol keranjang/logout), nama toko dapat ruang lebih lega. Role tetap tampil di menu profil saat chip diketuk. Kumulatif code57: memo dihapus bangkit lagi (TERTUTUP: noteDel recordTomb + lsave, merge notes hormati tombstone, tombol Bersihkan duplikat di Catatan Toko); code56: tutup pembuatan duplikat memo; code55: produk offline masuk online; code54: persist local-first, merge 5 koleksi + tombstone.",
+  "versionCode": 58,
   "versionName": "1.1.0"
 }
