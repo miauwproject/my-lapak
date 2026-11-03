@@ -24,11 +24,11 @@ header{position:sticky;top:0;z-index:20;background:linear-gradient(135deg,var(--
 header .logo{font-size:24px}
 header h1{font-size:17px;font-weight:700;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 header small{display:block;font-size:11px;opacity:.85;font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#userChip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.18);border-radius:20px;padding:5px 10px;font-size:12px;font-weight:600;cursor:pointer;max-width:150px}
+#userChip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.18);border-radius:20px;padding:6px 10px;font-size:12px;font-weight:600;cursor:pointer;max-width:150px}
 #userName{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 #userChip img{width:24px;height:24px;border-radius:50%}
 #userChip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.role-tag{font-size:9px;background:rgba(255,255,255,.3);padding:1px 6px;border-radius:6px;font-weight:800}
+.role-tag{font-size:9px;background:rgba(255,255,255,.3);padding:1px 6px;border-radius:6px;font-weight:800}#userRole{display:none}
 .view{display:none;padding:14px 14px 20px;animation:fade .18s}
 .view.active{display:block}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -1806,7 +1806,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 const LS={get(k,d){try{const v=localStorage.getItem('wapp3_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('wapp3_'+k,JSON.stringify(v))}catch(e){}},del(k){localStorage.removeItem('wapp3_'+k)}};
 
 /* ================= v7.2: BAHASA, FLOAT BAR, BACK ================= */
-const APP_VERSION_CODE=57;const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
+const APP_VERSION_CODE=58;const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
 const L={id:{
 nav_dashboard:'Beranda',nav_kasir:'Pesanan',nav_produk:'Produk',nav_laporan:'Laporan',nav_ownerdash:'Dashboard',nav_pengaturan:'Pengaturan',online_label:'Order Online',
 back:'‹ Kembali',floatbar:'BANTUAN',
