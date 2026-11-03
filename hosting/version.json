@@ -1,7 +1,7 @@
 {
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code58/my-lapak_v1.1.0-code58.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTU4L215LWxhcGFrX3YxLjEuMC1jb2RlNTguYXBr",
-  "notes": "1.1.0 stabil (code58): header Beranda opsi 2 (disetujui user dari preview) - badge role di chip header disembunyikan, chip profile tetap pil avatar + nama dengan tinggi 36px (sama seperti tombol keranjang/logout), nama toko dapat ruang lebih lega. Role tetap tampil di menu profil saat chip diketuk. Kumulatif code57: memo dihapus bangkit lagi (TERTUTUP: noteDel recordTomb + lsave, merge notes hormati tombstone, tombol Bersihkan duplikat di Catatan Toko); code56: tutup pembuatan duplikat memo; code55: produk offline masuk online; code54: persist local-first, merge 5 koleksi + tombstone.",
-  "versionCode": 58,
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code59/my-lapak_v1.1.0-code59.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTU5L215LWxhcGFrX3YxLjEuMC1jb2RlNTkuYXBr",
+  "notes": "1.1.0 stabil (code59): hemat reads Firestore - csave diff dari snapshot cloud terakhir tanpa full get tiap simpan (penjualan kasir tidak lagi membaca seluruh histori transaksi), Refresh jadi sync ringan tanpa cload penuh (full sync tetap saat login dan bila wipe/reset berubah). Kumulatif code58: header Beranda opsi 2; code57: memo bangkit tertutup; code56: tutup pembuatan duplikat memo; code55: produk offline masuk online; code54: persist local-first, merge 5 koleksi + tombstone.",
+  "versionCode": 59,
   "versionName": "1.1.0"
 }
