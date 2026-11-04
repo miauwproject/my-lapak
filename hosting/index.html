@@ -4812,7 +4812,8 @@ async function catAppCheckInit(){
     if(!firebase.appCheck)await new Promise((res,rej)=>{const s=document.createElement('script');s.src='https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check-compat.js';s.onload=res;s.onerror=rej;document.head.appendChild(s)});
     firebase.appCheck().activate(new firebase.appCheck.ReCaptchaEnterpriseProvider(CAT_APPCHECK_KEY),true);
     CAT.appCheckOn=true;
-  }catch(e){}
+    try{await firebase.appCheck().getToken();}catch(e){await new Promise(r=>setTimeout(r,1500));try{await firebase.appCheck().getToken();}catch(e2){console.warn('AppCheck warmup gagal',e2);}}
+  }catch(e){console.warn('AppCheck init gagal',e);}
 }
 async function initCatalog(code,cfgB64){
   document.getElementById('catalogView').classList.add('active');
@@ -4823,7 +4824,7 @@ async function initCatalog(code,cfgB64){
     if(!firebase.apps.length)firebase.initializeApp(CAT.cfg);
     await catAppCheckInit();
     const db=firebase.firestore();
-    const q=await db.collection('shops').where('code','==',code.toUpperCase()).limit(1).get();
+    let q;try{q=await db.collection('shops').where('code','==',code.toUpperCase()).limit(1).get();}catch(e){if(e&&e.code==='permission-denied'){await new Promise(r=>setTimeout(r,2000));try{await firebase.appCheck().getToken(true);}catch(_){}q=await db.collection('shops').where('code','==',code.toUpperCase()).limit(1).get();}else throw e;}
     if(q.empty){document.getElementById('catalogView').innerHTML='<div class="empty" style="padding:60px 20px"><div class="ic">🏪</div>'+tr('cat_shop_not_found')+'</div>';return}
     const doc=q.docs[0];CAT.shopId=doc.id;const s=doc.data();CAT.holiday=!!s.holiday;CAT.holidayNote=s.holidayNote||'';
     CAT.shop={name:s.name,address:s.address||'',phone:s.phone||'',logo:s.logo||'',banner:s.banner||'',mapsUrl:s.mapsUrl||''};
