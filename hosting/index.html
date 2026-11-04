@@ -2580,37 +2580,38 @@ function coverIntsFor61(coll){
   if(wo)ints.push([wo,'9999-12-31']);
   return ints;
 }
-async function ensureRange61(coll,field,s,e){
+async function ensureRange61(cn,field,s,e){
   if(MODE!=='cloud'||!FB||!FB.db||!SHOP_ID||CLOUD_BLOCKED)return false;
   if(!s||!e||s>e)return false;
-  const gaps=coverGaps61(s,e,coverIntsFor61(coll));
+  const gaps=coverGaps61(s,e,coverIntsFor61(cn));
   if(!gaps.length)return false;
-  let merged=collArr61(coll);
+  let merged=collArr61(cn);
+  let ok61=true;
   for(const gsge of gaps){
     const gs=gsge[0],ge=gsge[1];
     try{
-      const snap=await coll(coll).where(field,'>=',gs).where(field,'<=',ge).orderBy(field).get();
+      const snap=await coll(cn).where(field,'>=',gs).where(field,'<=',ge).orderBy(field).get();
       const docs=[];snap.forEach(d=>{const v=d.data();v.id=d.id;docs.push(v)});
       if(docs.length){
         const mf=mergeFetch61(merged,docs,null,null);
         merged=mf.merged;
-        const oldSnap=cloudSnap[coll]||[];const sm={};oldSnap.forEach(d=>{if(d&&d.id)sm[d.id]=d});
+        const oldSnap=cloudSnap[cn]||[];const sm={};oldSnap.forEach(d=>{if(d&&d.id)sm[d.id]=d});
         docs.forEach(d=>{if(mf.dirty.has(d.id)){delete sm[d.id]}else{sm[d.id]=d}});
-        cloudSnap[coll]=Object.values(sm);
+        cloudSnap[cn]=Object.values(sm);
         const kn=cloudKnownGet();docs.forEach(d=>{if(d&&d.id&&!mf.dirty.has(d.id))kn[d.id]=1});cloudKnownSet(kn);
       }
-      const ci=coverIntsGet();if(!ci[coll])ci[coll]=[];ci[coll].push([gs,ge]);coverIntsSet(ci);
-    }catch(err){}
+      const ci=coverIntsGet();if(!ci[cn])ci[cn]=[];ci[cn].push([gs,ge]);coverIntsSet(ci);
+    }catch(err){ok61=false}
   }
-  setCollArr61(coll,merged);sortColl61(coll);try{lsave()}catch(err){}
-  return true;
+  setCollArr61(cn,merged);sortColl61(cn);try{lsave()}catch(err){}
+  return ok61;
 }
 async function ensureReportPeriod61(r){
   if(!r||!r.start||!r.end)return false;
-  const a=await ensureRange61('transactions','date',r.start,r.end);
-  const b=await ensureRange61('orders','date',r.start,r.end);
-  const c=await ensureRange61('expenses','date',r.start,r.end);
-  return a||b||c;
+  await ensureRange61('transactions','date',r.start,r.end);
+  await ensureRange61('orders','date',r.start,r.end);
+  await ensureRange61('expenses','date',r.start,r.end);
+  return !periodGaps61(r);
 }
 function periodGaps61(r){
   if(!r||!r.start||!r.end)return false;
@@ -2623,24 +2624,24 @@ function monthRange61(){
 }
 function monthGaps61(){return periodGaps61(monthRange61())}
 async function ensureMonth61(){return ensureReportPeriod61(monthRange61())}
-async function pageIn61(coll,field,oldestVal){
+async function pageIn61(cn,field,oldestVal){
   if(MODE!=='cloud'||!FB||!FB.db||!SHOP_ID||CLOUD_BLOCKED)return 0;
   if(!oldestVal)return 0;
-  const cur=collArr61(coll);if(!cur.length)return 0;
+  const cur=collArr61(cn);if(!cur.length)return 0;
   try{
-    const snap=await coll(coll).orderBy(field,'desc').startAt(oldestVal).limit(PAGE_LIMIT61).get();
+    const snap=await coll(cn).orderBy(field,'desc').startAt(oldestVal).limit(PAGE_LIMIT61).get();
     const docs=[];snap.forEach(d=>{const v=d.data();v.id=d.id;docs.push(v)});
-    if(!docs.length){winHasMore61[coll]=false;return 0}
+    if(!docs.length){winHasMore61[cn]=false;return 0}
     const ids={};cur.forEach(d=>{if(d&&d.id)ids[d.id]=1});
     let nw=0;docs.forEach(d=>{if(d&&d.id&&!ids[d.id])nw++});
     const mf=mergeFetch61(cur,docs,null,null);
-    setCollArr61(coll,mf.merged);sortColl61(coll);
-    const arr=collArr61(coll);
-    const mn=minField61(arr,field);if(mn)winOldest61[coll]=mn;
-    winHasMore61[coll]=(docs.length===PAGE_LIMIT61&&nw>0);
-    const oldSnap=cloudSnap[coll]||[];const sm={};oldSnap.forEach(d=>{if(d&&d.id)sm[d.id]=d});
+    setCollArr61(cn,mf.merged);sortColl61(cn);
+    const arr=collArr61(cn);
+    const mn=minField61(arr,field);if(mn)winOldest61[cn]=mn;
+    winHasMore61[cn]=(docs.length===PAGE_LIMIT61&&nw>0);
+    const oldSnap=cloudSnap[cn]||[];const sm={};oldSnap.forEach(d=>{if(d&&d.id)sm[d.id]=d});
     docs.forEach(d=>{if(mf.dirty.has(d.id)){delete sm[d.id]}else{sm[d.id]=d}});
-    cloudSnap[coll]=Object.values(sm);
+    cloudSnap[cn]=Object.values(sm);
     const kn=cloudKnownGet();docs.forEach(d=>{if(d&&d.id&&!mf.dirty.has(d.id))kn[d.id]=1});cloudKnownSet(kn);
     try{lsave()}catch(err){}
     return nw;
