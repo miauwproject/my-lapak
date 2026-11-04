@@ -4818,7 +4818,7 @@ async function initCatalog(code,cfgB64){
   document.getElementById('catalogView').classList.add('active');
   try{
     CAT.cfg=cfgB64?JSON.parse(atob(cfgB64)):fbConfig();
-    if(CAT.cfg&&CAT.cfg.projectId==='toko-mobile-app'&&!CAT.cfg.appId)CAT.cfg.appId='1:1072525512477:web:9cd0cd2e6be2a9a6f04cf6';
+    if(CAT.cfg&&CAT.cfg.projectId==='toko-mobile-app'&&!CAT.cfg.appId)CAT.cfg.appId='1:964910397769:web:e2baf7c523194459100298';
     await loadFirebase(CAT.cfg);
     if(!firebase.apps.length)firebase.initializeApp(CAT.cfg);
     await catAppCheckInit();
