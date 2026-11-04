@@ -4804,12 +4804,22 @@ async function catTestiSubmit(){var nm=(document.getElementById('catTestiName').
 window.addEventListener('resize',catTestiPlace);
 const CAT_ICONS={'Sembako':'🧺','Minuman':'🥤','Snack':'🍟','Makanan':'🍜','Rokok':'🚬','ATK':'✏️','Kebersihan':'🧼','Obat':'💊','Pulsa':'📱','Lainnya':'📦'};
 const catIcon=c=>CAT_ICONS[c]||'📦';
+const CAT_APPCHECK_KEY='6Lc7vg4uAAAAAEkIGVTEY2hdpA2ILR1TnoqbTFMn';
+async function catAppCheckInit(){
+  if(CAT.appCheckOn)return;
+  try{
+    if(!firebase.appCheck)await new Promise((res,rej)=>{const s=document.createElement('script');s.src='https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check-compat.js';s.onload=res;s.onerror=rej;document.head.appendChild(s)});
+    firebase.appCheck().activate(new firebase.appCheck.ReCaptchaEnterpriseProvider(CAT_APPCHECK_KEY),true);
+    CAT.appCheckOn=true;
+  }catch(e){}
+}
 async function initCatalog(code,cfgB64){
   document.getElementById('catalogView').classList.add('active');
   try{
     CAT.cfg=cfgB64?JSON.parse(atob(cfgB64)):fbConfig();
     await loadFirebase(CAT.cfg);
     if(!firebase.apps.length)firebase.initializeApp(CAT.cfg);
+    await catAppCheckInit();
     const db=firebase.firestore();
     const q=await db.collection('shops').where('code','==',code.toUpperCase()).limit(1).get();
     if(q.empty){document.getElementById('catalogView').innerHTML='<div class="empty" style="padding:60px 20px"><div class="ic">🏪</div>'+tr('cat_shop_not_found')+'</div>';return}
