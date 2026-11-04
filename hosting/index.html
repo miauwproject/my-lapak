@@ -50,7 +50,6 @@ header small{display:block;font-size:11px;opacity:.85;font-weight:400;white-spac
 .btn:disabled{background:var(--line);color:var(--mut);opacity:1}
 .rowbtns{display:flex;gap:8px}.rowbtns .btn{flex:1}
 input,select,textarea{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;font-size:15px;margin-bottom:10px;background:var(--card);color:var(--txt);font-family:inherit}
-.searchbar select{flex:none;width:auto;margin:0}.searchbar input{margin:0}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--green)}
 input::placeholder,textarea::placeholder{color:var(--mut);opacity:1}
 label{font-size:12px;color:var(--mut);display:block;margin-bottom:4px;font-weight:600}
@@ -1807,7 +1806,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 const LS={get(k,d){try{const v=localStorage.getItem('wapp3_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('wapp3_'+k,JSON.stringify(v))}catch(e){}},del(k){localStorage.removeItem('wapp3_'+k)}};
 
 /* ================= v7.2: BAHASA, FLOAT BAR, BACK ================= */
-const APP_VERSION_CODE=61;const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
+const APP_VERSION_CODE=59;const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
 const L={id:{
 nav_dashboard:'Beranda',nav_kasir:'Pesanan',nav_produk:'Produk',nav_laporan:'Laporan',nav_ownerdash:'Dashboard',nav_pengaturan:'Pengaturan',online_label:'Order Online',
 back:'‹ Kembali',floatbar:'BANTUAN',
@@ -2522,145 +2521,8 @@ function mergeById(local,cloud,tomb){
   (local||[]).forEach(it=>{if(!it||!it.id)return;if(tomb&&tomb.has(it.id))return;if(!byId[it.id]){byId[it.id]=1;merged.push(it);push.push(it)}});
   return {merged:merged,push:push};
 }
-
-/* ---------- code61: window + paging + range ---------- */
-WIN_LIMIT61=200;PAGE_LIMIT61=100;winHasMore61={};winOldest61={};
-function validCat61(cur,cats){return (cats||[]).includes(cur)?cur:'Semua'}
-function tombUnpushed61(list){return (list||[]).filter(t=>!t.pushed)}
-function cloudKnownGet(){try{return LS.get('cloudKnownIds',{})||{}}catch(e){return{}}}
-function cloudKnownSet(m){try{LS.set('cloudKnownIds',m||{})}catch(e){}}
-function coverIntsGet(){try{return LS.get('coverInts',{})||{}}catch(e){return{}}}
-function coverIntsSet(m){try{LS.set('coverInts',m||{})}catch(e){}}
-function minField61(arr,field){let m='';(arr||[]).forEach(d=>{const t=d?d[field]||'':'';if(t&&(!m||t<m))m=t});return m}
-function coverGaps61(s,e,intervals){
-  if(!s||!e||s>e)return[];
-  const iv=(intervals||[]).filter(x=>x&&x[0]&&x[1]).sort((a,b)=>(a[0]<b[0]?-1:(a[0]>b[0]?1:0)));
-  const gaps=[];let cur=s;
-  for(const ab of iv){
-    if(ab[0]>cur){gaps.push([cur,ab[0]]);cur=ab[1]>cur?ab[1]:cur}
-    else if(ab[1]>cur){cur=ab[1]}
-    if(cur>=e)break;
-  }
-  if(cur<e)gaps.push([cur,e]);
-  return gaps;
-}
-function mergeFetch61(local,cloud,tomb,known){
-  const byId={},merged=[],push=[],dirty=new Set();
-  (cloud||[]).forEach(it=>{if(!it||!it.id)return;if(tomb&&tomb.has(it.id))return;byId[it.id]=it;merged.push(it)});
-  (local||[]).forEach(it=>{
-    if(!it||!it.id)return;if(tomb&&tomb.has(it.id))return;
-    if(byId[it.id]){
-      if(canonJSON(it)!==canonJSON(byId[it.id])){const ix=merged.findIndex(x=>x.id===it.id);if(ix>=0)merged[ix]=it;dirty.add(it.id)}
-    }else{merged.push(it);if(!(known&&known[it.id]))push.push(it)}
-  });
-  return {merged:merged,push:push,dirty:dirty};
-}
-function seedMap61(localArr,field,lastSync){
-  const out={};if(!lastSync)return out;
-  const lsDate=lastSync.slice(0,10);
-  (localArr||[]).forEach(d=>{
-    if(!d||!d.id)return;
-    const fv=field==='date'?(d.date||''):(d[field]||'');
-    const lim=field==='date'?lsDate:lastSync;
-    if(fv&&fv<lim)out[d.id]=1;
-  });
-  return out;
-}
-function knownSet61(k,localArr,field,lastSync){
-  const kn=cloudKnownGet();
-  if(!LS.get('winSeedDone',0)){const sd=seedMap61(localArr,field,lastSync);Object.keys(sd).forEach(id=>{kn[id]=1})}
-  return kn;
-}
-function collArr61(coll){return coll==='transactions'?transactions:coll==='orders'?orders:coll==='expenses'?expenses:coll==='stockLogs'?stockLogs:[]}
-function setCollArr61(coll,arr){if(coll==='transactions')transactions=arr;else if(coll==='orders')orders=arr;else if(coll==='expenses')expenses=arr;else if(coll==='stockLogs')stockLogs=arr}
-function sortColl61(coll){const a=collArr61(coll);const f=coll==='expenses'?'date':'ts';a.sort((x,y)=>(y[f]||'').localeCompare(x[f]||''))}
-function coverIntsFor61(coll){
-  const ints=(coverIntsGet()[coll]||[]).slice();
-  const wo=winOldest61[coll]||'';
-  if(wo)ints.push([wo,'9999-12-31']);
-  return ints;
-}
-async function ensureRange61(coll,field,s,e){
-  if(MODE!=='cloud'||!FB||!FB.db||!SHOP_ID||CLOUD_BLOCKED)return false;
-  if(!s||!e||s>e)return false;
-  const gaps=coverGaps61(s,e,coverIntsFor61(coll));
-  if(!gaps.length)return false;
-  let merged=collArr61(coll);
-  for(const gsge of gaps){
-    const gs=gsge[0],ge=gsge[1];
-    try{
-      const snap=await coll(coll).where(field,'>=',gs).where(field,'<=',ge).orderBy(field).get();
-      const docs=[];snap.forEach(d=>{const v=d.data();v.id=d.id;docs.push(v)});
-      if(docs.length){
-        const mf=mergeFetch61(merged,docs,null,null);
-        merged=mf.merged;
-        const oldSnap=cloudSnap[coll]||[];const sm={};oldSnap.forEach(d=>{if(d&&d.id)sm[d.id]=d});
-        docs.forEach(d=>{if(mf.dirty.has(d.id)){delete sm[d.id]}else{sm[d.id]=d}});
-        cloudSnap[coll]=Object.values(sm);
-        const kn=cloudKnownGet();docs.forEach(d=>{if(d&&d.id&&!mf.dirty.has(d.id))kn[d.id]=1});cloudKnownSet(kn);
-      }
-      const ci=coverIntsGet();if(!ci[coll])ci[coll]=[];ci[coll].push([gs,ge]);coverIntsSet(ci);
-    }catch(err){}
-  }
-  setCollArr61(coll,merged);sortColl61(coll);try{lsave()}catch(err){}
-  return true;
-}
-async function ensureReportPeriod61(r){
-  if(!r||!r.start||!r.end)return false;
-  const a=await ensureRange61('transactions','date',r.start,r.end);
-  const b=await ensureRange61('orders','date',r.start,r.end);
-  const c=await ensureRange61('expenses','date',r.start,r.end);
-  return a||b||c;
-}
-function periodGaps61(r){
-  if(!r||!r.start||!r.end)return false;
-  return ['transactions','orders','expenses'].some(c=>coverGaps61(r.start,r.end,coverIntsFor61(c)).length>0);
-}
-function monthRange61(){
-  const m=todayStr().slice(0,7);const s=m+'-01';
-  const d=new Date();const last=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();const e=m+'-'+String(last).padStart(2,'0');
-  return {start:s,end:e};
-}
-function monthGaps61(){return periodGaps61(monthRange61())}
-async function ensureMonth61(){return ensureReportPeriod61(monthRange61())}
-async function pageIn61(coll,field,oldestVal){
-  if(MODE!=='cloud'||!FB||!FB.db||!SHOP_ID||CLOUD_BLOCKED)return 0;
-  if(!oldestVal)return 0;
-  const cur=collArr61(coll);if(!cur.length)return 0;
-  try{
-    const snap=await coll(coll).orderBy(field,'desc').startAt(oldestVal).limit(PAGE_LIMIT61).get();
-    const docs=[];snap.forEach(d=>{const v=d.data();v.id=d.id;docs.push(v)});
-    if(!docs.length){winHasMore61[coll]=false;return 0}
-    const ids={};cur.forEach(d=>{if(d&&d.id)ids[d.id]=1});
-    let nw=0;docs.forEach(d=>{if(d&&d.id&&!ids[d.id])nw++});
-    const mf=mergeFetch61(cur,docs,null,null);
-    setCollArr61(coll,mf.merged);sortColl61(coll);
-    const arr=collArr61(coll);
-    const mn=minField61(arr,field);if(mn)winOldest61[coll]=mn;
-    winHasMore61[coll]=(docs.length===PAGE_LIMIT61&&nw>0);
-    const oldSnap=cloudSnap[coll]||[];const sm={};oldSnap.forEach(d=>{if(d&&d.id)sm[d.id]=d});
-    docs.forEach(d=>{if(mf.dirty.has(d.id)){delete sm[d.id]}else{sm[d.id]=d}});
-    cloudSnap[coll]=Object.values(sm);
-    const kn=cloudKnownGet();docs.forEach(d=>{if(d&&d.id&&!mf.dirty.has(d.id))kn[d.id]=1});cloudKnownSet(kn);
-    try{lsave()}catch(err){}
-    return nw;
-  }catch(err){return 0}
-}
-async function ensureAll61(coll,field){
-  let guard=0,fetched=0;
-  while(winHasMore61[coll]&&guard<100){
-    guard++;
-    const arr=collArr61(coll);if(!arr.length)break;
-    const oldest=minField61(arr,field);
-    if(!oldest)break;
-    const nw=await pageIn61(coll,field,oldest);
-    fetched+=nw;
-    if(!nw)break;
-  }
-  return fetched;
-}
 function recordTomb(cname,id){
-  try{const t=LS.get('tombstones',[]);if(!t.some(x=>x.coll===cname&&x.id===id))t.push({coll:cname,id:id,ts:new Date().toISOString(),pushed:false});LS.set('tombstones',t)}catch(e){}
+  try{const t=LS.get('tombstones',[]);if(!t.some(x=>x.coll===cname&&x.id===id))t.push({coll:cname,id:id,ts:new Date().toISOString()});LS.set('tombstones',t)}catch(e){}
   try{if(MODE==='cloud'&&FB&&SHOP_ID&&!CLOUD_BLOCKED)coll('deleted').doc(cname+'_'+id).set({coll:cname,id:id,ts:new Date().toISOString()}).catch(()=>{})}catch(e){}
 }
 function canonJSON(v){if(v===null||typeof v!=='object')return JSON.stringify(v);if(Array.isArray(v))return '['+v.map(canonJSON).join(',')+']';return '{'+Object.keys(v).sort().map(k=>JSON.stringify(k)+':'+canonJSON(v[k])).join(',')+'}'}
@@ -2685,13 +2547,12 @@ async function csaveOnce(name){
   for(let i=0;i<delRefs.length;i+=450){const batch=FB.db.batch();delRefs.slice(i,i+450).forEach(r=>batch.delete(r));await batch.commit()}
   for(let i=0;i<setDocs.length;i+=450){const batch=FB.db.batch();setDocs.slice(i,i+450).forEach(it=>batch.set(c.doc(it.id),JSON.parse(JSON.stringify(it))));await batch.commit()}
   cloudSnap[name]=JSON.parse(JSON.stringify(data));
-  try{const _kn=cloudKnownGet();data.forEach(d=>{if(d&&d.id)_kn[d.id]=1});cloudKnownSet(_kn)}catch(e){}
   if(name==='products')await FB.db.collection('shops').doc(SHOP_ID).set({name:shop.name,address:shop.address||'',phone:shop.phone||'',logo:shop.logo||'',banner:shop.banner||'',lat:shop.lat||'',lng:shop.lng||'',mapsUrl:shop.mapsUrl||'',code:SHOP_CODE,updatedAt:new Date().toISOString()},{merge:true});
 }
 async function csave(name){let _e=null;for(let a=0;a<3;a++){try{await csaveOnce(name);return}catch(e){_e=e;if(a<2)await new Promise(r=>setTimeout(r,400*(a+1)))}}throw _e}
 async function cload(){
   lload();
-  try{const _ds=LS.get('dataShopId','');if(SHOP_ID&&_ds&&_ds!==SHOP_ID){products=[];transactions=[];expenses=[];orders=[];debts=[];stockLogs=[];notes=[];returns=[];cloudSnap={};winHasMore61={};winOldest61={};try{LS.set('coverInts',{})}catch(e){}try{LS.set('cloudKnownIds',{})}catch(e){}try{LS.set('winSeedDone',0)}catch(e){}}}catch(e){}
+  try{const _ds=LS.get('dataShopId','');if(SHOP_ID&&_ds&&_ds!==SHOP_ID){products=[];transactions=[];expenses=[];orders=[];debts=[];stockLogs=[];notes=[];returns=[];cloudSnap={}}}catch(e){}
   const _cloadLastSync=settings.lastSync||'';
   const map={products:'products',transactions:'transactions',expenses:'expenses',orders:'orders',debts:'debts'};
   let _shopDoc=null;
@@ -2734,8 +2595,7 @@ async function cload(){
   let _tomb={};
   try{
     const _tb=LS.get('tombstones',[]);
-    for(const t of tombUnpushed61(_tb)){try{await coll('deleted').doc(t.coll+'_'+t.id).set({coll:t.coll,id:t.id,ts:t.ts||new Date().toISOString()});t.pushed=true}catch(e){}}
-    try{LS.set('tombstones',_tb)}catch(e){}
+    for(const t of _tb){try{await coll('deleted').doc(t.coll+'_'+t.id).set({coll:t.coll,id:t.id,ts:t.ts||new Date().toISOString()})}catch(e){}}
     const _ts=await coll('deleted').get();
     _ts.forEach(d=>{const v=d.data();if(v&&v.coll&&v.id){if(!_tomb[v.coll])_tomb[v.coll]=new Set();_tomb[v.coll].add(v.id)}});
   }catch(e){}
@@ -2744,27 +2604,22 @@ async function cload(){
   if(_newWipe)settings._seenWipedAt=SHOP_WIPED_AT;if(_newReset)settings._seenResetAt=SHOP_RESET_AT;
   if(_newWipe||_newReset)LS.set('settings',settings);
   if(_newWipe){notes=[];returns=[];activityCloud=[]}
-  if(_newWipe){products=[];transactions=[];expenses=[];orders=[];debts=[];stockLogs=[];winHasMore61={};winOldest61={};try{LS.set('coverInts',{})}catch(e){}try{LS.set('cloudKnownIds',{})}catch(e){}try{LS.set('winSeedDone',0)}catch(e){}}
-  else if(_newReset){transactions=[];expenses=[];orders=[];debts=[];stockLogs=[];returns=[];winHasMore61={};winOldest61={};try{LS.set('coverInts',{})}catch(e){}try{LS.set('cloudKnownIds',{})}catch(e){}try{LS.set('winSeedDone',0)}catch(e){}}
+  if(_newWipe){products=[];transactions=[];expenses=[];orders=[];debts=[];stockLogs=[]}
+  else if(_newReset){transactions=[];expenses=[];orders=[];debts=[];stockLogs=[];returns=[]}
   const _allowEmpty=_newWipe||_newReset||(SHOP_WIPED_AT&&SHOP_WIPED_AT>_lastSync)||(SHOP_RESET_AT&&SHOP_RESET_AT>_lastSync);
   let _suspect=false;
-  for(const k of Object.keys(map)){
-    const _wfield=k==='transactions'||k==='orders'?'ts':(k==='expenses'?'date':null);
-    let s2;if(_wfield){s2=await coll(map[k]).orderBy(_wfield,'desc').limit(WIN_LIMIT61).get()}else{s2=await coll(map[k]).get()}
-    const arr=[];s2.forEach(d=>{const v=d.data();if(!v.id)v.id=d.id;arr.push(v)});
+  for(const k of Object.keys(map)){const s2=await coll(map[k]).get();const arr=[];s2.forEach(d=>{const v=d.data();if(!v.id)v.id=d.id;arr.push(v)});
     const _local={products:products,transactions:transactions,expenses:expenses,orders:orders,debts:debts}[k]||[];
     if(arr.length===0&&_local.length>0&&!_allowEmpty){_suspect=true;continue}
-    const _isWin=!!_wfield;
-    if(_isWin){winHasMore61[k]=(arr.length===WIN_LIMIT61);winOldest61[k]=arr.length?arr[arr.length-1][_wfield]||'':''}
-    const _m=mergeFetch61(_local,arr,_tomb[k]||null,_isWin?knownSet61(k,_local,_wfield,_cloadLastSync):null);
+    const _m=mergeById(_local,arr,_tomb[k]||null);
     if(k==='products')products=_m.merged;else if(k==='transactions')transactions=_m.merged;else if(k==='expenses')expenses=_m.merged;else if(k==='debts')debts=_m.merged;else orders=_m.merged;
     let _pf=false;for(const it of _m.push){try{await coll(map[k]).doc(it.id).set(JSON.parse(JSON.stringify(it)))}catch(e){_pf=true}}
-    if(!_pf){cloudSnap[k]=JSON.parse(JSON.stringify(_m.merged.filter(d=>!_m.dirty.has(d.id))));if(_isWin){const _kn=cloudKnownGet();_m.merged.forEach(d=>{if(d&&d.id&&!_m.dirty.has(d.id))_kn[d.id]=1});_m.push.forEach(d=>{if(d&&d.id)_kn[d.id]=1});cloudKnownSet(_kn)}}}
+    if(!_pf)cloudSnap[k]=JSON.parse(JSON.stringify(k==='products'?products:k==='transactions'?transactions:k==='expenses'?expenses:k==='debts'?debts:orders));}
   if(_suspect){lastSyncSuspect=true;toast(tr('i18n_023'))}else lastSyncSuspect=false;
   transactions.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));expenses.sort((a,b)=>(b.date||'').localeCompare(a.date||''));stockLogs.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));orders.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));debts.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));
   const uq=await FB.db.collection('users').where('shopId','==',SHOP_ID).get();shopUsers=[];uq.forEach(d=>shopUsers.push({uid:d.id,...d.data()}));
   if(MODE==='cloud'&&CUR_USER&&!isDeveloper()&&shopUsers.length&&!shopUsers.find(x=>x.uid===CUR_USER.uid)){toast(tr('i18n_004'));gLogout();return}
-  await mergeCloudExtra(_tomb);try{LS.set('winSeedDone',1)}catch(e){}markSynced();lsave();
+  await mergeCloudExtra(_tomb);markSynced();lsave();
 }
 async function refreshReturns(){
   const rs=await coll('returns').get();const seen={},merged=[],push=[];rs.forEach(d=>{const v=d.data();v.id=d.id;merged.push(v);seen[d.id]=1});returns.forEach(n=>{if(!n.id)return;if(!seen[n.id]){merged.push(n);push.push(n)}});returns=merged;returns.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));let _rf=false;for(const n of push){try{await coll('returns').doc(n.id).set(JSON.parse(JSON.stringify(n)))}catch(e){_rf=true}}if(!_rf)cloudSnap.returns=JSON.parse(JSON.stringify(returns));
@@ -2773,7 +2628,7 @@ async function mergeCloudExtra(_tomb){
   if(MODE!=='cloud'||!FB||!SHOP_ID)return;
   try{const ns=await coll('notes').get();const seen={},merged=[],push=[];ns.forEach(d=>{if(_tomb&&_tomb.notes&&_tomb.notes.has(d.id))return;const v=d.data();v.id=d.id;merged.push(v);seen[d.id]=1});notes.forEach(n=>{if(!n.id)return;if(_tomb&&_tomb.notes&&_tomb.notes.has(n.id))return;if(!seen[n.id]){merged.push(n);push.push(n)}});let _nf=false;notes=merged;notes.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));for(const n of push){try{await coll('notes').doc(n.id).set(JSON.parse(JSON.stringify(n)))}catch(e){_nf=true}}if(!_nf)cloudSnap.notes=JSON.parse(JSON.stringify(notes));}catch(e){}
   try{await refreshReturns()}catch(e){}
-  try{const ss=await coll('stockLogs').orderBy('ts','desc').limit(WIN_LIMIT61).get();const winArr=[];ss.forEach(d=>{const v=d.data();v.id=d.id;winArr.push(v)});winHasMore61.stockLogs=(winArr.length===WIN_LIMIT61);winOldest61.stockLogs=winArr.length?winArr[winArr.length-1].ts||'':'';const _mf=mergeFetch61(stockLogs,winArr,null,knownSet61('stockLogs',stockLogs,'ts',settings.lastSync||''));const merged=_mf.merged,push=_mf.push;const seen={};merged.forEach(x=>{if(x&&x.id)seen[x.id]=1});try{const ls=await coll('stocklogs').get();ls.forEach(d=>{const v=d.data();v.id=d.id;if(!seen[v.id]){merged.push(v);seen[v.id]=1;push.push(v)}})}catch(e){}let _sf=false;stockLogs=merged;stockLogs.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));for(const n of push){try{await coll('stockLogs').doc(n.id).set(JSON.parse(JSON.stringify(n)))}catch(e){_sf=true}}if(!_sf){cloudSnap.stockLogs=JSON.parse(JSON.stringify(merged.filter(d=>!_mf.dirty.has(d.id))));const _kn=cloudKnownGet();merged.forEach(d=>{if(d&&d.id&&!_mf.dirty.has(d.id))_kn[d.id]=1});push.forEach(d=>{if(d&&d.id)_kn[d.id]=1});cloudKnownSet(_kn)}}catch(e){}
+  try{const ss=await coll('stockLogs').get();const seen={},merged=[],push=[];ss.forEach(d=>{const v=d.data();v.id=d.id;merged.push(v);seen[d.id]=1});try{const ls=await coll('stocklogs').get();ls.forEach(d=>{if(!seen[d.id]){const v=d.data();v.id=d.id;merged.push(v);seen[d.id]=1;push.push(v)}})}catch(e){}stockLogs.forEach(n=>{if(!n.id)return;if(!seen[n.id]){merged.push(n);push.push(n)}});let _sf=false;stockLogs=merged;stockLogs.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));for(const n of push){try{await coll('stockLogs').doc(n.id).set(JSON.parse(JSON.stringify(n)))}catch(e){_sf=true}}if(!_sf)cloudSnap.stockLogs=JSON.parse(JSON.stringify(stockLogs));}catch(e){}
   try{const as=await coll('activity').orderBy('ts','desc').limit(200).get();const arr=[];as.forEach(d=>arr.push(d.data()));arr.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));activityCloud=arr.slice(0,200)}catch(e){}
 }
 async function persist(what){if(MODE==='cloud'&&FB&&SHOP_ID&&!CLOUD_BLOCKED){try{const _pc=LS.get('licenseCode','');if(_pc&&!isDeveloper()){const _pd=await getDeviceInfo();const _ps=await FB.db.collection('licenses').doc(_pc).collection('devices').doc(_pd.id).get();if(_ps.exists&&_ps.data()&&_ps.data().active===false){CLOUD_BLOCKED=true;CLOUD_BLOCK_REASON='Perangkat ini dinonaktifkan oleh Owner/Developer. Hubungi Owner/Developer.';DEVICE_STATUS='deactivated';try{renderCloudBlocked()}catch(e){}lsave();return true}}}catch(e){}if(what==='settings'){return await pushShopSettings()}try{await csave(what==='shop'?'products':what);lsave();return true}catch(e){toast('Gagal simpan cloud: '+e.message);lsave();return false}}else{lsave();return true}}
@@ -2796,9 +2651,8 @@ function showAuth(){
   const cfg=fbConfig(),body=document.getElementById('authBody');
   if(!cfg){body.innerHTML='<p style="font-size:13px;color:var(--mut)">'+tr('auth_offline')+'</p>';return}
   body.innerHTML='<div class="spin"></div>';
-  loadFirebase(cfg).then(async()=>{
+  loadFirebase(cfg).then(()=>{
     if(!firebase.apps.length)firebase.initializeApp(cfg);
-    try{await firebase.firestore().enablePersistence({synchronizeTabs:false})}catch(e){}
     FB={auth:firebase.auth(),db:firebase.firestore()};
     FB.auth.onAuthStateChanged(u=>{if(u)onLogin(u);else{
       body.innerHTML=`<button class="gbtn" onclick="gLogin()"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"> ${tr('login_google')}</button><div style="font-size:12px;color:var(--mut)">${tr('one_account')}</div><div style="margin:16px 0 8px;border-top:1px solid var(--line);padding-top:12px;font-size:13px;color:var(--mut)">${LANG==='en'?'Login with Google only. Email login is not available.':'Login hanya dengan Google. Login email tidak tersedia.'}</div>`;if(LS.get('licExpired','')){const _w=document.createElement('div');_w.style.cssText='margin:0 0 12px;padding:10px;border-radius:10px;font-size:13px;line-height:1.5;background:#451a03;border:1.5px solid #f59e0b;color:#fde68a';_w.innerHTML=LANG==='en'?'<b>License Expired</b><br>This store license has expired. Cloud cannot be used until the license is renewed. Continue offline first, then enter a new code in Settings > License. If the license has already been renewed, try Google Login again.':'<b>Lisensi Habis</b><br>Lisensi toko ini sudah habis. Cloud tidak bisa dipakai sampai lisensi diperpanjang. Masuk offline dulu, lalu isi kode baru di Pengaturan > Lisensi. Kalau lisensi sudah diperpanjang, langsung coba Login Google lagi.';body.prepend(_w)}}});
@@ -3096,7 +2950,6 @@ let histTab='jual';let histLimit=30,histTotal=0;
 function setHistTab(t){histTab=t;histLimit=30;['histTabJual','histTabBeli','histTabLunas'].forEach(id=>{const e=document.getElementById(id);if(e)e.classList.toggle('on',('histTabJual'===id&&t==='jual')||('histTabBeli'===id&&t==='beli')||('histTabLunas'===id&&t==='lunas'))});renderHist()}
 function renderHist(){
   const el=document.getElementById('histList');if(!el)return;
-  const _hc=histTab==='jual'?'transactions':(histTab==='beli'?'stockLogs':null);
   const pv=tr('hist_preview'),sv=tr('save_btn');
   let rows='';
   if(histTab==='jual'){
@@ -3109,9 +2962,9 @@ function renderHist(){
     const list=debts.filter(d=>(d.remaining||0)<=0&&((d.pays||[]).reduce((a,p)=>a+(p.amount||0),0)>=(d.total||0))).sort((a,b)=>{const pa=a.pays&&a.pays.length?a.pays[a.pays.length-1].ts:a.ts;const pb=b.pays&&b.pays.length?b.pays[b.pays.length-1].ts:b.ts;return (pb||'').localeCompare(pa||'')});histTotal=list.length;
     rows=list.length?list.slice(0,histLimit).map(d=>{const pts=d.pays&&d.pays.length?d.pays[d.pays.length-1].ts:d.ts;return `<div class="list-item"><div class="inf"><div class="nm">${esc(d.customer)} <span class="badge ok">${LANG==='en'?'PAID':'LUNAS'}</span></div><div class="sub">${rp(d.total)} · ${fmtDT(pts)}</div></div><button class="btn btn-outline btn-sm" onclick="openHistPreview('lunas','${d.id}')">${pv}</button><button class="btn btn-green btn-sm" onclick="saveHistPaidJPG('${d.id}')">${sv}</button></div>`}).join(''):'<div class="empty">'+tr('hist_empty')+'</div>';
   }
-  el.innerHTML=rows+((histTotal>histLimit||(_hc&&winHasMore61[_hc]))?'<button class="btn btn-outline" style="width:100%;margin-top:8px" onclick="histMore()">'+(histTotal>histLimit?('Muat lagi ('+(histTotal-histLimit)+' lagi)'):'Muat lagi (lebih lama)')+'</button>':'');
+  el.innerHTML=rows+(histTotal>histLimit?'<button class="btn btn-outline" style="width:100%;margin-top:8px" onclick="histMore()">Muat lagi ('+(histTotal-histLimit)+' lagi)</button>':'');
 }
-async function histMore(){const _c=histTab==='jual'?'transactions':(histTab==='beli'?'stockLogs':null);if(_c&&histLimit>=histTotal&&winHasMore61[_c]&&!window._histFetching61){window._histFetching61=true;const _arr=_c==='transactions'?transactions:stockLogs;const _old=minField61(_arr,'ts');if(_old)await pageIn61(_c,'ts',_old);window._histFetching61=false}histLimit+=30;renderHist();}
+function histMore(){histLimit+=30;renderHist();}
 function histBuyHTML(l){const en=LANG==='en';return `<div style="font-size:13px;line-height:1.7;text-align:center"><b>${esc(shop.name)}</b><br>${esc(shop.address||'')}<br>${en?'PURCHASE RECEIPT':'STRUK PEMBELIAN'}<br>${fmtDT(l.ts)}<br>----------------------------------------<br>${esc(l.name)} x${l.qty}<br>${l.note?(en?'Note: ':'Catatan: ')+esc(l.note)+'<br>':''}----------------------------------------<br>${en?'Stock in':'Stok masuk'}</div>`}
 function histPaidHTML(d){const en=LANG==='en';const pts=d.pays&&d.pays.length?d.pays[d.pays.length-1].ts:d.ts;return `<div style="font-size:13px;line-height:1.7;text-align:center"><b>${esc(shop.name)}</b><br>${esc(shop.address||'')}<br>${en?'PAID DEBT RECEIPT':'STRUK HUTANG LUNAS'}<br>${fmtDT(pts)}<br>----------------------------------------<br>${esc(d.customer)}<br>${en?'Total: ':'Total: '}${rp(d.total)}<br><b>${en?'PAID':'LUNAS'}</b><br>----------------------------------------</div>`}
 function openHistPreview(kind,id){
@@ -3399,7 +3252,7 @@ function renderPayWaitCard(){
  const note=document.getElementById('payWaitKasirNote');
  if(note)note.textContent=canEdit?'Hanya Owner/Developer yang bisa mengubah.':'Terkunci — hanya Owner/Developer yang bisa mengubah.';
 }
-function renderKasirGrid(){const cats=['Semua',...new Set(products.map(p=>p.category||'Lainnya'))];kasirCat=validCat61(kasirCat,cats);
+function renderKasirGrid(){const cats=['Semua',...new Set(products.map(p=>p.category||'Lainnya'))];
  document.getElementById('kasirCats').innerHTML=catRowHTML('kasir',kasirCat);
  const q=(document.getElementById('kasirSearch').value||'').toLowerCase();
  const list=products.filter(p=>(kasirCat==='Semua'||(p.category||'Lainnya')===kasirCat)&&p.name.toLowerCase().includes(q));
@@ -4086,7 +3939,7 @@ let prodSort='def';
 function prodSortChg(){const s=document.getElementById('prodSort');prodSort=s?s.value:'def';renderProduk();}
 function expBadge(p){if(!p.exp)return '';const now=new Date();now.setHours(0,0,0,0);const d=new Date(p.exp+'T00:00:00');const days=Math.round((d-now)/86400000);if(days<0)return '<span class="badge out">EXPIRED</span>';if(days<=30)return '<span class="badge low">EXP '+days+' hari</span>';return ''}
 function prodTips(){const t30=new Date();t30.setDate(t30.getDate()-30);const s30=t30.toISOString().slice(0,10);const t90=new Date();t90.setDate(t90.getDate()-90);const s90=t90.toISOString().slice(0,10);const out=[];products.forEach(p=>{let q30=0,q90=0;transactions.forEach(t=>{(t.items||[]).forEach(i=>{if(i.productId===p.id){if(t.date>=s30)q30+=i.qty;if(t.date>=s90)q90+=i.qty}})});orders.filter(o=>o.status==='sampai').forEach(o=>{(o.items||[]).forEach(i=>{if(i.productId===p.id){if(o.date>=s30)q30+=i.qty;if(o.date>=s90)q90+=i.qty}})});const rate=q30/30;const daysLeft=rate>0?p.stock/rate:Infinity;let pri='aman',lbl='Stok aman';if(q90===0&&p.stock>0){pri='jangan';lbl='Jangan dulu'}else if((p.stock===0&&q30>0)||daysLeft<=7){pri='segera';lbl='Beli segera'}else if(daysLeft<=14){pri='minggu';lbl='Beli minggu ini'}const needQty=(pri==='segera'||pri==='minggu')?Math.max(0,Math.ceil(rate*14-p.stock)):0;out.push({p:p,rate:rate,daysLeft:daysLeft,pri:pri,lbl:lbl,needQty:needQty,modal:needQty*(p.buy||0)})});const rank={segera:0,minggu:1,aman:2,jangan:3};out.sort((a,b)=>rank[a.pri]-rank[b.pri]||a.daysLeft-b.daysLeft);return out}
-function renderProduk(){const q=(document.getElementById('prodSearch').value||'').toLowerCase();const cats=['Semua',...new Set(products.map(p=>p.category||'Lainnya'))];prodCat=validCat61(prodCat,cats);document.getElementById('prodCats').innerHTML=catRowHTML('produk',prodCat);
+function renderProduk(){const q=(document.getElementById('prodSearch').value||'').toLowerCase();const cats=['Semua',...new Set(products.map(p=>p.category||'Lainnya'))];document.getElementById('prodCats').innerHTML=catRowHTML('produk',prodCat);
  const list=products.filter(p=>(prodCat==='Semua'||(p.category||'Lainnya')===prodCat)&&(p.name.toLowerCase().includes(q)||(p.category||'').toLowerCase().includes(q)));
  if(prodSort==='az')list.sort((a,b)=>a.name.localeCompare(b.name,'id',{sensitivity:'base'}));else if(prodSort==='za')list.sort((a,b)=>b.name.localeCompare(a.name,'id',{sensitivity:'base'}));
  const canEdit=can('produk_edit')||can('produk_add');
@@ -4575,7 +4428,7 @@ async function tiketReply(id){const _lt=(typeof tiketList!=='undefined'?tiketLis
   try{await FB.db.runTransaction(async function(tx){const ref=FB.db.collection('tickets').doc(id);const d=await tx.get(ref);if(!d.exists)throw new Error('Tiket tidak ditemukan');if(d.data().shopCode!==SHOP_CODE)throw new Error('Tiket bukan milik toko ini');if(d.data().status==='Selesai')throw new Error('Tiket ini sudah selesai dan terkunci');const reps=(d.data().replies||[]).slice();reps.push({from:'user',name:CUR_USER?CUR_USER.name:'',body:body,at:new Date().toISOString()});tx.update(ref,{replies:reps,updatedAt:new Date().toISOString()})});toast(tr('msg_reply_sent'));if(inp)inp.value='';tiketLoad()}catch(e){toast('Gagal kirim balasan: '+(e.message||e))}}
 
 let ordKirimLimit=30;
-async function ordKirimMore(){const _sent=orders.filter(o=>o.status==='dikirim').length;if(ordKirimLimit>=_sent&&winHasMore61.orders&&!window._ordFetching61){window._ordFetching61=true;const _old=minField61(orders,'ts');if(_old)await pageIn61('orders','ts',_old);window._ordFetching61=false}ordKirimLimit+=30;renderKasirOrders();}
+function ordKirimMore(){ordKirimLimit+=30;renderKasirOrders();}
 function renderKasirOrders(){const el=document.getElementById('kasirOrderBody');if(!el)return;clearOrderBadge();orders=orders.filter((o,ix,arr)=>arr.findIndex(x=>x.id===o.id)===ix);const baru=orders.filter(o=>o.status==='baru'),proc=orders.filter(o=>o.status==='diproses'),sent=orders.filter(o=>o.status==='dikirim');
  const done=orders.filter(o=>o.status==='sampai').sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));const doneTop=done.slice(0,20);
  function sec(id,title,list,body){
@@ -4585,7 +4438,7 @@ function renderKasirOrders(){const el=document.getElementById('kasirOrderBody');
  let h='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span style="font-size:13px;color:var(--mut)">Baru '+baru.length+' • Proses '+proc.length+' • Kirim '+sent.length+'</span>'+(can('order')?'<button class="btn btn-green btn-sm" onclick="openOrderForm()">＋ Buat Pesanan</button>':'')+'</div>';
  h+=sec('baru','Pesanan Baru Masuk',baru.length,baru.length?baru.map(o=>'<div class="ordrow"><div class="inf"><div class="nm">'+esc(o.customer.name)+(o.no?'<span style="background:#dbeafe;color:#1d4ed8;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;margin-left:6px">'+esc(o.no)+'</span>':'')+' <span class="rtag online">Order Online</span></div><div class="sub">'+o.items.map(i=>i.name+' ×'+i.qty).join(', ')+' · '+rp(o.total)+'</div></div><button class="btn btn-green btn-sm" onclick="openOrder(\''+o.id+'\')">Lihat Detail</button></div>').join(''):'<div style="font-size:13px;color:var(--mut)">Tidak ada pesanan baru.</div>');
  h+=sec('proses','Sedang Diproses',proc.length,proc.length?proc.map(o=>'<div class="ordrow"><div class="inf"><div class="nm">'+esc(o.customer.name)+(o.no?'<span style="background:#dbeafe;color:#1d4ed8;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;margin-left:6px">'+esc(o.no)+'</span>':'')+' <span class="rtag online">Order Online</span></div><div class="sub">'+o.items.map(i=>i.name+' ×'+i.qty).join(', ')+' · '+rp(o.total)+(o.proof?' · ✅ Bukti ada':(o.payReqAt?' · ⏳ Menunggu bukti':''))+'</div></div>'+(can('order')?'<button class="btn btn-blue btn-sm" onclick="openKirimForm(\''+o.id+'\')">Kirim</button>':'')+'</div>').join(''):'<div style="font-size:13px;color:var(--mut)">Tidak ada pesanan diproses.</div>');
- h+=sec('kirim','Terkirim',sent.length,sent.length?'<div style="display:grid;grid-template-columns:1.3fr 1fr 1.3fr auto;gap:8px;font-weight:700;font-size:12px;padding:6px 0;border-bottom:1px solid var(--line)"><span>Nama</span><span>Ekspedisi</span><span>Resi</span><span></span></div>'+sent.slice(0,ordKirimLimit).map(o=>{const ex=EXPEDISI.find(e=>e.id===o.expedition);return '<div style="display:grid;grid-template-columns:1.3fr 1fr 1.3fr auto;gap:8px;align-items:center;font-size:13px;padding:10px 0;border-bottom:1px solid var(--line);cursor:pointer" onclick="openOrder(\''+o.id+'\')"><span>'+esc(o.customer.name)+(o.no?'<br><span style="background:#dbeafe;color:#1d4ed8;font-size:10px;font-weight:700;padding:1px 7px;border-radius:99px;white-space:nowrap">'+esc(o.no)+'</span>':'')+'</span><span>'+expName(o.expedition)+'</span><span style="word-break:break-all">'+esc(o.resi||'-')+'</span><span>'+(o.resi&&ex?'<button style="background:#1769FF;color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border:none;border-radius:99px;white-space:nowrap;cursor:pointer" onclick="event.stopPropagation();openTrackEx(\''+ex.id+'\',\''+esc(o.resi)+'\')">'+(ex.url(o.resi)?'Lacak':'Lacak via App')+'</button>':'')+'</span></div>'}).join('')+((sent.length>ordKirimLimit||winHasMore61.orders)?'<button class="btn btn-outline" style="width:100%;margin-top:8px" onclick="ordKirimMore()">'+(sent.length>ordKirimLimit?('Muat lagi ('+(sent.length-ordKirimLimit)+' lagi)'):'Muat lagi (lebih lama)')+'</button>':''):'<div style="font-size:13px;color:var(--mut)">Belum ada pesanan terkirim.</div>' );
+ h+=sec('kirim','Terkirim',sent.length,sent.length?'<div style="display:grid;grid-template-columns:1.3fr 1fr 1.3fr auto;gap:8px;font-weight:700;font-size:12px;padding:6px 0;border-bottom:1px solid var(--line)"><span>Nama</span><span>Ekspedisi</span><span>Resi</span><span></span></div>'+sent.slice(0,ordKirimLimit).map(o=>{const ex=EXPEDISI.find(e=>e.id===o.expedition);return '<div style="display:grid;grid-template-columns:1.3fr 1fr 1.3fr auto;gap:8px;align-items:center;font-size:13px;padding:10px 0;border-bottom:1px solid var(--line);cursor:pointer" onclick="openOrder(\''+o.id+'\')"><span>'+esc(o.customer.name)+(o.no?'<br><span style="background:#dbeafe;color:#1d4ed8;font-size:10px;font-weight:700;padding:1px 7px;border-radius:99px;white-space:nowrap">'+esc(o.no)+'</span>':'')+'</span><span>'+expName(o.expedition)+'</span><span style="word-break:break-all">'+esc(o.resi||'-')+'</span><span>'+(o.resi&&ex?'<button style="background:#1769FF;color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border:none;border-radius:99px;white-space:nowrap;cursor:pointer" onclick="event.stopPropagation();openTrackEx(\''+ex.id+'\',\''+esc(o.resi)+'\')">'+(ex.url(o.resi)?'Lacak':'Lacak via App')+'</button>':'')+'</span></div>'}).join('')+(sent.length>ordKirimLimit?'<button class="btn btn-outline" style="width:100%;margin-top:8px" onclick="ordKirimMore()">Muat lagi ('+(sent.length-ordKirimLimit)+' lagi)</button>':''):'<div style="font-size:13px;color:var(--mut)">Belum ada pesanan terkirim.</div>' );
  h+=sec('sampai','Sampai — Riwayat',done.length,doneTop.length?doneTop.map(o=>'<div class="ordrow" style="cursor:pointer" onclick="openOrder(\''+o.id+'\')"><div class="inf"><div class="nm">'+esc(o.customer.name)+(o.no?'<span style="background:#dbeafe;color:#1d4ed8;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;margin-left:6px">'+esc(o.no)+'</span>':'')+' <span class="rtag online">Order Online</span></div><div class="sub">'+o.items.map(i=>i.name+' ×'+i.qty).join(', ')+' · '+rp(o.total)+'</div></div><span style="color:var(--mut);font-size:12px">'+fmtDT(o.ts)+'</span></div>').join('')+(done.length>20?'<div class="sub">Menampilkan 20 terbaru dari '+done.length+' order sampai.</div>':''):'<div style="font-size:13px;color:var(--mut)">Belum ada pesanan sampai.</div>');
  el.innerHTML=h}
 
@@ -4941,11 +4794,9 @@ function renderLogCard(target){const prefix=target==='dash'?'logDash':'logKasir'
 function openLogAll(){openModal('<div class="mhead">📋 Semua Log Transaksi</div>'+logCardFiltersHTML('logAll',true)+'<div class="logscroll" id="logAllBody" style="max-height:60vh"></div>');renderLogCardBody('logAll')}
 function toggleLogKasirMin(){LS.set('logKasirMin',LS.get('logKasirMin',0)?0:1);renderLogKasir()}
 function renderLogKasir(){renderLogCard('kasir')}
-function renderLapLog(_skipEns){const el=document.getElementById('logLapBody');if(!el)return;const r=reportRange(lapSendPeriod);if(!r){el.innerHTML='';return}
- if(!_skipEns&&!window._logEns61&&periodGaps61(r)){window._logEns61=true;const _ll=document.getElementById('logLapBodyList');if(_ll)_ll.innerHTML='<div class="empty">Memuat data…</div>';ensureReportPeriod61(r).then(_f=>{window._logEns61=false;renderLapLog(!_f)});return}if(!document.getElementById('logLapBodyList')){el.innerHTML=logCardFiltersHTML('logLap',false)+'<div class="logscroll" id="logLapBodyList"></div>'}const st=logCardState('logLap');const rows=logFilter(logRows().filter(x=>(x.date||'')>=r.start&&(x.date||'')<=r.end),st.q,{nama:st.f.nama,produk:st.f.produk,jenis:st.f.jenis,waktu:'Semua'});const list=document.getElementById('logLapBodyList');if(list)list.innerHTML=rows.map(logRowHTML).join('')||'<div class="empty">Belum ada transaksi di periode ini.</div>'}
+function renderLapLog(){const el=document.getElementById('logLapBody');if(!el)return;const r=reportRange(lapSendPeriod);if(!r){el.innerHTML='';return}if(!document.getElementById('logLapBodyList')){el.innerHTML=logCardFiltersHTML('logLap',false)+'<div class="logscroll" id="logLapBodyList"></div>'}const st=logCardState('logLap');const rows=logFilter(logRows().filter(x=>(x.date||'')>=r.start&&(x.date||'')<=r.end),st.q,{nama:st.f.nama,produk:st.f.produk,jenis:st.f.jenis,waktu:'Semua'});const list=document.getElementById('logLapBodyList');if(list)list.innerHTML=rows.map(logRowHTML).join('')||'<div class="empty">Belum ada transaksi di periode ini.</div>'}
 function renderLapExp(){const card=document.getElementById('expLapCard');if(!card)return;if(!can('pengeluaran')){card.style.display='none';return}card.style.display='';const r=reportRange('bulanan');const list=expenses.filter(x=>(x.date||'')>=r.start&&(x.date||'')<=r.end);const tot=list.filter(x=>x.klaimStatus!=='diganti').reduce((a,x)=>a+x.amount,0);const tt=document.getElementById('expLapTotal');if(tt)tt.textContent=rp(tot);document.getElementById('expLapList').innerHTML=list.slice(0,20).map(e=>'<div class="list-item" onclick="openExpForm(\''+e.id+'\')" style="cursor:pointer"><div class="inf"><div class="nm">'+esc(e.category)+' — '+rp(e.amount)+'</div><div class="sub">'+(e.ts?fmtDTS(e.ts):fmtDate(e.date))+(e.note?' · '+esc(e.note):'')+(e.bukti?' · 📎 bukti':'')+'</div></div><span style="color:var(--mut)">›</span></div>').join('')||'<div class="empty">Belum ada pengeluaran bulan ini.</div>'}
-function renderLap(_skipEns){const r=periodRange();if(!r)return;
- if(!_skipEns&&!window._lapEns61&&periodGaps61(r)){window._lapEns61=true;['lOmzet','lProfit','lTrx','lExp','lNet'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent='…'});const _tp=document.getElementById('topProd');if(_tp)_tp.innerHTML='<div class="empty">Memuat data…</div>';ensureReportPeriod61(r).then(_f=>{window._lapEns61=false;renderLap(!_f)});return}
+function renderLap(){const r=periodRange();if(!r)return;
  const trx=transactions.filter(x=>x.date>=r.start&&x.date<=r.end&&!x.cancelled),ordAll=orders.filter(o=>o.date>=r.start&&o.date<=r.end&&o.status!=='batal'),ord=ordAll.filter(o=>o.status==='sampai'),ex=expenses.filter(x=>x.date>=r.start&&x.date<=r.end);
  const _ret=retValIn(r.start,r.end);const om=trx.reduce((a,x)=>a+x.total,0)+ord.reduce((a,o)=>a+o.total,0)-_ret.om;
  const pf=trx.reduce((a,x)=>a+x.items.reduce((b,i)=>b+(i.price-i.buy)*i.qty,0)-(x.discount||0),0)+ord.reduce((a,o)=>a+(o.kompensasi?0:o.items.reduce((b,i)=>b+(i.price-i.buy)*i.qty,0)),0)-_ret.pf;
@@ -5876,7 +5727,7 @@ function getEmailComposer(){try{return (window.cordova&&cordova.plugins&&cordova
 function blobToB64(blob){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(',')[1]);r.onerror=rej;r.readAsDataURL(blob)})}
 async function sendEmailFiles(subject,body,files){const comp=getEmailComposer();if(comp&&comp.open){const atts=[];for(const f of files){atts.push('base64:'+f.name+'//'+await blobToB64(f.blob))}try{comp.open({to:settings.emailTo.split(',').map(x=>x.trim()).filter(Boolean),subject:subject,body:body,isHtml:false,attachments:atts});toast(tr('i18n_090'));return 'composer'}catch(e){}}const ns=await nativeShareFiles(subject+'\n'+body,files);if(ns===true)return true;if(ns==='cancel')return false;if(navigator.share&&navigator.canShare){try{const fls=[];for(const f of files){fls.push(new File([f.blob],f.name,{type:f.blob.type}))}if(navigator.canShare({files:fls})){await navigator.share({title:subject,text:body,files:fls});return true}}catch(e){}}location.href='mailto:'+settings.emailTo.split(',').map(x=>x.trim()).filter(Boolean).join(',')+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body+'\n\n(Catatan: lampiran file tidak ikut lewat mailto. Unduh file dari menu Laporan bila perlu.)');toast(tr('i18n_090'));return 'composer'}
 function lapMarkSent(period){const ls=settings.emailLastSent||{};ls[period]=periodKey(period);settings.emailLastSent=ls;LS.set('settings',settings);pushShopSettings()}
-async function sendLapEmail(){if(!lapPeriodOK(lapSendPeriod)){toast(tr('i18n_084'));return}await ensureReportPeriod61(reportRange(lapSendPeriod));const to=(settings.emailTo||'').trim();if(!to){toast(tr('i18n_060'));return}const kind=document.getElementById('lapKind').value;const f=lapFileBlob(kind,lapSendPeriod,lapSendFmt);if(lapSendFmt==='pdf'&&f.name.slice(-4)==='.csv')toast(tr('i18n_028'));const rep=lapReport(kind,lapSendPeriod);const subj=(LANG==='en'?'[My Lapak] Report ':'[My Lapak] Laporan ')+lapKindName(kind)+' '+(LANG==='en'?(RP.perMap[lapSendPeriod]||lapSendPeriod):lapSendPeriod)+' — '+rep.r.label;let _files=[f],_extra='';if(kind==='pengeluaran'){const _pr=lapProofFiles(lapSendPeriod);_files=_files.concat(_pr);const _tot=expenses.filter(x=>(x.date||'')>=rep.r.start&&(x.date||'')<=rep.r.end&&x.bukti).length;if(_tot>_pr.length)_extra=(LANG==='en'?'\n\nNote: '+(_tot-_pr.length)+' more proofs not attached (max 9).':'\n\nCatatan: '+(_tot-_pr.length)+' bukti lain tidak dilampirkan (maks 9).');}const ok=await sendEmailSmart(subj,lapText(kind,lapSendPeriod)+_extra,_files);if(ok===true){lapMarkSent(lapSendPeriod);logAction('Laporan '+kind+' '+lapSendPeriod+' dikirim via email','Laporan');toast(tr('i18n_082'))}else if(ok==='composer'){toast(tr('i18n_025'))}}
+async function sendLapEmail(){if(!lapPeriodOK(lapSendPeriod)){toast(tr('i18n_084'));return}const to=(settings.emailTo||'').trim();if(!to){toast(tr('i18n_060'));return}const kind=document.getElementById('lapKind').value;const f=lapFileBlob(kind,lapSendPeriod,lapSendFmt);if(lapSendFmt==='pdf'&&f.name.slice(-4)==='.csv')toast(tr('i18n_028'));const rep=lapReport(kind,lapSendPeriod);const subj=(LANG==='en'?'[My Lapak] Report ':'[My Lapak] Laporan ')+lapKindName(kind)+' '+(LANG==='en'?(RP.perMap[lapSendPeriod]||lapSendPeriod):lapSendPeriod)+' — '+rep.r.label;let _files=[f],_extra='';if(kind==='pengeluaran'){const _pr=lapProofFiles(lapSendPeriod);_files=_files.concat(_pr);const _tot=expenses.filter(x=>(x.date||'')>=rep.r.start&&(x.date||'')<=rep.r.end&&x.bukti).length;if(_tot>_pr.length)_extra=(LANG==='en'?'\n\nNote: '+(_tot-_pr.length)+' more proofs not attached (max 9).':'\n\nCatatan: '+(_tot-_pr.length)+' bukti lain tidak dilampirkan (maks 9).');}const ok=await sendEmailSmart(subj,lapText(kind,lapSendPeriod)+_extra,_files);if(ok===true){lapMarkSent(lapSendPeriod);logAction('Laporan '+kind+' '+lapSendPeriod+' dikirim via email','Laporan');toast(tr('i18n_082'))}else if(ok==='composer'){toast(tr('i18n_025'))}}
 function waNorm(raw){const d=(raw||'').replace(/\D/g,'');let n=d;if(n.indexOf('0')===0)n='62'+n.slice(1);if(n.length<10||n.indexOf('62')!==0)return '';return n}
 function waOpen(num,text){const n=waNorm(num);if(!n){toast(tr('i18n_101'));return false}window.open('https://wa.me/'+n+'?text='+encodeURIComponent(text),'_system');return true}
 /* v7.5.1-wa-share */
@@ -5957,7 +5808,7 @@ function openTrackEx(exId,resi){const ex=EXPEDISI.find(e=>e.id===exId);if(!ex){t
 function openTrackApp(exId,resi){const ex=EXPEDISI.find(e=>e.id===exId)||{name:'Ekspedisi'};const intent={grab:'intent://#Intent;package=com.grabtaxi.passenger;S.browser_fallback_url=https://www.grab.com/id/;end',gosend:'intent://#Intent;package=com.gojek.app;S.browser_fallback_url=https://www.gojek.com/;end'}[exId]||'';window._trackResi=resi;openModal(`<div class="mhead">Lacak via Aplikasi</div><div class="helpbox">${esc(ex.note||'Lacak manual sesuai ekspedisi')}</div><div style="margin:12px 0;font-size:14px">Resi: <b>${esc(resi||'')}</b></div><div class="rowbtns"><button class="btn btn-green" onclick="copyTrackResi()">Salin Resi</button>${intent?`<a class="btn btn-blue" href="${intent}">Buka ${exId==='grab'?'Grab':'Gojek'}</a>`:''}</div><div class="helpbox" style="margin-top:10px">Grab/Gojek tidak punya URL lacak publik - buka aplikasinya lalu tempel resi.</div>`)}
 function copyTrackResi(){const v=window._trackResi||'';if(!v){toast(tr('msg_resi_empty'));return}(navigator.clipboard?navigator.clipboard.writeText(v):Promise.reject()).then(()=>toast(tr('msg_resi_copied'))).catch(()=>{prompt('Salin resi:',v)})}
 async function sendLapWA(){if(!lapPeriodOK(lapSendPeriod)){toast(tr('i18n_084'));return}const kind=document.getElementById('lapKind').value;const f=lapFileBlob(kind,lapSendPeriod,lapSendFmt);if(lapSendFmt==='pdf'&&f.name.slice(-4)==='.csv')toast(tr('i18n_028'));const rep=lapReport(kind,lapSendPeriod);let msg='Laporan '+lapKindName(kind)+' '+lapSendPeriod+' — '+shop.name+' ('+rep.r.label+')';let files=[f];if(kind==='pengeluaran'){const pr=lapProofFiles(lapSendPeriod);files=files.concat(pr);const tot=expenses.filter(x=>(x.date||'')>=rep.r.start&&(x.date||'')<=rep.r.end&&x.bukti).length;if(tot>pr.length)msg+='\n(Catatan: '+(tot-pr.length)+' bukti lain tidak dilampirkan.)';}const ns=await nativeShareFiles(msg,files);if(ns===true){lapMarkSent(lapSendPeriod);logAction('Laporan '+kind+' '+lapSendPeriod+' dikirim via WhatsApp','Laporan');toast(tr('i18n_081'));return}if(ns==='cancel')return;const sh=await shareWAFiles(msg,files);if(sh===true){lapMarkSent(lapSendPeriod);logAction('Laporan '+kind+' '+lapSendPeriod+' dikirim via WhatsApp','Laporan');toast(tr('i18n_081'));return}if(sh==='cancel')return;toast(tr('i18n_032'));const toNum=(settings.waTo||'').trim()||shop.phone||'';if(!toNum){toast(tr('i18n_061'));return}const m2=msg+'\n'+lapText(kind,lapSendPeriod);if(waOpen(toNum,m2)){lapMarkSent(lapSendPeriod);logAction('Laporan '+kind+' '+lapSendPeriod+' dikirim via WhatsApp (teks saja)','Laporan')}}
-async function sendBundle(period){if(!lapPeriodOK(period)){toast(tr('i18n_084'));return}await ensureReportPeriod61(reportRange(period));const fmt=settings.lapFmt==='csv'?'xlsx':(settings.lapFmt||'pdf');const ch=((settings.emailSched||{})[period]||{}).ch||'email';const label=reportRange(period).label;let did=false;const kinds=['penjualan','pengeluaran','hutang','opname'];let files=[],body='';
+async function sendBundle(period){if(!lapPeriodOK(period)){toast(tr('i18n_084'));return}const fmt=settings.lapFmt==='csv'?'xlsx':(settings.lapFmt||'pdf');const ch=((settings.emailSched||{})[period]||{}).ch||'email';const label=reportRange(period).label;let did=false;const kinds=['penjualan','pengeluaran','hutang','opname'];let files=[],body='';
   if(fmt==='pdf'){const bf=lapBundlePDF(period);if(bf)files.push(bf);else{for(const k of kinds)files.push(lapFileBlob(k,period,'xlsx'));toast(tr('i18n_029'))}body=(LANG==='en'?'Report Bundle ':'Bundel Laporan ')+(LANG==='en'?(RP.perMap[period]||period):period)+' — '+shop.name+' ('+label+')\n\n'+kinds.map(k=>lapText(k,period)).join('\n\n')}
   else{for(const k of kinds){const f=lapFileBlob(k,period,fmt);files.push(f);body+=lapText(k,period)+'\n\n'}}
   const pr=lapProofFiles(period);const totPr=expenses.filter(x=>(x.date||'')>=reportRange(period).start&&(x.date||'')<=reportRange(period).end&&x.bukti).length;
@@ -5998,13 +5849,10 @@ function renderAturMode(view){const cont=aturCont(view);if(!cont)return;renderAt
 function aturCancel(){const v=aturState?aturState.view:'dashboard';restoreAturOrder(v);clearAturDecor();aturState=null;renderAturBtn(v);if(v==='dashboard')renderDash();else if(v==='ownerdash')renderOdTab();else if(v==='kasir'){renderKasir();applyCardOrder('kasir');renderAturBtn('kasir')}}
 async function aturSave(){const v=aturState.view;settings[ATUR_KEY[v]]=aturState.order.slice();LS.set('settings',settings);await pushShopSettings();aturState=null;clearAturDecor();renderAturBtn(v);if(v==='dashboard')renderDash();else if(v==='ownerdash')renderOdTab();else if(v==='kasir'){renderKasir();applyCardOrder('kasir');renderAturBtn('kasir')}toast(tr('i18n_layout_saved'))}
 function renderOwnerDash(){setOdTab(odTab)}
-function renderOdTab(_skipEns){const el=document.getElementById('odBody');if(!el)return;
- if(odTab==='ringkasan'&&!_skipEns&&!window._odEns61&&monthGaps61()){window._odEns61=true;el.innerHTML='<div class="empty">Memuat data bulan ini…</div>';ensureMonth61().then(_f=>{window._odEns61=false;renderOdTab(!_f)});return}const m=monthStats();const dOpen=debts.filter(d=>(d.remaining||0)>0),dTot=dOpen.reduce((a,d)=>a+(d.remaining||0),0);if(odTab==='ringkasan'){const ts=todayStats(),sa=salesStatsAll();el.innerHTML='<div id="odBlocks"><div class="grid2" id="odStats"><div class="stat green" id="odOm" style="cursor:pointer" onclick="openSumDetail(\'month\')"><div class="lbl">Omzet Bulan Ini</div><div class="val">'+rp(m.om)+'</div></div><div class="stat blue" id="odProfit" style="cursor:pointer" onclick="openSumDetail(\'profit\')"><div class="lbl">Laba Bersih</div><div class="val">'+rp(m.net)+'</div></div><div class="stat orange" id="odDay" style="cursor:pointer" onclick="openSumDetail(\'day\')"><div class="lbl">Omzet Harian</div><div class="val">'+rp(ts.om)+'</div></div><div class="stat purple" id="odHutang" style="cursor:pointer" onclick="openSumDetail(\'hutang\')"><div class="lbl">Hutang Aktif</div><div class="val">'+rp(dTot)+'</div></div><div class="stat orange" id="odExp" style="cursor:pointer" onclick="openSumDetail(\'pengeluaran\')"><div class="lbl">'+tr('exp_lbl')+'</div><div class="val">'+rp(m.te)+'</div></div><div class="stat green" id="odJual" style="cursor:pointer" onclick="openSumDetail(\'penjualan\')"><div class="lbl">Penjualan</div><div class="val">'+rp(sa.om)+'</div></div></div><div class="card" id="odOrdCard" data-cloud><h3>🛍️ Order Online</h3><div id="odOrdStrip" style="font-size:13px;color:var(--mut);margin-bottom:8px">Baru 0 • Proses 0 • Kirim 0</div><div id="odOrdBody"></div><button class="btn btn-outline btn-sm" style="margin-top:10px" onclick="go(\'kasir\')">Lihat Pesanan →</button></div><div class="card" id="odChartCard"><h3>📊 Omzet per Hari</h3><canvas class="chart" id="odChart" width="400" height="180"></canvas></div><div class="card" id="odTopCard"><h3>🏆 Barang Terlaris</h3><div id="odTopBody"></div></div><div class="card" id="odGraphCard"><h3>📊 Grafik Owner</h3><div class="chips" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px"><div class="chip" onclick="openGraphSheet()">Pilih Grafik ▾</div><div class="chip" onclick="graphSet(\'omzet\')">Omzet per Hari</div><div class="chip" onclick="graphSet(\'profit\')">Profit Bersih</div></div><div style="display:flex;gap:8px;margin-bottom:8px"><button class="btn btn-sm" onclick="graphPeriodSet(\'harian\')">Harian</button><button class="btn btn-sm" onclick="graphPeriodSet(\'mingguan\')">Mingguan</button><button class="btn btn-sm" onclick="graphPeriodSet(\'bulanan\')">Bulanan</button><span id="odGraphPeriod" style="font-size:13px;color:var(--mut);align-self:center">Bulanan</span></div><div style="font-size:13px;color:var(--mut);margin-bottom:8px" id="odGraphLbl">Omzet per Hari</div><div id="odGraphBody"></div></div><div class="card" id="odQuick" style="grid-column:1/-1;margin:0"><h3>Akses Cepat</h3><div class="rowbtns" style="flex-wrap:wrap"><button class="btn btn-outline btn-sm" onclick="go(\'produk\')">Produk</button><button class="btn btn-outline btn-sm" onclick="go(\'stok\')">Stok</button><button class="btn btn-outline btn-sm" onclick="go(\'pengeluaran\')">Pengeluaran</button><button class="btn btn-outline btn-sm" onclick="go(\'kasir\')">Order</button><button class="btn btn-outline btn-sm" onclick="go(\'pengguna\')" data-cloud>Member</button><button class="btn btn-outline btn-sm" onclick="go(\'pengaturan\')">Pengaturan</button></div></div></div>';applyCardOrder('ownerdash');renderAturBtn('ownerdash');renderOdCards();}else if(odTab==='penjualan'){const r=reportRange('bulanan');const trx=transactions.filter(x=>x.date>=r.start&&x.date<=r.end&&!x.cancelled),ord=orders.filter(o=>o.date>=r.start&&o.date<=r.end&&o.status==='sampai');el.innerHTML='<div class="card"><h3>📊 Omzet Bulan Ini</h3><canvas class="chart" id="odChart" width="400" height="180"></canvas><div style="margin-top:10px;font-size:13px">Total: <b>'+rp(m.om)+'</b> dari '+m.n+' transaksi</div><button class="btn btn-outline btn-sm" style="margin-top:10px" onclick="go(\'laporan\')">Detail →</button></div>';setTimeout(()=>drawChartInto('odChart',r,trx,ord),50)}else if(odTab==='keuangan'){el.innerHTML='<div class="grid2"><div class="stat green"><div class="lbl">Omzet</div><div class="val">'+rp(m.om)+'</div></div><div class="stat red"><div class="lbl">'+tr('exp_lbl')+'</div><div class="val">'+rp(m.te)+'</div></div></div><div class="card" style="margin-top:12px"><h3>💰 Laba Bersih</h3><div style="font-size:22px;font-weight:800;color:var(--green)">'+rp(m.net)+'</div><button class="btn btn-outline btn-sm" style="margin-top:10px" onclick="go(\'laporan\')">Detail →</button></div>'}else if(odTab==='hutang'){el.innerHTML='<div class="card"><h3>💰 Hutang Aktif: '+rp(dTot)+'</h3>'+(dOpen.length?dOpen.map(d=>'<div class="list-item"><div class="inf"><div class="nm">'+esc(d.customer)+'</div><div class="sub">Sisa '+rp(d.remaining||0)+' dari '+rp(d.total)+'</div></div></div>').join(''):'<div class="empty">Tidak ada hutang 👍</div>')+'<button class="btn btn-outline btn-sm" style="margin-top:10px" onclick="goLapDebt()">Detail →</button></div>'}else{odTab='ringkasan';renderOdTab();return}if(aturState&&aturState.view==='ownerdash')renderAturMode('ownerdash');renderTestiHistory(true);testiDashBadgeRefresh();renderCancelHistory();}
-function openSumDetail(kind,_skipEns){
+function renderOdTab(){const el=document.getElementById('odBody');if(!el)return;const m=monthStats();const dOpen=debts.filter(d=>(d.remaining||0)>0),dTot=dOpen.reduce((a,d)=>a+(d.remaining||0),0);if(odTab==='ringkasan'){const ts=todayStats(),sa=salesStatsAll();el.innerHTML='<div id="odBlocks"><div class="grid2" id="odStats"><div class="stat green" id="odOm" style="cursor:pointer" onclick="openSumDetail(\'month\')"><div class="lbl">Omzet Bulan Ini</div><div class="val">'+rp(m.om)+'</div></div><div class="stat blue" id="odProfit" style="cursor:pointer" onclick="openSumDetail(\'profit\')"><div class="lbl">Laba Bersih</div><div class="val">'+rp(m.net)+'</div></div><div class="stat orange" id="odDay" style="cursor:pointer" onclick="openSumDetail(\'day\')"><div class="lbl">Omzet Harian</div><div class="val">'+rp(ts.om)+'</div></div><div class="stat purple" id="odHutang" style="cursor:pointer" onclick="openSumDetail(\'hutang\')"><div class="lbl">Hutang Aktif</div><div class="val">'+rp(dTot)+'</div></div><div class="stat orange" id="odExp" style="cursor:pointer" onclick="openSumDetail(\'pengeluaran\')"><div class="lbl">'+tr('exp_lbl')+'</div><div class="val">'+rp(m.te)+'</div></div><div class="stat green" id="odJual" style="cursor:pointer" onclick="openSumDetail(\'penjualan\')"><div class="lbl">Penjualan</div><div class="val">'+rp(sa.om)+'</div></div></div><div class="card" id="odOrdCard" data-cloud><h3>🛍️ Order Online</h3><div id="odOrdStrip" style="font-size:13px;color:var(--mut);margin-bottom:8px">Baru 0 • Proses 0 • Kirim 0</div><div id="odOrdBody"></div><button class="btn btn-outline btn-sm" style="margin-top:10px" onclick="go(\'kasir\')">Lihat Pesanan →</button></div><div class="card" id="odChartCard"><h3>📊 Omzet per Hari</h3><canvas class="chart" id="odChart" width="400" height="180"></canvas></div><div class="card" id="odTopCard"><h3>🏆 Barang Terlaris</h3><div id="odTopBody"></div></div><div class="card" id="odGraphCard"><h3>📊 Grafik Owner</h3><div class="chips" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px"><div class="chip" onclick="openGraphSheet()">Pilih Grafik ▾</div><div class="chip" onclick="graphSet(\'omzet\')">Omzet per Hari</div><div class="chip" onclick="graphSet(\'profit\')">Profit Bersih</div></div><div style="display:flex;gap:8px;margin-bottom:8px"><button class="btn btn-sm" onclick="graphPeriodSet(\'harian\')">Harian</button><button class="btn btn-sm" onclick="graphPeriodSet(\'mingguan\')">Mingguan</button><button class="btn btn-sm" onclick="graphPeriodSet(\'bulanan\')">Bulanan</button><span id="odGraphPeriod" style="font-size:13px;color:var(--mut);align-self:center">Bulanan</span></div><div style="font-size:13px;color:var(--mut);margin-bottom:8px" id="odGraphLbl">Omzet per Hari</div><div id="odGraphBody"></div></div><div class="card" id="odQuick" style="grid-column:1/-1;margin:0"><h3>Akses Cepat</h3><div class="rowbtns" style="flex-wrap:wrap"><button class="btn btn-outline btn-sm" onclick="go(\'produk\')">Produk</button><button class="btn btn-outline btn-sm" onclick="go(\'stok\')">Stok</button><button class="btn btn-outline btn-sm" onclick="go(\'pengeluaran\')">Pengeluaran</button><button class="btn btn-outline btn-sm" onclick="go(\'kasir\')">Order</button><button class="btn btn-outline btn-sm" onclick="go(\'pengguna\')" data-cloud>Member</button><button class="btn btn-outline btn-sm" onclick="go(\'pengaturan\')">Pengaturan</button></div></div></div>';applyCardOrder('ownerdash');renderAturBtn('ownerdash');renderOdCards();}else if(odTab==='penjualan'){const r=reportRange('bulanan');const trx=transactions.filter(x=>x.date>=r.start&&x.date<=r.end&&!x.cancelled),ord=orders.filter(o=>o.date>=r.start&&o.date<=r.end&&o.status==='sampai');el.innerHTML='<div class="card"><h3>📊 Omzet Bulan Ini</h3><canvas class="chart" id="odChart" width="400" height="180"></canvas><div style="margin-top:10px;font-size:13px">Total: <b>'+rp(m.om)+'</b> dari '+m.n+' transaksi</div><button class="btn btn-outline btn-sm" style="margin-top:10px" onclick="go(\'laporan\')">Detail →</button></div>';setTimeout(()=>drawChartInto('odChart',r,trx,ord),50)}else if(odTab==='keuangan'){el.innerHTML='<div class="grid2"><div class="stat green"><div class="lbl">Omzet</div><div class="val">'+rp(m.om)+'</div></div><div class="stat red"><div class="lbl">'+tr('exp_lbl')+'</div><div class="val">'+rp(m.te)+'</div></div></div><div class="card" style="margin-top:12px"><h3>💰 Laba Bersih</h3><div style="font-size:22px;font-weight:800;color:var(--green)">'+rp(m.net)+'</div><button class="btn btn-outline btn-sm" style="margin-top:10px" onclick="go(\'laporan\')">Detail →</button></div>'}else if(odTab==='hutang'){el.innerHTML='<div class="card"><h3>💰 Hutang Aktif: '+rp(dTot)+'</h3>'+(dOpen.length?dOpen.map(d=>'<div class="list-item"><div class="inf"><div class="nm">'+esc(d.customer)+'</div><div class="sub">Sisa '+rp(d.remaining||0)+' dari '+rp(d.total)+'</div></div></div>').join(''):'<div class="empty">Tidak ada hutang 👍</div>')+'<button class="btn btn-outline btn-sm" style="margin-top:10px" onclick="goLapDebt()">Detail →</button></div>'}else{odTab='ringkasan';renderOdTab();return}if(aturState&&aturState.view==='ownerdash')renderAturMode('ownerdash');renderTestiHistory(true);testiDashBadgeRefresh();renderCancelHistory();}
+function openSumDetail(kind){
  if(kind==='hutang'){goLapDebt();return}
  if(kind==='pengeluaran'){go('pengeluaran');return}
- if(kind==='penjualan'&&!_skipEns&&!window._sumEns61&&(winHasMore61.transactions||winHasMore61.orders)){window._sumEns61=true;openModal('<div class="empty">Memuat seluruh histori…</div>');(async()=>{let f=0;f+=await ensureAll61('transactions','ts');f+=await ensureAll61('orders','ts');window._sumEns61=false;openSumDetail('penjualan',!(f>0))})();return}
- if((kind==='month'||kind==='profit')&&!_skipEns&&!window._sumEns61&&monthGaps61()){window._sumEns61=true;openModal('<div class="empty">Memuat data bulan ini…</div>');ensureMonth61().then(_f=>{window._sumEns61=false;openSumDetail(kind,!_f)});return}
  let title='',rows='',total=0;
  if(kind==='day'){const t=todayStr(),trx=transactions.filter(x=>x.date===t&&!x.cancelled),ord=orders.filter(o=>o.date===t&&o.status==='sampai'),ret=retValIn(t,t);title='Omzet Harian — '+fmtDate(t);const all=[...trx.map(x=>({ts:x.ts,nm:(x.items||[]).map(i=>i.name+' ×'+i.qty).join(', '),v:x.total})),...ord.map(o=>({ts:o.ts,nm:'Order: '+o.customer.name,v:o.total}))];all.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));total=trx.reduce((a,x)=>a+x.total,0)+ord.reduce((a,o)=>a+o.total,0)-ret.om;rows=(all.map(r=>'<div class="list-item"><div class="inf"><div class="nm">'+esc(r.nm)+'</div><div class="sub">'+fmtDT(r.ts)+'</div></div><b>'+rp(r.v)+'</b></div>').join('')+(ret.om?'<div class="list-item"><div class="inf"><div class="nm">Retur hari ini</div><div class="sub">Koreksi omzet</div></div><b>-'+rp(ret.om)+'</b></div>':''))||'<div class="empty">Belum ada transaksi hari ini.</div>'}
  else if(kind==='month'){const m=todayStr().slice(0,7),trx=transactions.filter(x=>x.date.startsWith(m)&&!x.cancelled),ord=orders.filter(o=>o.date.startsWith(m)&&o.status==='sampai');title='Omzet Bulan Ini';const agg={};trx.forEach(x=>{agg[x.date]=(agg[x.date]||0)+x.total});ord.forEach(o=>{agg[o.date]=(agg[o.date]||0)+o.total});Object.keys(agg).sort().reverse().forEach(d=>{agg[d]-=retValIn(d,d).om});rows=Object.keys(agg).sort().reverse().map(d=>'<div class="list-item"><div class="inf"><div class="nm">'+fmtDate(d)+'</div></div><b>'+rp(agg[d])+'</b></div>').join('')||'<div class="empty">Belum ada transaksi bulan ini.</div>';total=monthStats().om}
