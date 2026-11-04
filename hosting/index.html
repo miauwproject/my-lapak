@@ -4807,6 +4807,7 @@ const catIcon=c=>CAT_ICONS[c]||'📦';
 const CAT_APPCHECK_KEY='6Lc7vg4uAAAAAEkIGVTEY2hdpA2ILR1TnoqbTFMn';
 async function catAppCheckInit(){
   if(CAT.appCheckOn)return;
+  if(!CAT.cfg||CAT.cfg.projectId!=='toko-mobile-app')return;
   try{
     if(!firebase.appCheck)await new Promise((res,rej)=>{const s=document.createElement('script');s.src='https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check-compat.js';s.onload=res;s.onerror=rej;document.head.appendChild(s)});
     firebase.appCheck().activate(new firebase.appCheck.ReCaptchaEnterpriseProvider(CAT_APPCHECK_KEY),true);
@@ -4817,6 +4818,7 @@ async function initCatalog(code,cfgB64){
   document.getElementById('catalogView').classList.add('active');
   try{
     CAT.cfg=cfgB64?JSON.parse(atob(cfgB64)):fbConfig();
+    if(CAT.cfg&&CAT.cfg.projectId==='toko-mobile-app'&&!CAT.cfg.appId)CAT.cfg.appId='1:1072525512477:web:9cd0cd2e6be2a9a6f04cf6';
     await loadFirebase(CAT.cfg);
     if(!firebase.apps.length)firebase.initializeApp(CAT.cfg);
     await catAppCheckInit();
