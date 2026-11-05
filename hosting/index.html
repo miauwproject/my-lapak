@@ -249,6 +249,8 @@ code{background:var(--codebg);padding:2px 6px;border-radius:6px;font-size:12px;w
 .cat-ic{width:58px;height:58px;border-radius:16px;background:linear-gradient(135deg,#f0fdf4,#dcfce7);display:flex;align-items:center;justify-content:center;font-size:30px;margin-bottom:10px}
 .cat-add{position:absolute;bottom:12px;right:12px;width:38px;height:38px;border-radius:50%;background:var(--green);color:#fff;border:none;font-size:22px;font-weight:800;cursor:pointer;box-shadow:0 3px 8px rgba(27,122,61,.4);line-height:1}
 .cat-chips{padding:14px 14px 4px}
+.cat-sec{margin-top:4px}.cat-sec-head{display:flex;justify-content:space-between;align-items:center;padding:16px 14px 10px}.cat-sec-head h3{font-size:18px}.cat-sec-head a{color:#2563eb;font-weight:700;font-size:14px;text-decoration:none;cursor:pointer}.cat-sec-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 14px}
+#catDetail{display:none}.cat-d-top{display:flex;justify-content:space-between;align-items:center;padding:10px 14px}.cat-d-top button{border:none;background:none;cursor:pointer;color:var(--ink,#111827)}.cat-d-photo{width:100%;max-height:340px;object-fit:cover}.cat-d-photo-fb{height:260px;display:flex;align-items:center;justify-content:center;font-size:90px;background:var(--card)}.cat-d-pill{background:#ede9fe;color:#6d28d9;font-weight:800;font-size:14px;padding:10px 16px}.cat-d-info{padding:14px}.cat-d-name{font-size:21px;font-weight:800;line-height:1.3}.cat-d-meta{font-size:14px;color:var(--mut);margin-top:8px}.cat-d-price{font-size:28px;font-weight:800;margin-top:12px}.cat-d-qty{display:flex;align-items:center;gap:10px;margin-top:14px}.cat-d-help{background:#f0fdf4;border-radius:12px;padding:14px;margin:16px 14px;display:flex;gap:10px}
 .cat-wa{position:fixed;bottom:150px;right:16px;width:54px;height:54px;border-radius:50%;background:#25d366;color:#fff;display:none;align-items:center;justify-content:center;font-size:27px;box-shadow:0 4px 14px rgba(0,0,0,.28);z-index:31;text-decoration:none}
 .cat-foot{text-align:center;font-size:11px;color:var(--mut);padding:20px 16px 110px}
 .cat-foot b{color:var(--green)}
@@ -1024,7 +1026,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <div class="cat-hero"><img id="catLogo" style="display:none;width:64px;height:64px;border-radius:18px;object-fit:cover;margin:0 auto 10px;position:relative"><div class="cat-badge" data-t="cat_badge">🛍️ TOKO ONLINE</div><h1 id="catShopName">...</h1><div id="catShopLoc" style="margin-top:6px"></div><p id="catShopAddr"></p><div id="catHolidayPill" style="display:none;margin-top:12px"><span style="background:#dc2626;color:#fff;font-weight:800;font-size:12px;padding:6px 14px;border-radius:20px">TOKO LIBUR</span><div id="catHolidayNote" style="font-size:13px;margin-top:8px;opacity:.95"></div></div></div>
   <div class="cat-search"><input id="catSearch" data-t-ph="search_prod" placeholder="🔍 Cari barang..." oninput="renderCatalog()"></div>
   <div class="cat-chips"><div class="chips" id="catCats" style="padding-bottom:6px"></div></div>
-  <div style="padding:6px 14px 0"><div class="prod-grid" id="catGrid"></div></div>
+  <div id="catGridWrap" style="padding:6px 14px 0"><div class="prod-grid" id="catGrid"></div></div>
+  <div id="catDetail"></div>
   <div class="cat-foot" id="catFoot"></div>
   <a id="catWa" class="cat-wa" target="_blank"><span class="cat-wa-circle"><svg fill="#ffffff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></span></a>
   <div id="catCartBack" class="cat-cart-back" onclick="closeCatCart()"></div>
@@ -2059,6 +2062,15 @@ cat_all:'Semua',
 cat_other:'Lainnya',
 cat_stock:'Stok: ',
 cat_aria_add:'tambah',
+cat_see_all:'Lihat semua',
+cat_back_showcase:'‹ Kembali ke etalase',
+cat_share:'Bagikan',
+cat_link_copied:'Link disalin',
+cat_share_fail:'Gagal membagikan',
+cat_help_title:'Ada kendala dengan pesanan?',
+cat_help_text:'Hubungi toko langsung via WhatsApp.',
+cat_out_stock:'Stok habis',
+cat_added:'Ditambahkan ke keranjang',
 device_title:'📱 Perangkat Terdaftar',
 device_note:'Hanya Owner dan Developer yang bisa lihat daftar ini. Batas perangkat: Trial 1, Putus 3, Langganan 5. Cloud mati total kalau lisensi habis atau perangkat melebihi batas.',
 device_reload:'Muat Ulang Daftar',
@@ -2314,6 +2326,15 @@ cat_all:'All',
 cat_other:'Other',
 cat_stock:'Stock: ',
 cat_aria_add:'add',
+cat_see_all:'See all',
+cat_back_showcase:'‹ Back to showcase',
+cat_share:'Share',
+cat_link_copied:'Link copied',
+cat_share_fail:'Share failed',
+cat_help_title:'Having trouble with your order?',
+cat_help_text:'Contact the shop directly via WhatsApp.',
+cat_out_stock:'Out of stock',
+cat_added:'Added to cart',
 device_title:'📱 Registered Devices',
 device_note:'Only Owners and Developers can see this list. Device limits: Trial 1, Single Purchase 3, Subscription 5. Cloud stops completely if the license expires or devices exceed the limit.',
 device_reload:'Reload List',
@@ -4790,7 +4811,7 @@ function waOrder(id){const o=orders.find(x=>x.id===id);if(!o||!o.customer?.phone
  window.open('https://wa.me/'+ph+'?text='+msg,'_blank');}
 
 /* ================= KATALOG PUBLIK ================= */
-let CAT={cfg:null,shopId:null,products:[],shop:{},cart:{},cat:'Semua'}; let catTestiList=[],catTestiIx=0,catTestiTimer=null,catTestiHidden=false,catTestiFormOpen=false,catTestiLoaded=false;
+let CAT={cfg:null,shopId:null,code:null,products:[],shop:{},cart:{},cat:'Semua'}; let catTestiList=[],catTestiIx=0,catTestiTimer=null,catTestiHidden=false,catTestiFormOpen=false,catTestiLoaded=false;
 function catTestiPlace(){return} function catWaPlace(){var wa=document.getElementById('catWa');if(!wa||getComputedStyle(wa).display==='none')return;var w=document.getElementById('catTestiWidget');if(w&&getComputedStyle(w).display!=='none'){var r=w.getBoundingClientRect();if(r.top<window.innerHeight&&r.bottom>0){wa.style.bottom=(window.innerHeight-r.top+10)+'px';return}}wa.style.bottom='150px'} var _catWaPlaceRaf=0;window.addEventListener('scroll',function(){if(_catWaPlaceRaf)return;_catWaPlaceRaf=requestAnimationFrame(function(){_catWaPlaceRaf=0;try{catWaPlace()}catch(e){}})},{passive:true});window.addEventListener('resize',function(){try{catWaPlace()}catch(e){}});
 async function catTestiInit(){if(catTestiLoaded)return;catTestiLoaded=true;try{var snap=await CAT.db.collection('shops').doc(CAT.shopId).collection('testimonials').where('approved','==',true).orderBy('createdAt','desc').limit(50).get();catTestiList=[];snap.forEach(function(d){var t=d.data();t.id=d.id;catTestiList.push(t);});}catch(e){catTestiList=[];}catTestiShow();}
 function catTestiShow(){var w=document.getElementById('catTestiWidget');if(!w)return;w.style.display='block';catTestiRender();catTestiPlace();}
@@ -4815,7 +4836,7 @@ async function catAppCheckInit(){
     try{await firebase.appCheck().getToken();}catch(e){await new Promise(r=>setTimeout(r,1500));try{await firebase.appCheck().getToken();}catch(e2){console.warn('AppCheck warmup gagal',e2);}}
   }catch(e){console.warn('AppCheck init gagal',e);}
 }
-async function initCatalog(code,cfgB64){
+async function initCatalog(code,cfgB64,itemId){
   document.getElementById('catalogView').classList.add('active');
   try{
     CAT.cfg=cfgB64?JSON.parse(atob(cfgB64)):fbConfig();
@@ -4826,7 +4847,7 @@ async function initCatalog(code,cfgB64){
     const db=firebase.firestore();
     let q;try{q=await db.collection('shops').where('code','==',code.toUpperCase()).limit(1).get();}catch(e){if(e&&e.code==='permission-denied'){await new Promise(r=>setTimeout(r,2000));try{await firebase.appCheck().getToken(true);}catch(_){}q=await db.collection('shops').where('code','==',code.toUpperCase()).limit(1).get();}else throw e;}
     if(q.empty){document.getElementById('catalogView').innerHTML='<div class="empty" style="padding:60px 20px"><div class="ic">🏪</div>'+tr('cat_shop_not_found')+'</div>';return}
-    const doc=q.docs[0];CAT.shopId=doc.id;const s=doc.data();CAT.holiday=!!s.holiday;CAT.holidayNote=s.holidayNote||'';
+    const doc=q.docs[0];CAT.shopId=doc.id;CAT.code=(code||'').toUpperCase();const s=doc.data();CAT.holiday=!!s.holiday;CAT.holidayNote=s.holidayNote||'';
     CAT.shop={name:s.name,address:s.address||'',phone:s.phone||'',logo:s.logo||'',banner:s.banner||'',mapsUrl:s.mapsUrl||''};
     const ps=await db.collection('shops').doc(doc.id).collection('products').get();
     ps.forEach(d=>CAT.products.push(d.data()));
@@ -4843,6 +4864,7 @@ async function initCatalog(code,cfgB64){
     const wa=document.getElementById('catWa');
     if(CAT.shop.phone){let ph=CAT.shop.phone.replace(/\D/g,'');if(ph.startsWith('0'))ph='62'+ph.slice(1);wa.href='https://wa.me/'+ph+'?text='+(LANG==='en'?'Hello%20'+encodeURIComponent(CAT.shop.name)+'%2C%20I%20have%20a%20question':'Halo%20'+encodeURIComponent(CAT.shop.name)+'%2C%20saya%20mau%20tanya-tanya%20dulu');wa.style.display='flex';try{catWaPlace()}catch(e){}}
     renderCatalog();renderCatHoliday();catTestiInit();
+    if(itemId){var _ip=CAT.products.find(function(pp){return pp.id===itemId});if(_ip)catDetail(itemId);}
     try{CAT.shopUnsub=CAT.db.collection('shops').doc(CAT.shopId).onSnapshot(d=>{if(!d.exists)return;const sd=d.data();CAT.holiday=!!sd.holiday;CAT.holidayNote=sd.holidayNote||'';renderCatHoliday()})}catch(e){}
   }catch(e){document.getElementById('catalogView').innerHTML='<div class="empty" style="padding:60px 20px"><div class="ic">⚠️</div>'+tr('cat_load_fail')+''+esc(e.message)+'</div>'}
 }
@@ -4850,9 +4872,83 @@ function renderCatalog(){
   const cats=['Semua',...new Set(CAT.products.map(p=>p.category||'Lainnya'))];
   document.getElementById('catCats').innerHTML=cats.map(c=>`<div class="chip ${c===CAT.cat?'on':''}" onclick="CAT.cat='${esc(c)}';renderCatalog()">${c==='Semua'?tr('cat_all'):c==='Lainnya'?tr('cat_other'):esc(c)}</div>`).join('');
   const q=(document.getElementById('catSearch').value||'').toLowerCase();
-  const list=CAT.products.filter(p=>p.stock>0&&(CAT.cat==='Semua'||(p.category||'Lainnya')===CAT.cat)&&p.name.toLowerCase().includes(q));
-  document.getElementById('catGrid').innerHTML=list.length?list.map(p=>`<div class="cat-card" onclick="catQuick('${p.id}')">${photoOK(p.photo)?`<img class="cat-img" src="${p.photo}">`:`<div class="cat-ic">${catIcon(p.category)}</div>`}<div class="nm">${esc(p.name)}</div><div class="pr">${rp(p.price)}</div><div class="st">${LANG==='en'?'Stock: ':'Stok: '}${p.stock} ${p.unit||'pcs'}</div><button class="cat-add" aria-label="${tr('cat_aria_add')}">+</button></div>`).join(''):'<div class="empty" style="grid-column:1/-1"><div class="ic">📦</div>'+tr('cat_no_items')+'</div>';
+  const cardHtml=function(p){return `<div class="cat-card" onclick="catDetail('${p.id}')">${photoOK(p.photo)?`<img class="cat-img" src="${p.photo}">`:`<div class="cat-ic">${catIcon(p.category)}</div>`}<div class="nm">${esc(p.name)}</div><div class="pr">${rp(p.price)}</div><div class="st">${LANG==='en'?'Stock: ':'Stok: '}${p.stock} ${p.unit||'pcs'}</div><button class="cat-add" aria-label="${tr('cat_aria_add')}" onclick="event.stopPropagation();catAddOne('${p.id}')">+</button></div>`};
+  const grid=document.getElementById('catGrid');
+  if(CAT.cat==='Semua'&&!q){
+    grid.style.display='block';
+    let html='';
+    cats.slice(1).forEach(function(c){
+      const items=CAT.products.filter(function(p){return p.stock>0&&(p.category||'Lainnya')===c});
+      if(!items.length)return;
+      const cn=c==='Lainnya'?tr('cat_other'):c;
+      html+='<div class="cat-sec"><div class="cat-sec-head"><h3>'+esc(cn)+'</h3>'+(items.length>3?'<a onclick="CAT.cat=\''+esc(c)+'\';renderCatalog()">'+tr('cat_see_all')+' ›</a>':'')+'</div><div class="cat-sec-row">'+items.slice(0,3).map(cardHtml).join('')+'</div></div>';
+    });
+    grid.innerHTML=html||'<div class="empty" style="grid-column:1/-1"><div class="ic">📦</div>'+tr('cat_no_items')+'</div>';
+  }else{
+    grid.style.display='';
+    const list=CAT.products.filter(p=>p.stock>0&&(CAT.cat==='Semua'||(p.category||'Lainnya')===CAT.cat)&&p.name.toLowerCase().includes(q));
+    const back=(CAT.cat!=='Semua'&&!q)?'<div style="grid-column:1/-1;padding:4px 0 10px"><a style="color:#2563eb;font-weight:700;cursor:pointer" onclick="CAT.cat=\'Semua\';renderCatalog()">‹ '+tr('cat_back_showcase')+'</a></div>':'';
+    grid.innerHTML=back+(list.length?list.map(cardHtml).join(''):'<div class="empty" style="grid-column:1/-1"><div class="ic">📦</div>'+tr('cat_no_items')+'</div>');
+  }
   catBar();}
+function catDetail(id){
+  const p=CAT.products.find(function(x){return x.id===id});if(!p)return;
+  if(CAT.holiday){toast(tr('i18n_149'));return}
+  const d=document.getElementById('catDetail');if(!d)return;
+  const out=p.stock<=0;
+  let cn=p.category||'Lainnya';if(cn==='Lainnya')cn=tr('cat_other');
+  let wn='';try{wn=CAT.shop.phone?waNorm(CAT.shop.phone):''}catch(e){wn=''}
+  const waBox=wn?'<div style="margin-top:8px"><a href="https://wa.me/'+wn+'?text='+encodeURIComponent((LANG==='en'?'Hello ':'Halo ')+CAT.shop.name+', '+(LANG==='en'?'I want to ask about ':'saya mau tanya tentang ')+p.name)+'" target="_blank" rel="noopener" style="color:var(--green);font-weight:700">WhatsApp ›</a></div>':'';
+  d.innerHTML='<div class="cat-d-top"><button onclick="catDetailBack()" style="font-size:30px">‹</button><button onclick="catShare(\''+p.id+'\')" style="font-size:24px">⤴</button></div>'
+  +(photoOK(p.photo)?'<img class="cat-d-photo" src="'+p.photo+'">':'<div class="cat-d-photo-fb">'+catIcon(p.category)+'</div>')
+  +'<div class="cat-d-pill">'+esc(cn)+'</div>'
+  +'<div class="cat-d-info"><div class="cat-d-name">'+esc(p.name)+'</div>'
+  +'<div class="cat-d-meta">'+(out?tr('cat_out_stock'):(LANG==='en'?'Stock: ':'Stok: ')+p.stock+' '+(p.unit||'pcs'))+'</div>'
+  +'<div class="cat-d-price">'+rp(p.price)+'</div>'
+  +'<div class="cat-d-qty"><span style="font-weight:700">'+tr('cat_qty')+'</span><button class="btn btn-outline" onclick="catDQChg(\''+p.id+'\',-1)">−</button><input id="catDQty" type="number" inputmode="numeric" value="1" min="1" max="'+p.stock+'" onchange="catDQChg(\''+p.id+'\',0)" style="width:70px;text-align:center;padding:10px;border:1.5px solid var(--line);border-radius:10px;font-size:16px"><button class="btn btn-outline" onclick="catDQChg(\''+p.id+'\',1)">+</button></div>'
+  +'<div class="rowbtns" style="margin-top:14px"><button class="btn btn-green" style="width:100%" '+(out?'disabled':'')+' onclick="catDetailAdd(\''+p.id+'\')">'+tr('cat_add_cart')+'</button></div></div>'
+  +'<div class="cat-d-help"><div style="font-size:22px">💬</div><div><b>'+tr('cat_help_title')+'</b><div style="font-size:13px;color:var(--mut);margin-top:2px">'+tr('cat_help_text')+'</div>'+waBox+'</div></div>';
+  document.querySelector('.cat-hero').style.display='none';
+  document.querySelector('.cat-search').style.display='none';
+  document.querySelector('.cat-chips').style.display='none';
+  document.getElementById('catGridWrap').style.display='none';
+  document.getElementById('catFoot').style.display='none';
+  d.style.display='block';window.scrollTo(0,0);}
+function catDetailBack(){
+  const d=document.getElementById('catDetail');if(d)d.style.display='none';
+  document.querySelector('.cat-hero').style.display='';
+  document.querySelector('.cat-search').style.display='';
+  document.querySelector('.cat-chips').style.display='';
+  document.getElementById('catGridWrap').style.display='';
+  document.getElementById('catFoot').style.display='';}
+function catDQChg(id,delta){
+  const p=CAT.products.find(function(x){return x.id===id});if(!p)return;
+  const el=document.getElementById('catDQty');if(!el)return;
+  let v=(parseInt(el.value,10)||1)+delta;if(v>p.stock)v=p.stock;if(v<1)v=1;el.value=v;}
+function catDetailAdd(id){
+  if(CAT.holiday){toast(tr('i18n_149'));return}
+  const p=CAT.products.find(function(x){return x.id===id});if(!p||p.stock<=0)return;
+  let v=parseInt(((document.getElementById('catDQty')||{}).value||'1'),10)||1;if(v<1)v=1;
+  const cur=CAT.cart[id]||0;
+  if(cur+v>p.stock){v=p.stock-cur;if(v<=0){toast(tr('i18n_137'));return}}
+  CAT.cart[id]=cur+v;catBar();openCatCart();}
+function catAddOne(id){
+  if(CAT.holiday){toast(tr('i18n_149'));return}
+  const p=CAT.products.find(function(x){return x.id===id});
+  if(!p||p.stock<=0){toast(tr('i18n_136'));return}
+  const cur=CAT.cart[id]||0;
+  if(cur>=p.stock){toast(tr('i18n_137'));return}
+  CAT.cart[id]=cur+1;catBar();toast(tr('cat_added'));}
+async function catShare(id){
+  const p=CAT.products.find(function(x){return x.id===id});if(!p)return;
+  const url=location.origin+'/?katalog='+encodeURIComponent(CAT.code||'')+'&item='+encodeURIComponent(id);
+  const text=p.name+' — '+rp(p.price)+' di '+CAT.shop.name;
+  try{if(navigator.share){await navigator.share({title:p.name,text:text,url:url});return}}catch(e){if(e&&e.name==='AbortError')return}
+  try{
+    if(navigator.clipboard&&navigator.clipboard.writeText){await navigator.clipboard.writeText(url)}
+    else{const ta=document.createElement('textarea');ta.value=url;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove()}
+    toast(tr('cat_link_copied'));
+  }catch(e2){toast(tr('cat_share_fail'))}}
 function catQuick(id){if(CAT.holiday){toast(tr('i18n_149'));return}const p=CAT.products.find(x=>x.id===id);if(!p)return;if(p.stock<=0){toast(tr('i18n_136'));return;}const cur=Math.min(CAT.cart[id]||1,p.stock);const q0=cur>0?cur:1;openModal(`<div class="mhead">🛒 ${esc(p.name)}</div>${photoOK(p.photo)?`<img src="${p.photo}" style="width:100%;max-height:220px;object-fit:cover;border-radius:12px">`:''}<div style="display:flex;justify-content:space-between;margin-top:10px"><span style="font-size:20px;font-weight:800">${rp(p.price)}</span><span style="color:var(--mut)">${tr('cat_stock')}${p.stock} ${p.unit||'pcs'}</span></div><div style="display:flex;align-items:center;gap:10px;margin:14px 0"><span style="font-weight:700">${tr('cat_qty')}</span><button class="btn btn-outline" onclick="catQChg('${p.id}',-1)">−</button><input id="catQQty" type="number" inputmode="numeric" value="${q0}" min="0" max="${p.stock}" onchange="catQInput('${p.id}')" style="width:80px;text-align:center;padding:10px;border:1.5px solid var(--line);border-radius:10px;font-size:16px"><button class="btn btn-outline" onclick="catQChg('${p.id}',1)">+</button></div><div style="display:flex;justify-content:space-between;margin-bottom:12px"><span style="color:var(--mut)">Subtotal</span><b id="catQSub">${rp(p.price*q0)}</b></div><div class="rowbtns"><button class="btn btn-green" onclick="catQuickAdd('${p.id}')">${tr('cat_add_cart')}</button><button class="btn btn-outline" onclick="closeModal()">${tr('cat_cancel')}</button></div>`)}
 function catQGet(id){const el=document.getElementById('catQQty');if(!el)return 0;const v=parseInt(el.value,10);return isNaN(v)?0:v}
 function catQUpd(id){const p=CAT.products.find(x=>x.id===id);if(!p)return;const el=document.getElementById('catQQty');if(!el)return;let v=catQGet(id);if(v>p.stock){v=p.stock;toast(tr('i18n_137'));}if(v<0)v=0;el.value=v;const sub=document.getElementById('catQSub');if(sub)sub.textContent=rp(p.price*v)}
@@ -6235,8 +6331,8 @@ document.getElementById('lapDate').addEventListener('change',renderLap);
 (function init(){
   applyLang();setupBackButton();applyTheme();
   const q=new URLSearchParams(location.search);
-  const _kp=location.pathname.match(/^\/k\/([A-Za-z0-9]+)\/?$/);if(_kp){initCatalog(_kp[1].toUpperCase(),null);return}
-  if(q.get('katalog')){initCatalog(q.get('katalog'),q.get('cfg'));return}
+  const _kp=location.pathname.match(/^\/k\/([A-Za-z0-9]+)\/?$/);if(_kp){initCatalog(_kp[1].toUpperCase(),null,q.get('item'));return}
+  if(q.get('katalog')){initCatalog(q.get('katalog'),q.get('cfg'),q.get('item'));return}
   const cfg=fbConfig();
   if(cfg){showAuth()}
   else{MODE='local';MY_ROLE='owner';lload();
