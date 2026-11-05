@@ -4826,8 +4826,8 @@ function catTestiFormToggle(){catTestiFormOpen=!catTestiFormOpen;catTestiRender(
 let catAdsList=[],catAdsIx=0,catAdsTimer=null;
 async function catAdsInit(){
   try{
-    const snap=await CAT.db.collection('shops').doc(CAT.shopId).collection('ads').orderBy('order').get();
-    catAdsList=[];snap.forEach(function(d){const a=d.data();a.id=d.id;if(a.active!==false)catAdsList.push(a);});
+    const snap=await CAT.db.collection('shops').doc(CAT.shopId).collection('ads').where('active','==',true).get();
+    catAdsList=[];snap.forEach(function(d){const a=d.data();a.id=d.id;catAdsList.push(a);});catAdsList.sort(function(x,y){return (x.order||0)-(y.order||0);});
   }catch(e){catAdsList=[];}
   catAdsRender();
 }
