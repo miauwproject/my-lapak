@@ -1,7 +1,7 @@
 {
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code62/my-lapak_v1.1.0-code62.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTYyL215LWxhcGFrX3YxLjEuMC1jb2RlNjIuYXBr",
-  "notes": "1.1.0 stabil (code62): carousel iklan toko di katalog + kelola iklan (Pengaturan -> Profil Toko, maks 5 foto) + perbaikan query iklan katalog where(active==true). Rules v113+ads sudah live. Kumulatif code61 fixed2: perbaikan freeze Dashboard (shadowing coll).",
-  "versionCode": 62,
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code63/my-lapak_v1.1.0-code63.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTYzL215LWxhcGFrX3YxLjEuMC1jb2RlNjMuYXBr",
+  "notes": "1.1.0 stabil (code63): fix carousel iklan katalog (single-img swap, slide 2-5 kini tampil) + kumulatif code62.",
+  "versionCode": 63,
   "versionName": "1.1.0"
 }
