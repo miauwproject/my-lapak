@@ -1812,7 +1812,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 const LS={get(k,d){try{const v=localStorage.getItem('wapp3_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('wapp3_'+k,JSON.stringify(v))}catch(e){}},del(k){localStorage.removeItem('wapp3_'+k)}};
 
 /* ================= v7.2: BAHASA, FLOAT BAR, BACK ================= */
-const APP_VERSION_CODE=64;const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
+const APP_VERSION_CODE=65;const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
 const L={id:{
 nav_dashboard:'Beranda',nav_kasir:'Pesanan',nav_produk:'Produk',nav_laporan:'Laporan',nav_ownerdash:'Dashboard',nav_pengaturan:'Pengaturan',online_label:'Order Online',
 back:'‹ Kembali',floatbar:'BANTUAN',
@@ -7308,6 +7308,20 @@ async function catShare(id){
   const url=location.origin+'/?katalog='+encodeURIComponent(CAT.code||'')+'&item='+encodeURIComponent(id);
   const text=p.name+' — '+rp(p.price)+' di '+CAT.shop.name;
   try{
+    if(navigator.canShare){
+      try{
+        toast(tr('cat_story_making'));
+        const sb=await catStoryCardBlob(id);
+        if(sb){
+          const sfn='story-'+(p.name||'produk').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')+'.png';
+          const sfile=new File([sb],sfn,{type:'image/png'});
+          if(navigator.canShare({files:[sfile]})){
+            await navigator.share({title:p.name,text:text+'\n'+url,files:[sfile]});
+            return;
+          }
+        }
+      }catch(e){if(e&&e.name==='AbortError')return;}
+    }
     if(photoOK(p.photo)&&navigator.canShare){
       try{
         const blob=await (await fetch(p.photo)).blob();
@@ -7327,12 +7341,11 @@ async function catShare(id){
     else{const ta=document.createElement('textarea');ta.value=url;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove()}
     toast(tr('cat_link_copied'));
   }catch(e2){toast(tr('cat_share_fail'))}}
-async function catStoryCard(id){
-  const p=CAT.products.find(function(x){return x.id===id});if(!p)return;
+async function catStoryCardBlob(id){
+  const p=CAT.products.find(function(x){return x.id===id});if(!p)return null;
   const url=location.origin+'/?katalog='+encodeURIComponent(CAT.code||'')+'&item='+encodeURIComponent(id);
-  toast(tr('cat_story_making'));
   try{
-    if(typeof qrcode!=='function')throw new Error('noqr');
+    if(typeof qrcode!=='function')return null;
     const W=1080,H=1920;
     const cv=document.createElement('canvas');cv.width=W;cv.height=H;
     const g=cv.getContext('2d');if(!g)throw new Error('noctx');
@@ -7382,6 +7395,14 @@ async function catStoryCard(id){
     g.fillStyle='rgba(255,255,255,.65)';g.font='24px sans-serif';
     g.fillText(url.replace(/^https?:\/\//,''),W/2,1870);
     const blob=await new Promise(function(res){cv.toBlob(res,'image/png');});
+    return blob||null;
+  }catch(e){return null;}
+}
+async function catStoryCard(id){
+  const p=CAT.products.find(function(x){return x.id===id});if(!p)return;
+  toast(tr('cat_story_making'));
+  try{
+    const blob=await catStoryCardBlob(id);
     if(!blob)throw new Error('noblob');
     const fn='story-'+(p.name||'produk').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')+'.png';
     const file=new File([blob],fn,{type:'image/png'});
