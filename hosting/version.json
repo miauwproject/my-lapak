@@ -1,7 +1,7 @@
 {
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code63/my-lapak_v1.1.0-code63.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTYzL215LWxhcGFrX3YxLjEuMC1jb2RlNjMuYXBr",
-  "notes": "1.1.0 stabil (code63): fix carousel iklan katalog (single-img swap, slide 2-5 kini tampil) + kumulatif code62.",
-  "versionCode": 63,
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code64/my-lapak_v1.1.0-code64.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTY0L215LWxhcGFrX3YxLjEuMC1jb2RlNjQuYXBr",
+  "notes": "1.1.0 stabil (code64): kartu story QR hemat di katalog (tombol Kartu Story di detail produk, QR per produk, deep-link hemat ~3 bacaan/scan) + kumulatif code63.",
+  "versionCode": 64,
   "versionName": "1.1.0"
 }
