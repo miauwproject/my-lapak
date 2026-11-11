@@ -1,7 +1,7 @@
 {
-  "versionCode": 69,
+  "versionCode": 70,
   "versionName": "1.1.0",
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code69/my-lapak_v1.1.0-code69.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTY5L215LWxhcGFrX3YxLjEuMC1jb2RlNjkuYXBr",
-  "notes": "STABIL code69: 14 temuan inspeksi code68. v2: ikon SVG tidak raksasa, profil pop-up, hapus Tata Letak Layar, Pengingat Kirim ke Pengaturan, gear SVG, Pengaturan drill-down, tombol Kembali di atas nav, layar Produk v2, mode gelap gelap. Bersama: PDF tidak tumpang tindih, logo Excel sesuai rasio, caption general, picker lokasi ala Absensi Owner."
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code70/my-lapak_v1.1.0-code70.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTcwL215LWxhcGFrX3YxLjEuMC1jb2RlNzAuYXBr",
+  "notes": "STABIL code70: audit A/B menyeluruh vs preview (Produk fab ke aliran normal, grid 2 kolom, pensil+swipe hilang di v2; Kasir/Laporan/Dashboard ringkas; reverse leak v1 diperbaiki) + night mode 16 perbaikan kontras + izin GPS (COARSE+FINE) di manifest."
 }
