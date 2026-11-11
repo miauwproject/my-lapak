@@ -167,6 +167,14 @@ nav button.hidden{display:none}
 [data-theme="gelap"] .mhead{background:linear-gradient(135deg,var(--head-a),var(--head-b))}
 .cart-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
 .cart-item .inf{flex:1}.cart-item .nm{font-size:14px;font-weight:700}.cart-item .pr{font-size:12px;color:var(--mut)}
+/* ---- code74: quick-add form order manual ---- */
+#ocGrid .cat-card.oc-incart{border:1.5px solid #15803d;background:var(--chg)}
+#ocGrid .cat-card.oc-incart .nm{padding-right:52px}
+.oc-badge{position:absolute;top:8px;right:8px;background:#15803d;color:#fff;font-size:10px;font-weight:800;border-radius:99px;padding:2px 7px}
+.oc-plus{position:absolute;right:10px;bottom:10px;width:28px;height:28px;border-radius:50%;background:#06b6d4;color:#082F3A;border:0;font-size:17px;font-weight:800;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.oc-stepper{display:flex;align-items:center;gap:8px;margin-top:8px}
+.oc-stepper button{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);background:var(--card);font-size:15px;font-weight:800;color:var(--txt);cursor:pointer}
+.oc-stepper b{font-size:14px;min-width:16px;text-align:center}
 .qty{display:flex;align-items:center;gap:10px}
 .qty button{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--green);background:var(--card);color:var(--green);font-size:18px;font-weight:800;cursor:pointer;line-height:1}
 .qty span{font-weight:800;min-width:24px;text-align:center}
@@ -403,7 +411,6 @@ body.v2 #voiceFabBtn{background:rgba(6,182,212,.7)}
 body.v2 #voiceFabBtn.voice-on{background:rgba(6,182,212,.7)}
 body.v2 #kasirSort,body.v2 #prodSort{display:none}
 /* ---- code70: A/B total + samakan preview ---- */
-body.v2 #tipsCard{display:none!important}
 body.v2 #expLapCard{display:none!important}
 body.v2 #lapDebtListCard{display:none!important}
 body.v2 #lapDateCard{display:none!important}
@@ -2027,7 +2034,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 const LS={get(k,d){try{const v=localStorage.getItem('wapp3_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('wapp3_'+k,JSON.stringify(v))}catch(e){}},del(k){localStorage.removeItem('wapp3_'+k)}};
 
 /* ================= v7.2: BAHASA, FLOAT BAR, BACK ================= */
-const APP_VERSION_CODE=73;const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
+const APP_VERSION_CODE=74;const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
 const L={id:{
 nav_dashboard:'Beranda',nav_kasir:'Pesanan',nav_produk:'Produk',nav_laporan:'Laporan',nav_ownerdash:'Dashboard',nav_pengaturan:'Pengaturan',online_label:'Order Online',
 back:'‹ Kembali',floatbar:'BANTUAN',
@@ -4776,7 +4783,7 @@ function openOrderForm(draft){
  <button type="button" class="btn btn-outline" style="width:100%;border-color:#16a34a;color:#15803d;font-weight:700" onclick="ocOpenMapPicker()">📍 Pilih di Peta</button>${mapInfo}
  <div style="font-size:12px;color:var(--mut);margin-top:4px">Pin di peta → alamat terisi otomatis + jarak &amp; rute ke toko dihitung. Tetap bisa diketik manual.</div>
  <label>Patokan *</label><input id="ocPatokan" placeholder="Nomor rumah / RT RW /Cat Rumah / patokan" value="${esc(d.patokan||'')}">
- <label>Barang (ketuk kartu untuk tambah)</label><input id="ocSearch" placeholder="Cari produk..." oninput="ocRenderGrid(this.value)"><div id="ocSel" style="margin:8px 0"></div><div id="ocGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;max-height:260px;overflow-y:auto;margin:8px 0"></div>
+ <label>Barang (ketuk kartu untuk tambah)</label><input id="ocSearch" placeholder="Cari produk..." oninput="ocRenderGrid(this.value)"><div id="ocGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;max-height:260px;overflow-y:auto;margin:8px 0"></div>
  <div id="ocItems" style="margin:10px 0"></div>
  <div class="grid2"><div><label>Ekspedisi</label><select id="ocExp">${expOpts}</select></div><div><label>Ongkir (Rp)</label><input type="number" id="ocOngkir" inputmode="numeric" value="${d.ongkir!=null?d.ongkir:0}"></div></div>
  <label>No. Resi (opsional)</label><input id="ocResi" placeholder="Isi setelah paket dikirim" value="${esc(d.resi||'')}">
@@ -4788,49 +4795,27 @@ function ocAdd(){const id=document.getElementById('ocProd').value,q=parseInt(doc
  const p=products.find(x=>x.id===id);const cur=ocart[id]||0;
  if(cur+q>p.stock){toast('Stok '+p.name+' cuma '+p.stock);return}
  ocart[id]=cur+q;ocRender();}
-function ocDel(id){delete ocart[id];ocRender()}
+function ocDel(id){delete ocart[id];ocRender();ocRenderGrid(ocSearchVal())}
 function ocRender(){const ids=Object.keys(ocart);let t=0;
  const el=document.getElementById('ocItems');if(!el)return;
  el.innerHTML=ids.length?ids.map(id=>{const p=products.find(x=>x.id===id);const st=p.price*ocart[id];t+=st;
-  return `<div class="cart-item"><div class="inf"><div class="nm">${esc(p.name)}</div><div class="pr">${rp(p.price)} × ${ocart[id]}</div></div><b>${rp(st)}</b><button class="btn btn-gray btn-sm" onclick="ocDel('${id}')">✕</button></div>`}).join(''):'<div class="empty" style="padding:12px">Pilih barang dulu 👆</div>';
+  return `<div class="cart-item"><div class="inf"><div class="nm">${esc(p.name)}</div><div class="pr">${rp(p.price)} × ${ocart[id]}</div></div><div class="oc-stepper" style="margin-top:0"><button onclick="ocChg('${id}',-1)">−</button><b>${ocart[id]}</b><button onclick="ocChg('${id}',1)">＋</button></div><b>${rp(st)}</b><button class="btn btn-gray btn-sm" onclick="ocDel('${id}')">✕</button></div>`}).join(''):'<div class="empty" style="padding:12px">Pilih barang dulu 👆</div>';
  const ong=parseFloat(document.getElementById('ocOngkir').value)||0;
  document.getElementById('ocTotal').textContent='Total: '+rp(t+ong);if(SHOP_ID)LS.set('ocart_'+SHOP_ID,ocart);}
 document.addEventListener('input',e=>{if(e.target&&e.target.id==='ocOngkir')ocRender()});
 function ocRenderGrid(q){
   const el=document.getElementById('ocGrid');if(!el)return;
+  const st=el.scrollTop;
   const qq=(q||'').toLowerCase();
   const list=products.filter(p=>p.stock>0&&(!qq||p.name.toLowerCase().includes(qq)));
-  el.innerHTML=list.length?list.map(p=>'<div class="cat-card" style="padding:10px" onclick="ocSelect(\''+p.id+'\')"><div class="nm">'+esc(p.name)+'</div><div class="pr">'+rp(p.price)+'</div><div class="st">Stok '+p.stock+' '+(p.unit||'pcs')+'</div></div>').join(''):'<div class="sub">Tidak ada produk</div>';
+  el.innerHTML=list.length?list.map(p=>{const cq=ocart[p.id]||0;
+  if(cq>0)return '<div class="cat-card oc-incart" style="padding:10px" onclick="ocQuickAdd(\''+p.id+'\')"><span class="oc-badge">✓ ×'+cq+'</span><div class="nm">'+esc(p.name)+'</div><div class="pr">'+rp(p.price)+'</div><div class="st">Stok '+p.stock+' '+(p.unit||'pcs')+'</div><div class="oc-stepper" onclick="event.stopPropagation()"><button onclick="ocChg(\''+p.id+'\',-1)">−</button><b>'+cq+'</b><button onclick="ocChg(\''+p.id+'\',1)">＋</button></div></div>';
+  return '<div class="cat-card" style="padding:10px" onclick="ocQuickAdd(\''+p.id+'\')"><div class="nm">'+esc(p.name)+'</div><div class="pr">'+rp(p.price)+'</div><div class="st">Stok '+p.stock+' '+(p.unit||'pcs')+'</div><button class="oc-plus" onclick="event.stopPropagation();ocQuickAdd(\''+p.id+'\')">＋</button></div>';}).join(''):'<div class="sub">Tidak ada produk</div>';
+  el.scrollTop=st;
 }
-let ocSelId=null,ocSelQty=1;
-function ocSelect(id){
-  const p=products.find(x=>x.id===id);if(!p)return;
-  ocSelId=id;ocSelQty=Math.min(ocart[id]||1,p.stock)||1;
-  const el=document.getElementById('ocSel');if(!el)return;
-  el.innerHTML='<div class="card" style="padding:10px;border:1.5px solid var(--green)">'+(photoOK(p.photo)?'<img src="'+p.photo+'" style="width:100%;max-height:160px;object-fit:cover;border-radius:12px">':'')+'<div style="font-weight:700;margin-top:6px">'+esc(p.name)+'</div><div class="sub">'+rp(p.price)+' · Stok '+p.stock+' '+(p.unit||'pcs')+'</div><div class="rowbtns" style="margin-top:8px"><button class="btn btn-outline btn-sm" onclick="ocSelChg(-1)">−</button><input id="ocSelQty" type="number" inputmode="numeric" value="'+ocSelQty+'" min="0" style="width:70px;text-align:center" oninput="ocSelInput()"><button class="btn btn-outline btn-sm" onclick="ocSelChg(1)">＋</button><button class="btn btn-green btn-sm" style="flex:1" onclick="ocSelAdd()">Tambah</button><button class="btn btn-gray btn-sm" onclick="ocSelClear()">✕</button></div><div class="sub" id="ocSelSub" style="margin-top:6px">Subtotal: '+rp(p.price*ocSelQty)+'</div></div>';
-}
-function ocSelUpd(){
-  const p=products.find(x=>x.id===ocSelId);if(!p)return;
-  const qEl=document.getElementById('ocSelQty');if(qEl)qEl.value=ocSelQty;
-  const sEl=document.getElementById('ocSelSub');if(sEl)sEl.textContent='Subtotal: '+rp(p.price*ocSelQty);
-}
-function ocSelChg(d){
-  const p=products.find(x=>x.id===ocSelId);if(!p)return;
-  ocSelQty=Math.max(0,Math.min(p.stock,ocSelQty+d));
-  if(d>0&&ocSelQty>=p.stock)toast(tr('i18n_137'));
-  ocSelUpd();
-}
-function ocSelInput(){
-  const p=products.find(x=>x.id===ocSelId);if(!p)return;
-  const v=parseInt(document.getElementById('ocSelQty').value)||0;
-  ocSelQty=Math.max(0,Math.min(p.stock,v));ocSelUpd();
-}
-function ocSelAdd(){
-  if(!ocSelId)return;
-  if(ocSelQty<=0){delete ocart[ocSelId]}else{ocart[ocSelId]=ocSelQty}
-  ocSelClear();ocRender();
-}
-function ocSelClear(){ocSelId=null;const el=document.getElementById('ocSel');if(el)el.innerHTML='';}
+function ocSearchVal(){const s=document.getElementById('ocSearch');return s?s.value:''}
+function ocQuickAdd(id){const p=products.find(x=>x.id===id);if(!p)return;const cur=ocart[id]||0;if(cur+1>p.stock){toast('Stok '+p.name+' cuma '+p.stock);return}ocart[id]=cur+1;ocRender();ocRenderGrid(ocSearchVal())}
+function ocChg(id,d){const p=products.find(x=>x.id===id);if(!p)return;let nq=(ocart[id]||0)+d;if(nq>p.stock){toast('Stok '+p.name+' cuma '+p.stock);nq=p.stock}if(nq<=0){delete ocart[id]}else{ocart[id]=nq}ocRender();ocRenderGrid(ocSearchVal())}
 async function saveOrder(){ if(SHOP_HOLIDAY){toast('Toko sedang libur — penjualan ditutup 🙏','err');return}
  const name=document.getElementById('ocName').value.trim(),phone=document.getElementById('ocPhone').value.trim();
  if(!name){toast(tr('i18n_094'));return}
@@ -9705,7 +9690,7 @@ function renderDashV2(){
   +(low.length?'<div class="v2alert" onclick="go(\'stok\')"><span>⚠ '+low.length+' produk stok menipis — '+esc(low.slice(0,3).map(p=>p.name).join(', '))+'</span><span>›</span></div>':'')
   +(isAdmin?'<div class="v2grid-h">⚡ Aksi Cepat</div><div class="rowbtns" style="flex-wrap:wrap"><button class="btn btn-green btn-sm" onclick="openProdForm()">＋ Tambah Produk</button><button class="btn btn-orange btn-sm" onclick="openStockIn()">＋ Tambah Stok</button><button class="btn btn-outline btn-sm" onclick="printReport(\'harian\')">'+iconHTML('printer')+' Laporan Harian</button></div>':'')
   +'<div class="v2grid-h">Lainnya</div><div class="v2grid">'+tiles.map(t=>'<div class="v2tile" onclick="'+t[2]+'"><span class="ic">'+t[0]+'</span>'+t[1]+'</div>').join('')+'</div>'
-  +'<div class="v2mini"><h3>'+iconHTML('list')+' Log Transaksi</h3>'+(allTx.length?allTx.map(r=>'<div class="row"><span>'+esc(r.nm)+'</span><b>'+rp(r.v)+'</b></div>').join(''):'<div class="empty">Belum ada transaksi.</div>')+'<span class="more" onclick="go(\'laporan\')">Lihat semua ›</span></div>'
+  +'<div class="v2mini"><h3>'+iconHTML('list')+' Log Transaksi</h3>'+(allTx.length?allTx.map(r=>'<div class="row"><span>'+esc(r.nm)+'</span><b>'+rp(r.v)+'</b></div>').join(''):'<div class="empty">Belum ada transaksi.</div>')+'<span class="more" onclick="openLogAll()">Lihat semua ›</span></div>'
   +(isOwnerRole?'<div class="v2mini"><h3>'+iconHTML('activity')+' Log Aktivitas</h3>'+(act.length?act.map(a=>'<div class="row"><span>'+esc((a.by||'?')+' — '+(a.text||''))+'</span></div>').join(''):'<div class="empty">Belum ada aktivitas.</div>')+'<span class="more" onclick="openActivityAll()">Lihat semua ›</span></div>':'')
   +'<div class="v2mini"><h3>'+iconHTML('memo')+' Catatan Toko</h3>'+(topNotes.length?topNotes.map(n=>'<div class="row"><span>'+esc((n.body||'').slice(0,60))+'</span></div>').join(''):'<div class="empty">Belum ada catatan.</div>')+'<span class="more" onclick="go(\'notes\')">Lihat semua ›</span></div>';
 }
@@ -9819,8 +9804,8 @@ function startContextTour(){const v=curView;const g=(LANG==='en'?CONTEXT_GUIDE_E
   if(v==='laporan'&&!can('riwayat_struk'))tourSteps=tourSteps.filter(s=>s.t!=='#histCard');tourReturnView=v;tourIdx=0;const tip=document.getElementById('tourTip'),hole=document.getElementById('tourHole');if(tip)tip.style.display='block';if(hole)hole.style.display='block';tourStackLen=viewStack.length;const sc=document.getElementById('tourScrim');if(sc)sc.style.display='block';document.body.style.overflow='hidden';tourShowStep()}
 let tourIdx=0;let tourSteps=TOUR_STEPS;let tourStackLen=0;let tourReturnView='dashboard';
 function tourStepsFor(){if(typeof uiV2==='function'&&!uiV2())return LANG==='en'?TOUR_STEPS_EN_V1:TOUR_STEPS_ID_V1;return TOUR_STEPS}
-function startTour(replay){const fb0=document.getElementById('floatBar');if(fb0){fb0.classList.add('gone');fb0.classList.remove('hidden')}clearTimeout(floatHideTimer);tourIdx=0;tourSteps=tourStepsFor();tourReturnView='dashboard';const tip=document.getElementById('tourTip'),hole=document.getElementById('tourHole');if(tip)tip.style.display='block';if(hole)hole.style.display='block';tourStackLen=viewStack.length;const sc=document.getElementById('tourScrim');if(sc)sc.style.display='block';document.body.style.overflow='hidden';tourShowStep()}
-function tourShowStep(){const s=tourSteps[tourIdx];go(s.v,true);setTimeout(()=>{const el=s.t?document.querySelector(s.t):null;if(el)el.scrollIntoView({block:'center'});setTimeout(()=>{const hole=document.getElementById('tourHole');if(el&&hole){const r=el.getBoundingClientRect();hole.style.left=(r.left-6)+'px';hole.style.top=(r.top-6)+'px';hole.style.width=(r.width+12)+'px';hole.style.height=(r.height+12)+'px';hole.style.display='block'}else if(hole){hole.style.display='none'}document.getElementById('tourStepLbl').textContent=(LANG==='en'?'STEP ':'LANGKAH ')+(tourIdx+1)+(LANG==='en'?' OF ':' DARI ')+tourSteps.length+(LANG==='en'?' • APP TOUR':' • TUR APLIKASI');document.getElementById('tourTitle').textContent=s.ti;document.getElementById('tourText').textContent=s.tx;document.getElementById('tourDots').textContent=tourSteps.map((_,i)=>i===tourIdx?'●':'○').join(' ');document.getElementById('tourNextBtn').textContent=tourIdx===tourSteps.length-1?tr('tour_finish'):tr('tour_next');const tip2=document.getElementById('tourTip');if(tip2){tip2.style.top='auto';tip2.style.bottom='76px';if(el){const r2=el.getBoundingClientRect(),th=tip2.offsetHeight,gap=14;if(r2.top>=th+gap){tip2.style.bottom=(window.innerHeight-r2.top+gap)+'px'}else if(window.innerHeight-r2.bottom>=th+gap){tip2.style.top=(r2.bottom+gap)+'px';tip2.style.bottom='auto'}else if(r2.top>=window.innerHeight-r2.bottom){tip2.style.bottom=(window.innerHeight-r2.top+gap)+'px'}else{tip2.style.top=(r2.bottom+gap)+'px';tip2.style.bottom='auto'}}}},120)},150)}
+function startTour(replay){const fb0=document.getElementById('floatBar');if(fb0){fb0.classList.add('gone');fb0.classList.remove('hidden')}clearTimeout(floatHideTimer);tourIdx=0;tourSteps=tourStepsFor().slice();tourReturnView='dashboard';const tip=document.getElementById('tourTip'),hole=document.getElementById('tourHole');if(tip)tip.style.display='block';if(hole)hole.style.display='block';tourStackLen=viewStack.length;const sc=document.getElementById('tourScrim');if(sc)sc.style.display='block';document.body.style.overflow='hidden';tourShowStep()}
+function tourShowStep(){const s=tourSteps[tourIdx];if(!s){tourFinish();return}go(s.v,true);setTimeout(()=>{const el=s.t?document.querySelector(s.t):null;if(el&&!tourElVisible(el)){tourSteps.splice(tourIdx,1);if(tourIdx>=tourSteps.length){tourFinish();return}tourShowStep();return}if(el)el.scrollIntoView({block:'center'});setTimeout(()=>{const hole=document.getElementById('tourHole');if(el&&hole){const r=el.getBoundingClientRect();hole.style.left=(r.left-6)+'px';hole.style.top=(r.top-6)+'px';hole.style.width=(r.width+12)+'px';hole.style.height=(r.height+12)+'px';hole.style.display='block'}else if(hole){hole.style.display='none'}document.getElementById('tourStepLbl').textContent=(LANG==='en'?'STEP ':'LANGKAH ')+(tourIdx+1)+(LANG==='en'?' OF ':' DARI ')+tourSteps.length+(LANG==='en'?' • APP TOUR':' • TUR APLIKASI');document.getElementById('tourTitle').textContent=s.ti;document.getElementById('tourText').textContent=s.tx;document.getElementById('tourDots').textContent=tourSteps.map((_,i)=>i===tourIdx?'●':'○').join(' ');document.getElementById('tourNextBtn').textContent=tourIdx===tourSteps.length-1?tr('tour_finish'):tr('tour_next');const tip2=document.getElementById('tourTip');if(tip2){tip2.style.top='auto';tip2.style.bottom='76px';if(el){const r2=el.getBoundingClientRect(),th=tip2.offsetHeight,gap=14;if(r2.top>=th+gap){tip2.style.bottom=(window.innerHeight-r2.top+gap)+'px'}else if(window.innerHeight-r2.bottom>=th+gap){tip2.style.top=(r2.bottom+gap)+'px';tip2.style.bottom='auto'}else if(r2.top>=window.innerHeight-r2.bottom){tip2.style.bottom=(window.innerHeight-r2.top+gap)+'px'}else{tip2.style.top=(r2.bottom+gap)+'px';tip2.style.bottom='auto'}}}},120)},150)}
 function tourNext(){if(tourIdx<tourSteps.length-1){tourIdx++;tourShowStep()}else tourFinish()}
 function tourSkip(){tourFinish()}
 function tourFinish(){const tip=document.getElementById('tourTip'),hole=document.getElementById('tourHole');if(tip)tip.style.display='none';if(hole)hole.style.display='none';const sc=document.getElementById('tourScrim');if(sc)sc.style.display='none';document.body.style.overflow='';if(typeof tourStackLen==='number')viewStack.length=tourStackLen;LS.set('tour_done',true);go(tourReturnView||'dashboard',true)}
