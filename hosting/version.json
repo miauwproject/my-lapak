@@ -1,7 +1,7 @@
 {
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code65/my-lapak_v1.1.0-code65.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTY1L215LWxhcGFrX3YxLjEuMC1jb2RlNjUuYXBr",
-  "notes": "1.1.0 stabil (code65): tombol Bagikan produk kini langsung kirim kartu story ber-QR + kumulatif code64.",
-  "versionCode": 65,
-  "versionName": "1.1.0"
+  "versionCode": 66,
+  "versionName": "1.1.0",
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code66/my-lapak_v1.1.0-code66.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTY2L215LWxhcGFrX3YxLjEuMC1jb2RlNjYuYXBr",
+  "notes": "Redesain seamless code66: nav 4 tab + Scan, cart sheet, header navy, voice island, pull-to-refresh, Versi Tampilan, katalog map picker + Patokan + OSRM, Jasa Ekspedisi, anti-spam, pattern doodle garis-tema."
 }
