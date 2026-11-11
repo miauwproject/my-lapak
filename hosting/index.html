@@ -262,6 +262,9 @@ code{background:var(--codebg);padding:2px 6px;border-radius:6px;font-size:12px;w
 #bgLayer.imgmode{background-size:cover;background-position:center}
 .hidden{display:none!important}
 .ic svg{width:22px;height:22px;display:block}
+.ic-svg{width:1em;height:1em;vertical-align:-.125em}
+.v2mini h3 .ic-svg{width:16px;height:16px;vertical-align:-3px}
+body.v2 #hdrGear svg{width:22px;height:22px;display:block}
 nav button .ic svg{width:21px;height:21px}
 .menu-item .ic svg{width:22px;height:22px}
 header .logo svg{width:26px;height:26px}
@@ -354,6 +357,7 @@ header .logo svg{width:26px;height:26px}
 
 /* ============ CODE66 v2 (body.v2) — palet navy #071c45 + cyan #06b6d4, bg putih ============ */
 body.v2{--bg:#fff}
+[data-theme="gelap"] body.v2{--bg:#111827}
 body.v2 #payWaitKasirCard{display:none}
 body.v2 header{background:#071c45;border-radius:0 0 28px 28px;padding:14px 14px 18px}
 #hdrDate{display:none}
@@ -384,6 +388,7 @@ body.v2 #syncRowOld{display:none!important}
 body.v2 button[onclick*="manualRefresh"]{display:none}
 body.v2 [id$="AturBtn"]{display:none!important}
 body.v2 #guideFabWrap{display:none!important}
+body.v2 #menuAturLayout{display:none}
 #verSwitchOverlay{position:fixed;inset:0;background:#071c45;z-index:999;opacity:0;pointer-events:none;transition:opacity .25s ease}
 #verSwitchOverlay.on{opacity:1;pointer-events:auto}
 #syncRowV2{display:none}
@@ -395,7 +400,7 @@ body.v2 #scanFabWrap{display:none!important}
 body.v2 #voiceFabBtn{background:rgba(6,182,212,.7)}
 body.v2 #voiceFabBtn.voice-on{background:rgba(6,182,212,.7)}
 body.v2 #kasirSort,body.v2 #prodSort{display:none}
-body.v2 #kasirCats,body.v2 #prodCats{position:sticky!important;top:72px!important;z-index:10;background:#fff;padding:8px 0}
+body.v2 #kasirCats{position:sticky!important;top:72px!important;z-index:10;background:#fff;padding:8px 0}
 body.v2 .searchbar{top:72px}
 body.v2 #view-kasir [data-t="sort_label"],body.v2 #view-produk [data-t="sort_label"]{display:none}
 body.v2 #dashRefreshBtn{display:none}
@@ -405,7 +410,7 @@ body.v2 #newVerNotif{display:none!important}
 #dashV2Home{display:none}
 body.v2 #dashV2Home{display:block}
 body.v2 #floatBarInner{background:rgba(7,28,69,.5)}
-body.v2 .card{background:#fff;border-color:#e2e8f0}
+body.v2 .card{background:var(--card);border-color:var(--line)}
 .v2hero{background:#071c45;border-radius:20px;padding:18px;color:#fff;margin:12px 0}
 .v2hero .t{font-size:13px;color:#bae6fd;font-weight:700}
 .v2hero .v{font-size:28px;font-weight:800;margin:4px 0}
@@ -433,6 +438,52 @@ body.v2 .card{background:#fff;border-color:#e2e8f0}
 #ptrInd{position:fixed;top:0;left:50%;transform:translateX(-50%);background:#071c45;color:#fff;font-size:12px;font-weight:700;padding:8px 16px;border-radius:0 0 12px 12px;z-index:80;display:none}
 .voice-hl{outline:3px solid #06b6d4!important;outline-offset:2px}
 .voice-badge{position:absolute;top:6px;right:6px;background:#06b6d4;color:#fff;font-size:12px;font-weight:800;border-radius:99px;padding:2px 8px;z-index:2}
+/* ============ CODE69 v2: back bar, drill-down, produk ============ */
+#backBarV2{display:none}
+body.v2 #backBarV2.show{display:flex;position:fixed;bottom:66px;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:36;padding:0 14px 8px;pointer-events:none}
+body.v2 #backBarV2.show button{pointer-events:auto;background:#071c45;color:#fff;border:none;border-radius:12px;padding:10px 16px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.25)}
+#setDetailRowsV2{display:none}
+body.v2 #setDetailRowsV2{display:block}
+body.v2 #view-pengaturan #kasirOrderCard{display:none}
+body.v2 #view-pengaturan #expedisiCard{display:none}
+body.v2 #view-laporan #lapSchedCard{display:none}
+body.v2 #view-produk .mtitle{position:sticky;top:76px;z-index:11;background:var(--bg);margin:0 4px;padding:12px 0 6px}
+body.v2 #view-produk .searchbar{top:120px}
+body.v2 #prodCats{position:sticky!important;top:177px!important;z-index:10;background:var(--card);padding:8px 0}
+body.v2 #prodGrid{padding-bottom:200px}
+body.v2 #prodGrid .pcard{border:1px solid #e2e8f0;border-radius:14px;box-shadow:0 1px 4px rgba(7,28,69,.06)}
+body.v2 #prodGrid .pcard .pimg{border-radius:12px}
+body.v2 #prodGrid .pcard .pimg-empty{background:#f1f5f9;color:#64748b;display:flex;align-items:center;justify-content:center;font-size:32px}
+body.v2 #prodGrid .pcard .pedit{background:#071c45;display:flex;align-items:center;justify-content:center}
+body.v2 #prodGrid .pcard .pedit .ic-svg{width:16px;height:16px}
+body.v2 #prodGrid .pcard .pnm{font-size:14px;color:#071c45}
+body.v2 #prodGrid .pcard .ppr{font-size:15px}
+body.v2 #prodCats .chip{background:#f1f5f9;border-color:#e2e8f0;border-radius:12px}
+body.v2 #prodCats .chip.on{background:#071c45;border-color:#071c45;color:#fff}
+/* ============ CODE69 v2: mode gelap ============ */
+[data-theme="gelap"] body.v2 .mtitle h2{color:var(--txt)}
+[data-theme="gelap"] body.v2 .mtitle .sub{color:var(--mut)}
+[data-theme="gelap"] body.v2 #mainNavV2{background:var(--card);border-top-color:var(--line)}
+[data-theme="gelap"] body.v2 #mainNavV2 button{color:var(--mut)}
+[data-theme="gelap"] body.v2 #mainNavV2 button.on{color:#38bdf8}
+[data-theme="gelap"] body.v2 .v2tile{background:var(--help);border-color:var(--line);color:var(--txt)}
+[data-theme="gelap"] body.v2 .v2chip{background:var(--help);border-color:var(--line)}
+[data-theme="gelap"] body.v2 .v2chip b{color:var(--txt)}
+[data-theme="gelap"] body.v2 .v2chip span{color:var(--mut)}
+[data-theme="gelap"] body.v2 .v2mini{background:var(--card);border-color:var(--line)}
+[data-theme="gelap"] body.v2 .v2mini h3{color:var(--txt)}
+[data-theme="gelap"] body.v2 .v2mini .row{border-bottom-color:var(--line)}
+[data-theme="gelap"] body.v2 .v2grid-h{color:var(--txt)}
+[data-theme="gelap"] body.v2 #kasirCats{background:var(--card)}
+[data-theme="gelap"] body.v2 #cartSheet{background:var(--card)}
+[data-theme="gelap"] body.v2 #syncRowV2{color:var(--mut)}
+[data-theme="gelap"] body.v2 .v2ads{border-color:var(--line)}
+[data-theme="gelap"] body.v2 #prodGrid .pcard{border-color:var(--line)}
+[data-theme="gelap"] body.v2 #prodGrid .pcard .pnm{color:var(--txt)}
+[data-theme="gelap"] body.v2 #prodGrid .pcard .pimg-empty{background:var(--help);color:var(--mut)}
+[data-theme="gelap"] body.v2 #prodCats .chip{background:var(--help);border-color:var(--line);color:var(--txt)}
+[data-theme="gelap"] body.v2 #prodCats .chip.on{background:#06b6d4;border-color:#06b6d4;color:#fff}
+[data-theme="gelap"] body.v2 #backBarV2.show button{background:#0ea5e9}
 #voiceIsland{position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:70;display:none;background:#071c45;color:#fff;border-radius:99px;padding:10px 16px;align-items:center;gap:10px;box-shadow:0 8px 24px rgba(0,0,0,.35);max-width:calc(100% - 28px)}
 #voiceIsland.show{display:flex}
 #voiceIsland .wbars{display:flex;gap:2px;align-items:flex-end;height:18px}
@@ -1303,8 +1354,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <div style="margin-bottom:10px"><button class="btn btn-green btn-sm" onclick="manualRefresh()"><svg width="18" height="18" viewBox="0 0 48 48" style="vertical-align:-3px"><path d="M32.7,21.8 L36.3,22.3 L36.3,25.7 L32.7,26.2 L31.7,28.6 L33.9,31.5 L31.5,33.9 L28.6,31.7 L26.2,32.7 L25.7,36.3 L22.3,36.3 L21.8,32.7 L19.4,31.7 L16.5,33.9 L14.1,31.5 L16.3,28.6 L15.3,26.2 L11.7,25.7 L11.7,22.3 L15.3,21.8 L16.3,19.4 L14.1,16.5 L16.5,14.1 L19.4,16.3 L21.8,15.3 L22.3,11.7 L25.7,11.7 L26.2,15.3 L28.6,16.3 L31.5,14.1 L33.9,16.5 L31.7,19.4 Z M28.4,24.0 L28.3,25.1 L27.8,26.2 L27.1,27.1 L26.2,27.8 L25.1,28.3 L24.0,28.4 L22.9,28.3 L21.8,27.8 L20.9,27.1 L20.2,26.2 L19.7,25.1 L19.6,24.0 L19.7,22.9 L20.2,21.8 L20.9,20.9 L21.8,20.2 L22.9,19.7 L24.0,19.6 L25.1,19.7 L26.2,20.2 L27.1,20.9 L27.8,21.8 L28.3,22.9 Z" fill="#fff" fill-rule="evenodd"/><path d="M 4.7 18.8 A 20 20 0 0 1 39.3 11.1" stroke="#fff" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M 45.1 18.0 L 41.2 5.6 L 33.6 12.1 Z" fill="#fff"/><path d="M 43.3 29.2 A 20 20 0 0 1 8.7 36.9" stroke="#fff" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M 2.9 30.0 L 6.8 42.4 L 14.4 35.9 Z" fill="#fff"/></svg> Refresh</button></div>
   <div class="card"><div style="display:flex;align-items:center;gap:12px"><div id="setProfAvatar" style="width:56px;height:56px;border-radius:50%;background:var(--line);display:flex;align-items:center;justify-content:center;font-size:30px;flex-shrink:0;overflow:hidden">👤</div><div style="flex:1"><div style="font-weight:800;font-size:16px" id="setProfName">Pengguna</div><div style="font-size:12px;color:var(--mut)" id="setProfRole">Owner</div></div><button class="btn btn-outline btn-sm" data-t="m_profil" onclick="go('profil')">Profil Saya</button></div></div>
 <div class="grp">Tampilan</div>
-  <div class="card" id="uiVersionCard"><h3>🎨 Versi Tampilan</h3><div class="helpbox">Versi Baru = desain navy/cyan code66. Versi Lama = tampilan code65. Data sama, bisa balik kapan saja.</div><div class="rowbtns"><button class="btn btn-sm" id="uiVerLamaBtn" onclick="setUiVersion('lama')">Versi Lama</button><button class="btn btn-sm" id="uiVerBaruBtn" onclick="setUiVersion('baru')">Versi Baru</button></div></div>
-  <div class="menu-item" onclick="openAturLayout()"><span class="ic" data-ic="sliders"></span>Tata Letak Layar<span class="arr">›</span></div>
+  <div class="card" id="uiVersionCard"><h3>🎨 Versi Tampilan</h3><div class="helpbox">Versi Baru — tampilan modern navy/cyan, navigasi bawah simpel, perintah suara, tarik untuk refresh. Versi Lama — tampilan klasik yang sudah familiar. Data sama, bisa balik kapan saja.</div><div class="rowbtns"><button class="btn btn-sm" id="uiVerLamaBtn" onclick="setUiVersion('lama')">Versi Lama</button><button class="btn btn-sm" id="uiVerBaruBtn" onclick="setUiVersion('baru')">Versi Baru</button></div></div>
+  <div class="menu-item" id="menuAturLayout" onclick="openAturLayout()"><span class="ic" data-ic="sliders"></span>Tata Letak Layar<span class="arr">›</span></div>
   <div class="menu-item" onclick="openPengingatKirim()"><span class="ic" data-ic="bell"></span>Pengingat Kirim<span class="arr">›</span></div>
 <div class="grp" data-t="grp_toko">Toko</div>
   <div class="menu-item" data-t="m_toko" data-perm="produk_stok" onclick="go('toko')"><span class="ic" data-ic="home">🏪</span>Profil Toko<span class="arr">›</span></div>
@@ -1314,6 +1365,12 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <div class="menu-item" data-t="m_role" data-perm="owner" onclick="go('role')"><span class="ic" data-ic="role">🛡️</span>Kelola Role<span class="arr">›</span></div>
   <div class="card" id="expedisiCard"><h3>🚚 Jasa Ekspedisi</h3><div class="helpbox">Yang dimatikan tidak muncul di dropdown Ekspedisi checkout katalog.</div><div id="expedisiList"></div><button class="btn btn-outline btn-sm" style="margin-top:8px" onclick="expedisiAddCustomPrompt()">＋ Tambah Ekspedisi</button></div>
   <div class="card2" id="kasirOrderCard"><h4>Kasir &amp; Order · Pindahan</h4><div class="row"><div>⏱ Batas Waktu Bayar Online<small>Order diproses tanpa bukti bayar dibatalkan otomatis</small></div><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><input type="number" id="setPayWaitCfg" min="1" style="width:64px;text-align:center" onchange="autoSaveNum('payWaitMin',this.value)"><button class="btn btn-outline btn-sm" onclick="setPayWaitPreset(5)">5</button><button class="btn btn-outline btn-sm" onclick="setPayWaitPreset(10)">10</button><button class="btn btn-outline btn-sm" onclick="setPayWaitPreset(15)">15</button><button class="btn btn-outline btn-sm" onclick="setPayWaitPreset(30)">30</button><button class="btn btn-outline btn-sm" onclick="setPayWaitPreset(60)">60</button></div></div><div class="row"><div>⚠️ Batas Stok Menipis<small>Produk di bawah angka ini masuk daftar menipis</small></div><input type="number" id="setLowCfg" min="1" style="width:64px;text-align:center" onchange="autoSaveNum('low',this.value)"></div><div class="row"><div>🔔 Suara &amp; Getar Order Masuk<small>Bunyi + getar saat ada order online baru</small></div><div style="display:flex;gap:12px"><label style="display:flex;gap:6px;align-items:center;font-size:13px"><input type="checkbox" id="setRingSoundCfg" onchange="autoSaveChk('ringSound',this.checked)"> Bunyi</label><label style="display:flex;gap:6px;align-items:center;font-size:13px"><input type="checkbox" id="setRingVibrateCfg" onchange="autoSaveChk('ringVibrate',this.checked)"> Getar</label></div></div></div>
+<div id="setDetailRowsV2">
+  <div class="menu-item" onclick="openSetDetail('paywait')"><span class="ic" data-ic="order"></span><span style="flex:1;text-align:left">Batas Waktu Bayar Online<span id="setRowPayWaitVal" style="display:block;font-size:11px;color:var(--mut);font-weight:400"></span></span><span class="arr">›</span></div>
+  <div class="menu-item" onclick="openSetDetail('low')"><span class="ic" data-ic="box"></span><span style="flex:1;text-align:left">Batas Stok Menipis<span id="setRowLowVal" style="display:block;font-size:11px;color:var(--mut);font-weight:400"></span></span><span class="arr">›</span></div>
+  <div class="menu-item" onclick="openSetDetail('ring')"><span class="ic" data-ic="bell"></span><span style="flex:1;text-align:left">Suara &amp; Getar Order Masuk<span id="setRowRingVal" style="display:block;font-size:11px;color:var(--mut);font-weight:400"></span></span><span class="arr">›</span></div>
+  <div class="menu-item" onclick="openSetDetail('expedisi')"><span class="ic" data-ic="cart"></span><span style="flex:1;text-align:left">Jasa Ekspedisi<span id="setRowExpedisiVal" style="display:block;font-size:11px;color:var(--mut);font-weight:400"></span></span><span class="arr">›</span></div>
+</div>
   <div class="grp" data-t="grp_akun">Akun</div>
   <div class="menu-item" data-t="m_profil" data-perm="profil_tema" onclick="go('profil')"><span class="ic" data-ic="profile">👤</span>Profil Saya<span class="arr">›</span></div>
   <div class="menu-item" data-t="m_cloud" onclick="go('cloud')"><span class="ic" data-ic="cloud">☁️</span>Login &amp; Cloud<span class="arr">›</span></div>
@@ -1329,6 +1386,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
 <div class="card"><h3>🔆 Layar Tetap Menyala</h3><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><span>Jaga layar tetap menyala selama app dibuka (memudahkan kasir)</span><label class="switch"><input type="checkbox" id="keepAwakeToggle" onchange="setKeepAwake(this.checked)"><span class="tr"></span></label></div><div class="helpbox">Layar tidak akan mati atau terkunci otomatis selama app dibuka. Matikan untuk menghemat baterai.</div></div>
 <div class="card"><h3 data-t="backup_title">💾 Backup Data</h3><div class="rowbtns"><button class="btn btn-outline btn-sm" data-t="backup_btn" onclick="backupData()">⬇️ Backup</button><button class="btn btn-outline btn-sm" data-t="restore_btn" onclick="document.getElementById('restoreFile').click()">⬆️ Restore</button></div><input type="file" id="restoreFile" accept=".json" style="display:none" onchange="restoreData(event)"></div>
   <div class="card" data-perm="owner"><h3 data-t="danger_title">🗑️ Zona Berbahaya</h3><div class="rowbtns"><button class="btn btn-red btn-sm" id="wipeBtn" data-t="wipe_all" onclick="openWipeDialog()">Hapus Semua Data</button><button class="btn btn-orange btn-sm" id="resetBtn" data-t="reset_btn" onclick="openResetDialog()">Reset Transaksi</button></div><div class="helpbox" style="margin-top:10px">Hapus Semua Data: Menghapus produk, transaksi, order, pengeluaran, hutang, riwayat stok, log aktivitas, history pembatalan, dan catatan; profil + pengaturan kembali default; hanya developer yang tersisa; kode toko tetap.</div><div class="helpbox">Reset Transaksi: Menghapus penjualan, order, pengeluaran, hutang, riwayat stok, log aktivitas, dan history pembatalan; produk, member, profil, pengaturan, nilai stok, dan catatan TETAP.</div></div>
+</section>
+<section id="view-setdetail" class="view">
+  <div class="mtitle"><button class="mt-back" onclick="goBack()">‹</button><h2 id="setDetailTitle">Pengaturan</h2></div>
+  <div id="setDetailBody"></div>
 </section>
 
 <section id="view-tiket" class="view">
@@ -1427,7 +1488,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 <section id="view-tentang" class="view">
   <div class="backlink" onclick="goBack()">‹ Kembali</div>
   <div style="margin-bottom:10px"><button class="btn btn-green btn-sm" onclick="manualRefresh()"><svg width="18" height="18" viewBox="0 0 48 48" style="vertical-align:-3px"><path d="M32.7,21.8 L36.3,22.3 L36.3,25.7 L32.7,26.2 L31.7,28.6 L33.9,31.5 L31.5,33.9 L28.6,31.7 L26.2,32.7 L25.7,36.3 L22.3,36.3 L21.8,32.7 L19.4,31.7 L16.5,33.9 L14.1,31.5 L16.3,28.6 L15.3,26.2 L11.7,25.7 L11.7,22.3 L15.3,21.8 L16.3,19.4 L14.1,16.5 L16.5,14.1 L19.4,16.3 L21.8,15.3 L22.3,11.7 L25.7,11.7 L26.2,15.3 L28.6,16.3 L31.5,14.1 L33.9,16.5 L31.7,19.4 Z M28.4,24.0 L28.3,25.1 L27.8,26.2 L27.1,27.1 L26.2,27.8 L25.1,28.3 L24.0,28.4 L22.9,28.3 L21.8,27.8 L20.9,27.1 L20.2,26.2 L19.7,25.1 L19.6,24.0 L19.7,22.9 L20.2,21.8 L20.9,20.9 L21.8,20.2 L22.9,19.7 L24.0,19.6 L25.1,19.7 L26.2,20.2 L27.1,20.9 L27.8,21.8 L28.3,22.9 Z" fill="#fff" fill-rule="evenodd"/><path d="M 4.7 18.8 A 20 20 0 0 1 39.3 11.1" stroke="#fff" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M 45.1 18.0 L 41.2 5.6 L 33.6 12.1 Z" fill="#fff"/><path d="M 43.3 29.2 A 20 20 0 0 1 8.7 36.9" stroke="#fff" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M 2.9 30.0 L 6.8 42.4 L 14.4 35.9 Z" fill="#fff"/></svg> Refresh</button></div>
-  <div class="card" style="text-align:center"><h3 data-t="about_title" style="font-size:14px;color:#6b7280">ℹ️ Tentang</h3><div style="font-size:12px;color:#667085">My Lapak 1.1.0 — mode <b id="modeLbl">offline</b>.</div><div style="font-size:11px;color:#9aa0a6;margin-top:12px;line-height:1.8">Kasir, stok, laporan, toko online, hutang pelanggan, dan laporan email dalam satu aplikasi offline-first.<br>Data tersimpan di HP (mode offline) atau tersinkron via Firebase (mode cloud).<br>Tema, background, dan gaya ikon bisa diubah dari Pengaturan → Tampilan.</div></div>
+  <div class="card" style="text-align:center"><h3 data-t="about_title" style="font-size:14px;color:#6b7280">ℹ️ Tentang</h3><div style="font-size:12px;color:#667085">My Lapak 1.1.0 — mode <b id="modeLbl">offline</b>.</div><div style="font-size:11px;color:#9aa0a6;margin-top:12px;line-height:1.8">Kasir, stok, laporan, toko online, hutang pelanggan, dan laporan email dalam satu aplikasi offline-first.<br>Data tersimpan di HP (mode offline) atau tersinkron ke cloud (mode cloud).<br>Tema, background, dan gaya ikon bisa diubah dari Pengaturan → Tampilan.</div></div>
 </section>
 
 <section id="view-role" class="view">
@@ -1494,6 +1555,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <button data-v="ownerdash" data-perm="dashboard_owner" onclick="go('ownerdash')"><span class="ic" data-ic="dash">📈</span>Dashboard</button>
   <button data-v="pengaturan" onclick="go('pengaturan')"><span style="position:relative"><span class="ic" data-ic="gear">⚙️</span><span id="navPengaturanBadge"></span></span>Pengaturan</button>
 </nav>
+<div id="backBarV2"><button onclick="goBack()">← Kembali</button></div>
 <nav id="mainNavV2">
   <button id="navBerandaBtn" data-v="dashboard" onclick="go('dashboard')"><span class="ic" data-ic="home"></span><span class="lbl">Beranda</span></button>
   <button id="navPesananBtn" data-v="kasir" onclick="go('kasir')"><span style="position:relative"><span class="ic" data-ic="cart"></span><span id="navKasirBadgeV2"></span></span><span class="lbl">Pesanan</span></button>
@@ -1924,7 +1986,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 const LS={get(k,d){try{const v=localStorage.getItem('wapp3_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('wapp3_'+k,JSON.stringify(v))}catch(e){}},del(k){localStorage.removeItem('wapp3_'+k)}};
 
 /* ================= v7.2: BAHASA, FLOAT BAR, BACK ================= */
-const APP_VERSION_CODE=68;const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
+const APP_VERSION_CODE=69;const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
 const L={id:{
 nav_dashboard:'Beranda',nav_kasir:'Pesanan',nav_produk:'Produk',nav_laporan:'Laporan',nav_ownerdash:'Dashboard',nav_pengaturan:'Pengaturan',online_label:'Order Online',
 back:'‹ Kembali',floatbar:'BANTUAN',
@@ -3492,7 +3554,11 @@ function applyPerms(){
   const pl=document.getElementById('priceListBtn');if(pl)pl.style.display=can('produk_stok')?'':'none';
   const ps=document.getElementById('prodStokBtn');if(ps)ps.style.display=can('produk_stok')?'':'none';
 }
-function userMenu(){go('profil')}
+function userMenu(){
+  openModal(`<h2>👤 ${CUR_USER?esc(CUR_USER.name):(LANG==='en'?'Offline mode':'Mode Offline')}</h2>
+  ${CUR_USER?`<div class="sub" style="color:var(--mut);margin-bottom:4px">${esc(CUR_USER.email)}</div><div style="margin-bottom:10px"><span class="role-badge">${isDeveloper()?'Developer':ROLES[MY_ROLE]}</span></div><div class="card" style="margin-bottom:10px"><h3>${tr('msg_bio_title')}</h3><div style="font-size:13px;line-height:1.7">${esc(getProfile().name||CUR_USER.name)}<br>${CUR_USER.email?esc(CUR_USER.email)+'<br>':''}${getProfile().wa?('WA: '+esc(getProfile().wa)+'<br>'):''}${getProfile().address?esc(getProfile().address):''}</div></div><div class="card" style="margin-bottom:10px"><h3>${tr('shop_code')}</h3><div style="font-size:26px;font-weight:800;letter-spacing:4px;text-align:center">${SHOP_CODE}</div><div style="text-align:center;margin-top:8px"><button class="btn btn-outline btn-sm" onclick="copyShopCode()">${tr('msg_copy_shop_code')}</button></div></div>${SHOP_CODE?'<div class="card" style="margin-bottom:10px"><h3>'+tr('msg_catalog_link_title')+'</h3><div style="font-size:13px;word-break:break-all;margin-bottom:8px">'+esc(catalogUrl())+'</div><div class="rowbtns"><button class="btn btn-blue btn-sm" onclick="shareCatalog()">'+tr('msg_copy_catalog_link')+'</button></div></div>':''}`:''}
+  <div class="rowbtns"><button class="btn btn-outline" onclick="closeModal();go('profil')">${tr('prof_title')}</button><button class="btn btn-outline" onclick="closeModal();goPass()">${tr('change_pass')}</button>${CUR_USER?'<button class="btn btn-red" onclick="gLogout()">'+tr('logout_switch')+'</button>':''}</div>`);
+}
 async function gLogout(){try{LS.del('cart_'+SHOP_ID);LS.del('ocart_'+SHOP_ID);if(typeof CAT!=='undefined'&&CAT.shopId)LS.del('catcart_'+CAT.shopId);}catch(e){}try{if(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform()){try{const P=(window.Capacitor.Plugins&&window.Capacitor.Plugins.FirebaseAuthentication)||window.Capacitor.registerPlugin('FirebaseAuthentication');await P.signOut();}catch(e){}}}catch(e){}if(!FB||!FB.auth){location.reload();return}try{FB.auth.signOut().then(()=>location.reload()).catch(()=>location.reload())}catch(e){location.reload()}}
 
 /* ================= EKSPEDISI ================= */
@@ -3531,7 +3597,7 @@ async function expedisiAddCustom(name){const nm=String(name||'').trim();if(!nm)r
 let curView='dashboard';
 let viewStack=['dashboard'];
 const SUBVIEWS=['stok','pengeluaran','pengaturan','laporan','pengguna','hutang','online','ownerdash','admin','profil','toko','tampilan','email','cloud','pin','tentang','role','panduan'];
-function setupProdFab(){const w=document.getElementById('prodFabWrap');if(!w||w.dataset.done)return;const row=document.getElementById('prodFabRow');if(!row)return;['addProdBtn','prodScanBtn','prodStokBtn'].forEach(id=>{const el=document.getElementById(id);if(el)row.appendChild(el)});const pl=document.getElementById('priceListBtn');if(pl)w.appendChild(pl);const sr=document.querySelector('#view-produk .scanrow');if(sr)sr.style.display='none';w.dataset.done='1';w.classList.add('show')}function go(v,nopush){
+function setupProdFab(){const w=document.getElementById('prodFabWrap');if(!w||w.dataset.done)return;const row=document.getElementById('prodFabRow');if(!row)return;['addProdBtn','prodScanBtn','prodStokBtn'].forEach(id=>{const el=document.getElementById(id);if(el)row.appendChild(el)});const pl=document.getElementById('priceListBtn');if(pl)w.appendChild(pl);const sr=document.querySelector('#view-produk .scanrow');if(sr)sr.style.display='none';w.dataset.done='1';w.classList.add('show');try{if(typeof updateBackBarV2==='function')updateBackBarV2()}catch(e){}}function go(v,nopush){
   if(v==='online')v='kasir';
   if(v==='kasir'&&!can('kasir')){toast(tr('i18n_003'));return}
   if(v==='produk'&&!can('produk_stok')){toast(tr('i18n_003'));return}
@@ -3587,6 +3653,7 @@ function renderNavV2(){
   lock('navProdukBtn','produk_stok','Produk');
   lock('navLaporanBtn','laporan_harian','Laporan');
   syncNavBadge();
+  updateBackBarV2();
   if(!window._navBadgeObs){
     window._navBadgeObs=true;
     const src=document.getElementById('navKasirBadge');
@@ -3594,6 +3661,18 @@ function renderNavV2(){
       new MutationObserver(()=>syncNavBadge()).observe(src,{childList:true,characterData:true,subtree:true,attributes:true});
     }
   }
+}
+function updateBackBarV2(){
+  try{
+    const bar=document.getElementById('backBarV2');if(!bar)return;
+    const show=(typeof uiV2==='function'&&uiV2())&&viewStack.length>1;
+    bar.classList.toggle('show',!!show);
+    if(show){
+      const fab=document.getElementById('prodFabWrap');
+      const overFab=curView==='produk'&&!!fab;
+      bar.style.bottom=overFab?'215px':'66px';
+    }
+  }catch(e){}
 }
 function syncNavBadge(){
   const src=document.getElementById('navKasirBadge'),dst=document.getElementById('navKasirBadgeV2');
@@ -4429,8 +4508,8 @@ function prodTips(){const t30=new Date();t30.setDate(t30.getDate()-30);const s30
 function renderProduk(){const q=(document.getElementById('prodSearch').value||'').toLowerCase();const cats=['Semua',...new Set(products.map(p=>p.category||'Lainnya'))];prodCat=validCat61(prodCat,cats);document.getElementById('prodCats').innerHTML=catRowHTML('produk',prodCat);
  const list=products.filter(p=>(prodCat==='Semua'||(p.category||'Lainnya')===prodCat)&&(p.name.toLowerCase().includes(q)||(p.category||'').toLowerCase().includes(q)));
  list.sort((a,b)=>a.name.localeCompare(b.name,'id',{sensitivity:'base'}));
- const canEdit=can('produk_edit')||can('produk_add');
- document.getElementById('prodGrid').innerHTML=list.length?list.map(p=>{const m=(p.price||0)-(p.buy||0);return `<div class="pcard" data-pid="${p.id}" onclick="prodCardTap('${p.id}',event)">${photoOK(p.photo)?`<img class="pimg" src="${p.photo}">`:`<div class="pimg" style="background:var(--line);display:flex;align-items:center;justify-content:center;font-size:32px">📦</div>`}${canEdit?`<button class="pedit" onclick="event.stopPropagation();openProdForm('${p.id}')">✏️</button>`:''}<div class="pnm">${esc(p.name)}</div><div class="psub">${esc(p.category||'Lainnya')}</div><div class="ppr">${rp(p.price)}</div><div class="psub">Beli ${rp(p.buy)} · Profit ${rp(m)}</div><div class="psub">Stok: <b>${p.stock} ${p.unit||'pcs'}</b> ${p.stock<=0?'<span class="badge out">HABIS</span>':p.stock<=settings.low?'<span class="badge low">MENIPIS</span>':'<span class="badge ok">OK</span>'} ${expBadge(p)}</div></div>`}).join(''):'<div class="empty" style="grid-column:1/-1"><div class="ic">📦</div>'+tr('no_products')+'</div>';
+ const canEdit=can('produk_edit')||can('produk_add');const _v2=(typeof uiV2==='function'&&uiV2());
+ document.getElementById('prodGrid').innerHTML=list.length?list.map(p=>{const m=(p.price||0)-(p.buy||0);return `<div class="pcard${_v2?' v2prod':''}" data-pid="${p.id}" onclick="prodCardTap('${p.id}',event)">${photoOK(p.photo)?`<img class="pimg" src="${p.photo}">`:_v2?`<div class="pimg pimg-empty">${iconHTML('box')}</div>`:`<div class="pimg" style="background:var(--line);display:flex;align-items:center;justify-content:center;font-size:32px">📦</div>`}${canEdit?`<button class="pedit" onclick="event.stopPropagation();openProdForm('${p.id}')">${_v2?iconHTML('edit'):'✏️'}</button>`:''}<div class="pnm">${esc(p.name)}</div><div class="psub">${esc(p.category||'Lainnya')}</div><div class="ppr">${rp(p.price)}</div><div class="psub">Beli ${rp(p.buy)} · Profit ${rp(m)}</div><div class="psub">Stok: <b>${p.stock} ${p.unit||'pcs'}</b> ${p.stock<=0?'<span class="badge out">HABIS</span>':p.stock<=settings.low?'<span class="badge low">MENIPIS</span>':'<span class="badge ok">OK</span>'} ${expBadge(p)}</div></div>`}).join(''):'<div class="empty" style="grid-column:1/-1"><div class="ic">'+(_v2?iconHTML('box'):'📦')+'</div>'+tr('no_products')+'</div>';
  renderTipsCard();renderStokBadge();renderProdExtras();}
 function renderTipsCard(){const el=document.getElementById('tipsCard');if(!el)return;const tips=prodTips();const top=tips.filter(t=>t.pri==='segera'||t.pri==='minggu').slice(0,3);const tot=top.reduce((a,t)=>a+t.modal,0);el.innerHTML='<h3>💡 Tips Pembelian</h3>'+(top.length?top.map(t=>'<div class="list-item"><div class="inf"><div class="nm">'+esc(t.p.name)+' <span class="badge '+(t.pri==='segera'?'out':'low')+'">'+t.lbl+'</span></div><div class="sub">Sisa '+(isFinite(t.daysLeft)?Math.floor(t.daysLeft)+' hari':'—')+' · Beli '+t.needQty+' '+(t.p.unit||'pcs')+'</div></div><b>'+rp(t.modal)+'</b></div>').join('')+'<div style="margin-top:8px;font-size:13px">Estimasi modal 3 teratas: <b>'+rp(tot)+'</b></div>':'<div class="empty">Semua stok aman 👍</div>')+'<button class="btn btn-outline btn-sm" style="margin-top:10px;width:100%" onclick="openTipsAll()">Lihat Semua ›</button>'}
 function openTipsAll(){const tips=prodTips();const sec=pri=>{const arr=tips.filter(t=>t.pri===pri);if(!arr.length)return '';const lbl={segera:'🔴 Beli segera',minggu:'🟠 Beli minggu ini',aman:'🟢 Stok aman',jangan:'⚪ Jangan dulu'}[pri];return '<h3 style="margin-top:12px">'+lbl+'</h3>'+arr.map(t=>'<div class="list-item"><div class="inf"><div class="nm">'+esc(t.p.name)+'</div><div class="sub">Stok '+t.p.stock+' · '+(t.rate>0?t.rate.toFixed(1)+' /hari · sisa '+(isFinite(t.daysLeft)?Math.floor(t.daysLeft)+' hari':'—'):'tidak laku 90 hari')+(t.needQty?' · Beli '+t.needQty:'')+'</div></div><b>'+rp(t.modal)+'</b></div>').join('')};const tot=tips.filter(t=>t.pri==='segera'||t.pri==='minggu').reduce((a,t)=>a+t.modal,0);openModal('<div class="mhead">💡 Tips Pembelian</div><div class="helpbox">Dihitung dari penjualan 30 hari terakhir (POS + order sampai). Saran jumlah = kecepatan × 14 hari − stok.</div><div style="font-size:15px;margin:8px 0">Total estimasi modal: <b>'+rp(tot)+'</b></div>'+sec('segera')+sec('minggu')+sec('aman')+sec('jangan'))}
@@ -8344,7 +8423,7 @@ function fillSettings(){document.getElementById('setShop').value=shop.name;docum
  document.getElementById('logoPrev').innerHTML=photoOK(shop.logo)?`<img src="${shop.logo}" style="width:64px;height:64px;object-fit:cover;border-radius:14px">`:'';
  renderLocShopRow();const _rt=document.getElementById('setRingTone');if(_rt)_rt.value=settings.ringTone||'bel';const _rs=document.getElementById('setRingSound');if(_rs)_rs.checked=settings.ringSound!==false;const _rv=document.getElementById('setRingVibrate');if(_rv)_rv.checked=settings.ringVibrate!==false;const _pwC=document.getElementById('setPayWaitCfg');if(_pwC)_pwC.value=settings.payWaitMin||5;const _lwC=document.getElementById('setLowCfg');if(_lwC)_lwC.value=settings.low;const _rsC=document.getElementById('setRingSoundCfg');if(_rsC)_rsC.checked=settings.ringSound!==false;const _rvC=document.getElementById('setRingVibrateCfg');if(_rvC)_rvC.checked=settings.ringVibrate!==false;const _kw=document.getElementById('keepAwakeToggle');if(_kw)_kw.checked=settings.keepAwake===true;
  document.getElementById('bannerPrev').innerHTML=photoOK(shop.banner)?`<img src="${shop.banner}" style="width:100%;max-height:120px;object-fit:cover;border-radius:12px">`:'';
- renderCloudCard();renderCatalogBox();refreshPinBox();refreshThemeBox();renderAdsList();}
+ renderCloudCard();renderCatalogBox();refreshPinBox();refreshThemeBox();renderAdsList();try{if(typeof renderSetDetailRows==='function')renderSetDetailRows()}catch(e){}}
 function delShopLogo(){if(!shop.logo){toast(tr('msg_no_logo_removed'));return}if(!confirm('Hapus logo toko? Header akan kembali ke ikon default.'))return;shop.logo='';document.getElementById('logoPrev').innerHTML='';renderShopBrand();saveShop();}
 function delShopBanner(){if(!shop.banner){toast(tr('msg_no_banner_removed'));return}if(!confirm('Hapus banner toko? Banner di Beranda & katalog akan hilang.'))return;shop.banner='';document.getElementById('bannerPrev').innerHTML='';renderDash();saveShop();}
 async function saveShop(){const n=document.getElementById('setShop').value.trim();if(!n){toast(tr('i18n_097'));return}
@@ -8560,7 +8639,7 @@ function setPayWaitPreset(m){if(!(MY_ROLE==='owner'||isDeveloper()))return;autoS
 function renderLocShopRow(){
   const st=document.getElementById('locShopStatus');if(!st)return;
   if(shop.mapsUrl&&shop.lat&&shop.lng){
-    st.innerHTML='Sudah ditandai: '+esc(shop.lat)+', '+esc(shop.lng)+' — <a href="'+esc(shop.mapsUrl)+'" target="_blank" rel="noopener">Lihat di Google Maps</a>';
+    st.innerHTML='Sudah ditandai: '+esc(shop.lat)+', '+esc(shop.lng)+(shop.locAddress?'<br>'+esc(shop.locAddress):'')+' — <a href="'+esc(shop.mapsUrl)+'" target="_blank" rel="noopener">Lihat di Google Maps</a>';
   } else {
     st.textContent='Belum ditandai — buka picker peta, ketuk/geser pin ke alamat toko, lalu simpan.';
   }
@@ -8568,8 +8647,8 @@ function renderLocShopRow(){
 let _leafletLoading=null;
 function loadLeaflet(){return Promise.resolve();}
 function openLocPicker(){
-  openModal('<div class="mhead">📍 Tandai Lokasi Toko</div><div class="sub" style="margin-bottom:10px">Ketuk peta atau geser pin sampai tepat di alamat toko, lalu Simpan. Peta memakai OpenStreetMap (gratis, tanpa API key) — link pelanggan tetap membuka Google Maps.</div><div id="locMap" style="height:320px;border-radius:14px;overflow:hidden;border:1px solid var(--line)"></div><div id="locCoords" style="font-size:12px;color:var(--mut);margin:8px 0"></div><div id="locTileNote" style="font-size:12px;color:#b45309"></div><div class="rowbtns"><button class="btn btn-gray" onclick="closeModal()">Batal</button><button class="btn btn-green" onclick="saveLocPicker()">Simpan Lokasi</button></div>');
-  window._locPin=null;if(navigator.onLine===false){const _n=document.getElementById('locTileNote');if(_n)_n.textContent='Perangkat offline — peta butuh internet untuk memuat tile.'}
+  openModal('<div class="mhead">📍 Tandai Lokasi Toko</div><div class="sub" style="margin-bottom:10px">Ketuk peta atau geser pin sampai tepat di alamat toko, lalu Simpan.</div><div style="display:flex;gap:6px;margin-bottom:8px"><input id="locSearch" placeholder="Cari alamat... (mis. Jl. Merdeka, Bogor)" style="flex:1;margin:0"><button class="btn btn-outline btn-sm" onclick="locSearchGo()">Cari</button></div><div id="locMap" style="height:320px;border-radius:14px;overflow:hidden;border:1px solid var(--line)"></div><div style="font-size:12px;color:var(--mut);margin:8px 0"><a href="javascript:void(0)" onclick="locMyPos()" style="color:#2563eb;font-weight:700">📍 POSISI SAYA</a></div><div id="locCoords" style="font-size:12px;color:var(--mut);margin:8px 0"></div><div id="locAddr" style="font-size:13px;background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:10px 12px">Memuat alamat...</div><div id="locTileNote" style="font-size:12px;color:#b45309"></div><div class="rowbtns" style="margin-top:12px"><button class="btn btn-gray" onclick="closeModal()">Batal</button><button class="btn btn-green" onclick="saveLocPicker()">Simpan Lokasi</button></div>');
+  window._locPin=null;window._locAddr='';if(navigator.onLine===false){const _n=document.getElementById('locTileNote');if(_n)_n.textContent='Perangkat offline — peta butuh internet untuk memuat tile.'}
   const lat=parseFloat(shop.lat),lng=parseFloat(shop.lng);
   const hasLoc=!isNaN(lat)&&!isNaN(lng);
   const startLat=hasLoc?lat:-6.2088,startLng=hasLoc?lng:106.8456;
@@ -8580,14 +8659,12 @@ function openLocPicker(){
       const map=_LL.map('locMap').setView([startLat,startLng],hasLoc?16:12);window._locMap=map;
       const _tl=_LL.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(map);
       let _te=0,_fb=false;_tl.on('tileerror',()=>{const n=document.getElementById('locTileNote');_te++;if(_te>=3&&!_fb){_fb=true;try{map.removeLayer(_tl);_LL.tileLayer('https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors © CARTO'}).addTo(map)}catch(e){}if(n)n.textContent='Server peta utama gagal, beralih ke server cadangan…'}else if(n&&!n.textContent)n.textContent='Tile peta gagal dimuat (internet lambat), tapi pin tetap bisa digeser & disimpan.'});
-      const marker=_LL.marker([startLat,startLng],{draggable:true,icon:_LL.divIcon({className:'loc-pin',html:'<div class="loc-pin-in">📍</div>',iconSize:[36,36],iconAnchor:[18,34]})}).addTo(map);
-      const upd=()=>{const ll=marker.getLatLng();const c=document.getElementById('locCoords');if(c)c.textContent='Pin: '+ll.lat.toFixed(6)+', '+ll.lng.toFixed(6);window._locPin={lat:ll.lat,lng:ll.lng}};
+      const marker=_LL.marker([startLat,startLng],{draggable:true,icon:_LL.divIcon({className:'loc-pin',html:'<div class="loc-pin-in">📍</div>',iconSize:[36,36],iconAnchor:[18,34]})}).addTo(map);window._locMarker=marker;
+      const upd=()=>{const ll=marker.getLatLng();const c=document.getElementById('locCoords');if(c)c.textContent='Pin: '+ll.lat.toFixed(6)+', '+ll.lng.toFixed(6);window._locPin={lat:ll.lat,lng:ll.lng};locRefreshAddr(ll.lat,ll.lng)};
       marker.on('dragend',upd);map.on('click',e=>{marker.setLatLng(e.latlng);upd()});
       upd();
       setTimeout(()=>map.invalidateSize(),300);setTimeout(()=>map.invalidateSize(),900);
-    }catch(e){document.getElementById('locMap').innerHTML='<div class="helpbox">Gagal memuat peta: '+esc(e.message||'periksa koneksi internet')+'.<br><button class="btn btn-outline btn-sm" style="margin-top:8px" onclick="openLocPicker()">🔄 Coba lagi</button></div>'}
-  }).catch((e)=>{_leafletLoading=null;
-    document.getElementById('locMap').innerHTML='<div class="helpbox">Gagal memuat peta: '+esc(e.message||'periksa koneksi internet')+'.<br><button class="btn btn-outline btn-sm" style="margin-top:8px" onclick="openLocPicker()">🔄 Coba lagi</button></div>';
+    }catch(e){document.getElementById('locMap').innerHTML='<div class="helpbox">Gagal memuat peta: '+esc(e.message||'periksa koneksi internet')+'.</div>';}
   });
 }
 async function saveLocPicker(){
@@ -8595,10 +8672,53 @@ async function saveLocPicker(){
   if(!pin){toast(tr('msg_pick_map_first'));return}
   shop.lat=String(pin.lat.toFixed(6));shop.lng=String(pin.lng.toFixed(6));
   shop.mapsUrl='https://maps.google.com/?q='+shop.lat+','+shop.lng;
+  if(window._locAddr)shop.locAddress=window._locAddr;
   LS.set('shop',shop);
   try{await persist('products')}catch(e){}
   renderLocShopRow();
   toast(tr('msg_shop_loc_saved'));closeModal();
+}
+function locFetchTimeout(url,ms){return new Promise(function(res,rej){var done=false;var to=setTimeout(function(){if(!done){done=true;rej(new Error('timeout'))}},ms||8000);fetch(url).then(function(r){if(done)return;done=true;clearTimeout(to);res(r)}).catch(function(e){if(done)return;done=true;clearTimeout(to);rej(e)})})}
+async function locReverseGeocode(lat,lng){try{const r=await locFetchTimeout('https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat='+lat+'&lon='+lng+'&zoom=18&addressdetails=1',8000);const j=await r.json();return (j&&j.display_name)||'';}catch(e){return ''}}
+let _locRevTimer=null;
+function locRefreshAddr(lat,lng){
+  const a=document.getElementById('locAddr');if(a)a.textContent='Memuat alamat...';
+  clearTimeout(_locRevTimer);
+  _locRevTimer=setTimeout(async function(){
+    const addr=await locReverseGeocode(lat,lng);
+    window._locAddr=addr||'';
+    const ae=document.getElementById('locAddr');if(!ae)return;
+    ae.textContent=addr||('Pin: '+lat.toFixed(6)+', '+lng.toFixed(6)+' — alamat tidak ditemukan, geser pin / coba lagi');
+  },400);
+}
+async function locSearchGo(){
+  const el=document.getElementById('locSearch');const q=(el&&el.value||'').trim();
+  if(!q){toast('Tulis alamat dulu');return}
+  if(!window._locMap){toast('Peta belum termuat');return}
+  try{
+    const r=await locFetchTimeout('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q='+encodeURIComponent(q),8000);
+    const j=await r.json();
+    if(j&&j.length){
+      const la=parseFloat(j[0].lat),lo=parseFloat(j[0].lon);
+      const mk=window._locMarker;if(mk)mk.setLatLng([la,lo]);
+      window._locMap.setView([la,lo],16);
+      window._locPin={lat:la,lng:lo};
+      const c=document.getElementById('locCoords');if(c)c.textContent='Pin: '+la.toFixed(6)+', '+lo.toFixed(6);
+      locRefreshAddr(la,lo);
+    }else toast('Alamat tidak ditemukan');
+  }catch(e){toast('Pencarian gagal — periksa internet')}
+}
+function locMyPos(){
+  if(!navigator.geolocation){toast('GPS tidak tersedia di perangkat ini');return}
+  if(!window._locMap){toast('Peta belum termuat');return}
+  navigator.geolocation.getCurrentPosition(function(pos){
+    const la=pos.coords.latitude,lo=pos.coords.longitude;
+    const mk=window._locMarker;if(mk)mk.setLatLng([la,lo]);
+    window._locMap.setView([la,lo],16);
+    window._locPin={lat:la,lng:lo};
+    const c=document.getElementById('locCoords');if(c)c.textContent='Pin: '+la.toFixed(6)+', '+lo.toFixed(6);
+    locRefreshAddr(la,lo);
+  },function(){toast('Gagal ambil posisi — izinkan akses lokasi')},{timeout:10000});
 }
 async function saveSettings(){const _slEl=lowInput();const l=_slEl?parseInt(_slEl.value):settings.low;if(isNaN(l)||l<0){toast(tr('i18n_014'));return}settings.low=l;const _rtEl=document.getElementById('setRingTone');if(_rtEl)settings.ringTone=_rtEl.value;const _rsEl=document.getElementById('setRingSoundCfg')||document.getElementById('setRingSound');if(_rsEl)settings.ringSound=_rsEl.checked;const _rvEl=document.getElementById('setRingVibrateCfg')||document.getElementById('setRingVibrate');if(_rvEl)settings.ringVibrate=_rvEl.checked;const _pwEl=payWaitInput();if(_pwEl&&(MY_ROLE==='owner'||isDeveloper())){const _pw=parseInt(_pwEl.value);if(isNaN(_pw)||_pw<1){toast(tr('msg_min_1_minute'));return}settings.payWaitMin=_pw}LS.set('settings',settings);const _okS=await persist('settings');if(!_okS){toast(tr('i18n_042'));return}toast(tr('i18n_143'))}
 function renderCatalogBox(){const el=document.getElementById('catalogBox');
@@ -8653,10 +8773,11 @@ function setUiVersion(v){
   const _ov=document.getElementById('verSwitchOverlay');
   if(_ov&&_ov.classList.contains('on'))return;
   const _doSwitch=function(){
+    try{if(typeof restoreSetDetailNodes==='function')restoreSetDetailNodes()}catch(e){}
     settings.uiVersion=(v==='lama')?'lama':'baru';persistSettings();applyUiVersion();renderUiVersionBtns();
     try{if(typeof cartSheetClose==='function')cartSheetClose()}catch(e){}
     try{if(typeof refreshIcons==='function')refreshIcons()}catch(e){}
-    try{go(curView,true)}catch(e){}
+    try{go(curView==='setdetail'?'pengaturan':curView,true)}catch(e){}
   };
   if(_ov){
     _ov.classList.add('on');
@@ -8677,14 +8798,65 @@ function renderUiVersionBtns(){
   if(bb)bb.className='btn btn-sm'+(on?' btn-green':' btn-outline');
 }
 function openAturLayout(){go('dashboard');setTimeout(()=>{try{if(typeof toggleAtur==='function')toggleAtur('dashboard')}catch(e){}},200)}
-function openPengingatKirim(){go('laporan');setTimeout(()=>{const el=document.getElementById('lapSchedCard');if(el)el.scrollIntoView({behavior:'smooth',block:'start'})},200)}
+function openPengingatKirim(){if(typeof uiV2==='function'&&uiV2()){openSetDetail('pengingat');return}go('laporan');setTimeout(()=>{const el=document.getElementById('lapSchedCard');if(el)el.scrollIntoView({behavior:'smooth',block:'start'})},200)}
+/* ---------- CODE69: drill-down Pengaturan v2 ---------- */
+let _setDetailHome={};
+function _setDetailMove(id){
+  const el=document.getElementById(id);if(!el)return false;
+  const body=document.getElementById('setDetailBody');if(!body)return false;
+  if(el.parentNode===body)return true;
+  if(!_setDetailHome[id])_setDetailHome[id]={parent:el.parentNode,next:el.nextSibling};
+  body.appendChild(el);return true;
+}
+function restoreSetDetailNodes(){
+  Object.keys(_setDetailHome).forEach(function(id){
+    const h=_setDetailHome[id];if(!h||!h.parent)return;
+    const el=document.getElementById(id);if(!el)return;
+    try{if(h.next&&h.next.parentNode===h.parent)h.parent.insertBefore(el,h.next);else h.parent.appendChild(el)}catch(e){}
+  });
+  _setDetailHome={};
+}
+function renderSetDetailRows(){
+  const set=(id,txt)=>{const el=document.getElementById(id);if(el)el.textContent=txt};
+  set('setRowPayWaitVal',(settings.payWaitMin||5)+' menit');
+  set('setRowLowVal','Di bawah '+(settings.low==null?'':settings.low)+' barang');
+  const rs=settings.ringSound!==false,rv=settings.ringVibrate!==false;
+  set('setRowRingVal',(!rs&&!rv)?'Mati':((rs?'Bunyi':'')+(rs&&rv?' + ':'')+(rv?'Getar':'')));
+  try{set('setRowExpedisiVal',(typeof expedisiOnIds==='function'?expedisiOnIds().length:0)+' aktif')}catch(e){}
+}
+function openSetDetail(kind){
+  if(typeof uiV2!=='function'||!uiV2())return;
+  const body=document.getElementById('setDetailBody');if(!body)return;
+  const title=document.getElementById('setDetailTitle');
+  restoreSetDetailNodes();
+  const pw=settings.payWaitMin||5,low=settings.low,rs=settings.ringSound!==false,rv=settings.ringVibrate!==false;
+  if(kind==='paywait'){
+    if(title)title.textContent='Batas Waktu Bayar Online';
+    body.innerHTML=`<div class="card"><h3>Batas Waktu Bayar Online</h3><div class="helpbox">Order diproses tanpa bukti bayar akan dibatalkan otomatis setelah batas ini.</div><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><input type="number" id="setPayWaitD" min="1" style="width:64px;text-align:center" value="${pw}" onchange="autoSaveNum('payWaitMin',this.value)"><span style="font-size:13px;color:var(--mut)">menit</span><button class="btn btn-outline btn-sm" onclick="setPayWaitPreset(5)">5</button><button class="btn btn-outline btn-sm" onclick="setPayWaitPreset(10)">10</button><button class="btn btn-outline btn-sm" onclick="setPayWaitPreset(15)">15</button><button class="btn btn-outline btn-sm" onclick="setPayWaitPreset(30)">30</button><button class="btn btn-outline btn-sm" onclick="setPayWaitPreset(60)">60</button></div></div>`;
+  }else if(kind==='low'){
+    if(title)title.textContent='Batas Stok Menipis';
+    body.innerHTML=`<div class="card"><h3>Batas Stok Menipis</h3><div class="helpbox">Produk di bawah angka ini masuk daftar menipis.</div><div style="display:flex;gap:8px;align-items:center"><input type="number" id="setLowD" min="1" style="flex:1" value="${low}" onchange="autoSaveNum('low',this.value)"><span style="font-size:13px;color:var(--mut)">barang</span></div></div>`;
+  }else if(kind==='ring'){
+    if(title)title.textContent='Suara & Getar Order Masuk';
+    body.innerHTML=`<div class="card"><h3>Suara & Getar Order Masuk</h3><div class="helpbox">Bunyi + getar saat ada order online baru.</div><div style="display:flex;gap:16px"><label style="display:flex;gap:6px;align-items:center;font-size:14px"><input type="checkbox" id="setRingSoundD" ${rs?'checked':''} onchange="autoSaveChk('ringSound',this.checked)"> Bunyi</label><label style="display:flex;gap:6px;align-items:center;font-size:14px"><input type="checkbox" id="setRingVibrateD" ${rv?'checked':''} onchange="autoSaveChk('ringVibrate',this.checked)"> Getar</label></div></div>`;
+  }else if(kind==='expedisi'){
+    if(title)title.textContent='Jasa Ekspedisi';
+    const card=document.getElementById('expedisiCard');
+    if(!card||card.parentNode!==body){body.innerHTML='';_setDetailMove('expedisiCard');}
+  }else if(kind==='pengingat'){
+    if(title)title.textContent='Pengingat Kirim';
+    const card=document.getElementById('lapSchedCard');
+    if(!card||card.parentNode!==body){body.innerHTML='';_setDetailMove('lapSchedCard');}
+  }else{return}
+  go('setdetail');
+}
 function autoSaveNum(key,val){
   const n=parseInt(val,10);
-  if(key==='low'){if(isNaN(n)||n<0){toast(tr('i18n_014'));const el=lowInput();if(el)el.value=settings.low;return}settings.low=n;persistSettings();const a=document.getElementById('setLowCfg');if(a)a.value=n;const b=document.getElementById('setLow');if(b)b.value=n;return}
-  if(key==='payWaitMin'){if(!(MY_ROLE==='owner'||isDeveloper()))return;if(isNaN(n)||n<1){toast(tr('msg_min_1_minute'));return}settings.payWaitMin=n;persistSettings();const a=document.getElementById('setPayWaitCfg');if(a)a.value=n;const b=document.getElementById('setPayWait');if(b)b.value=n;return}
+  if(key==='low'){if(isNaN(n)||n<0){toast(tr('i18n_014'));const el=lowInput();if(el)el.value=settings.low;return}settings.low=n;persistSettings();const a=document.getElementById('setLowCfg');if(a)a.value=n;const b=document.getElementById('setLow');if(b)b.value=n;const d=document.getElementById('setLowD');if(d)d.value=n;try{if(typeof renderSetDetailRows==='function')renderSetDetailRows()}catch(e){}return}
+  if(key==='payWaitMin'){if(!(MY_ROLE==='owner'||isDeveloper()))return;if(isNaN(n)||n<1){toast(tr('msg_min_1_minute'));return}settings.payWaitMin=n;persistSettings();const a=document.getElementById('setPayWaitCfg');if(a)a.value=n;const b=document.getElementById('setPayWait');if(b)b.value=n;const d=document.getElementById('setPayWaitD');if(d)d.value=n;try{if(typeof renderSetDetailRows==='function')renderSetDetailRows()}catch(e){}return}
 }
 function autoSaveSel(key,val){settings[key]=val;persistSettings()}
-function autoSaveChk(key,on){settings[key]=!!on;persistSettings();if(key==='ringSound'){const a=document.getElementById('setRingSoundCfg');if(a)a.checked=!!on;const b=document.getElementById('setRingSound');if(b)b.checked=!!on}if(key==='ringVibrate'){const a=document.getElementById('setRingVibrateCfg');if(a)a.checked=!!on;const b=document.getElementById('setRingVibrate');if(b)b.checked=!!on}}
+function autoSaveChk(key,on){settings[key]=!!on;persistSettings();if(key==='ringSound'){const a=document.getElementById('setRingSoundCfg');if(a)a.checked=!!on;const b=document.getElementById('setRingSound');if(b)b.checked=!!on;const d=document.getElementById('setRingSoundD');if(d)d.checked=!!on}if(key==='ringVibrate'){const a=document.getElementById('setRingVibrateCfg');if(a)a.checked=!!on;const b=document.getElementById('setRingVibrate');if(b)b.checked=!!on;const d=document.getElementById('setRingVibrateD');if(d)d.checked=!!on}try{if(typeof renderSetDetailRows==='function')renderSetDetailRows()}catch(e){}}
 function expedisiOnIds(){
   if(typeof expedisiEnabled==='function'){try{const r=expedisiEnabled();if(Array.isArray(r))return r}catch(e){}}
   if(Array.isArray(shop.expedisi))return shop.expedisi;
@@ -8695,7 +8867,7 @@ function renderExpedisiCard(){
   const on=expedisiOnIds();
   const custom=Array.isArray(shop.expedisi_custom)?shop.expedisi_custom:[];
   const all=(typeof EXPEDISI!=='undefined'?EXPEDISI:[]).concat(custom.map(c=>({id:c.id,name:c.name})));
-  el.innerHTML=all.map(e=>'<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)"><span style="font-size:14px">'+esc(e.name)+'</span><label class="switch"><input type="checkbox" '+(on.indexOf(e.id)>=0?'checked':'')+' onchange="expedisiToggle(\''+e.id+'\',this.checked)"><span class="tr"></span></label></div>').join('')||'<div class="empty">Belum ada ekspedisi.</div>';
+  el.innerHTML=all.map(e=>'<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)"><span style="font-size:14px">'+esc(e.name)+'</span><label class="switch"><input type="checkbox" '+(on.indexOf(e.id)>=0?'checked':'')+' onchange="expedisiToggle(\''+e.id+'\',this.checked)"><span class="tr"></span></label></div>').join('')||'<div class="empty">Belum ada ekspedisi.</div>';try{if(typeof renderSetDetailRows==='function')renderSetDetailRows()}catch(e){}
 }
 async function expedisiToggle(id,on){
   if(typeof expedisiSet==='function'){try{await expedisiSet(id,on)}catch(e){}}
@@ -8742,10 +8914,10 @@ function chatWA(raw){const d=(raw||'').replace(/\D/g,'');let n=d;if(n.indexOf('0
 /* ---------- PROFIL v2 (code66): Kode Toko + Link Katalog di layar Profil ---------- */
 function renderProfilV2Rows(){try{const c=document.getElementById('pfShopCodeBig');if(c)c.textContent=SHOP_CODE||'';const cr=document.getElementById('pfCodeRow');if(cr)cr.style.display=SHOP_CODE?'':'none';const l=document.getElementById('pfCatLink');if(l){try{l.textContent=(typeof catalogUrl==='function'?catalogUrl():'')}catch(e){l.textContent=''}}const lr=document.getElementById('pfCatRow');if(lr)lr.style.display=SHOP_CODE?'':'none'}catch(e){}}
 /* ================= v7.0: IKON ================= */
-const ICON_PATHS={home:'<path d="M3 9l1.5-5h15L21 9M4 9h16v11H4z"/><path d="M9 20v-6h6v6"/>',cart:'<path d="M4 8h16l-2 12H6z"/><path d="M8 8l1-3M16 8l-1-3"/>',box:'<path d="M3 8l9-5 9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/>',chart:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',order:'<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M8 6v4M16 6v4"/>',users:'<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 2.5-5 6-5s6 2 6 5"/><circle cx="17" cy="9" r="2.5"/><path d="M15 15c2.5.3 4.5 2 4.5 5"/>',mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>',dash:'<rect x="3" y="5" width="18" height="14" rx="3"/><path d="M7 19h10M12 14v5"/>',profile:'<circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.5-6 8-6s8 2 8 6"/>',theme:'<circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1.5"/><circle cx="15" cy="10" r="1.5"/><circle cx="12" cy="15" r="1.5"/>',bg:'<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/>',guide:'<path d="M4 5a2 2 0 012-2h12v16H6a2 2 0 00-2 2z"/><path d="M4 19a2 2 0 012-2h12"/>',role:'<path d="M12 3l7 3v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6z"/><path d="M9 12l2 2 4-4"/>',pin:'<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/>',cloud:'<path d="M7 18a4 4 0 01-.5-7.97A5.5 5.5 0 0117.5 11 3.5 3.5 0 0117 18z"/>',health:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',about:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle cx="12" cy="7.5" r="1" fill="currentColor" stroke="none"/>',logout:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/>',printer:'<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',mic:'<path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>',barcode:'<path d="M4 6v12M8 6v12M11 6v12M14 6v12M17 6v12M20 6v12"/>',memo:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>',more:'<circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="5" cy="12" r="1" fill="currentColor" stroke="none"/>',receipt:'<path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1z"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="16" y2="11"/>',money:'<rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/>',star:'<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',list:'<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>',activity:'<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',sliders:'<line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/>',bell:'<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>'};
-const EMOJI_ICONS={home:'🏪',cart:'🛒',box:'📦',chart:'📊',order:'🛍️',users:'👥',mail:'✉️',gear:'⚙️',dash:'📈',profile:'👤',theme:'🎨',bg:'🖼️',guide:'📖',role:'🛡️',pin:'🔒',cloud:'☁️',health:'🔍',about:'ℹ️',logout:'🚪',printer:'🖨️',memo:'📝',more:'⋯',receipt:'🧾',money:'💸',star:'⭐',list:'📋',activity:'📜',mic:'🎤',barcode:'',sliders:'',bell:'🔔'};
-function iconHTML(n){if((settings.iconStyle||'pro')==='pro'&&ICON_PATHS[n])return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+ICON_PATHS[n]+'</svg>';return EMOJI_ICONS[n]||'•'}
-function refreshIcons(){document.querySelectorAll('[data-ic]').forEach(el=>{el.innerHTML=iconHTML(el.dataset.ic)})}
+const ICON_PATHS={home:'<path d="M3 9l1.5-5h15L21 9M4 9h16v11H4z"/><path d="M9 20v-6h6v6"/>',cart:'<path d="M4 8h16l-2 12H6z"/><path d="M8 8l1-3M16 8l-1-3"/>',box:'<path d="M3 8l9-5 9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/>',chart:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',order:'<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M8 6v4M16 6v4"/>',users:'<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 2.5-5 6-5s6 2 6 5"/><circle cx="17" cy="9" r="2.5"/><path d="M15 15c2.5.3 4.5 2 4.5 5"/>',mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>',dash:'<rect x="3" y="5" width="18" height="14" rx="3"/><path d="M7 19h10M12 14v5"/>',profile:'<circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.5-6 8-6s8 2 8 6"/>',theme:'<circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1.5"/><circle cx="15" cy="10" r="1.5"/><circle cx="12" cy="15" r="1.5"/>',bg:'<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/>',guide:'<path d="M4 5a2 2 0 012-2h12v16H6a2 2 0 00-2 2z"/><path d="M4 19a2 2 0 012-2h12"/>',role:'<path d="M12 3l7 3v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6z"/><path d="M9 12l2 2 4-4"/>',pin:'<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/>',cloud:'<path d="M7 18a4 4 0 01-.5-7.97A5.5 5.5 0 0117.5 11 3.5 3.5 0 0117 18z"/>',health:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',about:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle cx="12" cy="7.5" r="1" fill="currentColor" stroke="none"/>',logout:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/>',printer:'<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',mic:'<path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>',barcode:'<path d="M4 6v12M8 6v12M11 6v12M14 6v12M17 6v12M20 6v12"/>',memo:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>',more:'<circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="5" cy="12" r="1" fill="currentColor" stroke="none"/>',receipt:'<path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1z"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="16" y2="11"/>',money:'<rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/>',star:'<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',list:'<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>',activity:'<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',edit:'<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>',sliders:'<line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/>',bell:'<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>'};
+const EMOJI_ICONS={home:'🏪',cart:'🛒',box:'📦',chart:'📊',order:'🛍️',users:'👥',mail:'✉️',gear:'⚙️',dash:'📈',profile:'👤',theme:'🎨',bg:'🖼️',guide:'📖',role:'🛡️',pin:'🔒',cloud:'☁️',health:'🔍',about:'ℹ️',logout:'🚪',printer:'🖨️',memo:'📝',more:'⋯',receipt:'🧾',money:'💸',star:'⭐',list:'📋',activity:'📜',edit:'✏️',mic:'🎤',barcode:'',sliders:'',bell:'🔔'};
+function iconHTML(n){if((settings.iconStyle||'pro')==='pro'&&ICON_PATHS[n])return '<svg width="1em" height="1em" class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+ICON_PATHS[n]+'</svg>';return EMOJI_ICONS[n]||'•'}
+function refreshIcons(){document.querySelectorAll('[data-ic]').forEach(el=>{el.innerHTML=iconHTML(el.dataset.ic)});try{var hg=document.getElementById('hdrGear');if(hg){hg.innerHTML=(typeof uiV2==='function'&&uiV2())?iconHTML('gear'):'⚙️'}}catch(e){}}
 function setIconStyle(s){settings.iconStyle=s;LS.set('settings',settings);refreshIcons();renderTampilan();toast(s==='pro'?'Gaya ikon Profesional aktif ✨':'Gaya ikon Default aktif')}
 
 /* ================= v7.0: BACKGROUND ================= */
@@ -8763,7 +8935,7 @@ function themeLineColor(){return {hijau:'#a4cab1',biru:'#a2c3ff',ungu:'#cbb0f8',
    Cache per pattern+warna; async (Image onload) tapi base64 data URI termuat sangat cepat. */
 const _tintCache={};
 function tintedPattern(p,lineHex,cb){const key=p+'|'+lineHex;if(_tintCache[key]){cb(_tintCache[key]);return _tintCache[key]}const srcImg=patternImg(p);if(!srcImg){cb('');return ''}const img=new Image();img.onload=function(){try{const c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;const x=c.getContext('2d');x.drawImage(img,0,0);const id=x.getImageData(0,0,c.width,c.height);const d=id.data;const r=parseInt(lineHex.slice(1,3),16),g=parseInt(lineHex.slice(3,5),16),b=parseInt(lineHex.slice(5,7),16);for(let i=0;i<d.length;i+=4){const lum=d[i]*0.299+d[i+1]*0.587+d[i+2]*0.114;const dark=255-lum;const a=Math.min(255,dark*1.6)*0.55;d[i]=r;d[i+1]=g;d[i+2]=b;d[i+3]=a}x.putImageData(id,0,0);const url=c.toDataURL('image/png');_tintCache[key]=url;cb(url)}catch(e){cb('')}};img.onerror=function(){cb('')};img.src=srcImg;return ''}
-function applyBg(){const layer=document.getElementById('bgLayer');if(!layer)return;const cv=document.getElementById('catalogView');if(cv&&cv.classList.contains('active')){layer.style.display='none';return}layer.style.display='';if(settings.bgMode==='image'&&settings.bgImage){layer.classList.add('imgmode');layer.style.backgroundImage='url("'+settings.bgImage+'")';layer.style.backgroundSize='';layer.style.backgroundColor='';layer.style.backgroundBlendMode='';layer.style.filter='brightness('+((settings.bgBright==null?70:settings.bgBright)/100)+')';layer.style.opacity=''}else{layer.classList.remove('imgmode');const pat=curPattern();if(pat==='polos'){layer.style.backgroundImage='';layer.style.backgroundColor='';layer.style.backgroundBlendMode='';layer.style.filter='';layer.style.opacity=''}else{const line=themeLineColor();layer.style.backgroundColor=(settings.theme==='gelap')?'transparent':'#ffffff';layer.style.backgroundBlendMode='';layer.style.backgroundSize='400px auto';layer.style.backgroundRepeat='repeat';layer.style.filter='';layer.style.opacity='1';const cached=tintedPattern(pat,line,function(url){if(url&&curPattern()===pat&&themeLineColor()===line){layer.style.backgroundImage='url("'+url+'")'}});layer.style.backgroundImage=cached?('url("'+cached+'")'):('url("'+patternImg(pat)+'")')}}applyHeaderMotif()}
+function applyBg(){const layer=document.getElementById('bgLayer');if(!layer)return;const cv=document.getElementById('catalogView');if(cv&&cv.classList.contains('active')){layer.style.display='none';return}layer.style.display='';if(settings.bgMode==='image'&&settings.bgImage){layer.classList.add('imgmode');layer.style.backgroundImage='url("'+settings.bgImage+'")';layer.style.backgroundSize='';layer.style.backgroundColor='';layer.style.backgroundBlendMode='';layer.style.filter='brightness('+((settings.bgBright==null?70:settings.bgBright)/100)+')';layer.style.opacity=''}else{layer.classList.remove('imgmode');const pat=curPattern();if(pat==='polos'){layer.style.backgroundImage='';layer.style.backgroundColor='';layer.style.backgroundBlendMode='';layer.style.filter='';layer.style.opacity=''}else{const line=themeLineColor();layer.style.backgroundColor=(settings.theme==='gelap')?'transparent':'#ffffff';layer.style.backgroundBlendMode='';layer.style.backgroundSize='400px auto';layer.style.backgroundRepeat='repeat';layer.style.filter='';layer.style.opacity=(settings.theme==='gelap')?'0.35':'1';const cached=tintedPattern(pat,line,function(url){if(url&&curPattern()===pat&&themeLineColor()===line){layer.style.backgroundImage='url("'+url+'")'}});layer.style.backgroundImage=cached?('url("'+cached+'")'):((settings.theme==='gelap')?'':('url("'+patternImg(pat)+'")'))}}applyHeaderMotif()}
 function applyHeaderMotif(){const h=document.querySelector('header');if(!h)return;h.style.backgroundImage='';h.style.backgroundSize='';h.style.backgroundRepeat=''}
 function setBgPattern(p){settings.bgPattern=p;settings.bgMode='pattern';LS.set('settings',settings);applyBg();renderPatternPicker();toast('Pattern '+p+' aktif ✅')}
 function renderPatternPicker(){const el=document.getElementById('bgPatternRow');if(!el)return;const cur=curPattern();el.innerHTML=PATTERN_NAMES.map(n=>{return '<button class="patbtn '+(cur===n[0]?'on':'')+'" onclick="setBgPattern(&quot;'+n[0]+'&quot;)"><div class="sw" data-pat="'+n[0]+'"></div>'+n[1]+'</button>'}).join('');el.querySelectorAll('.sw').forEach(swEl=>{const pat=swEl.dataset.pat;if(!pat||pat==='polos'){swEl.style.backgroundImage='';swEl.style.backgroundColor='';swEl.style.backgroundBlendMode='';swEl.style.backgroundSize=''}else{const line=themeLineColor();swEl.style.backgroundColor='#ffffff';swEl.style.backgroundBlendMode='';swEl.style.backgroundSize='cover';const cached=tintedPattern(pat,line,function(url){if(url){swEl.style.backgroundImage='url("'+url+'")'}});swEl.style.backgroundImage=cached?('url("'+cached+'")'):('url("'+patternImg(pat)+'")')}})}
@@ -8908,6 +9080,41 @@ function lapPDFBlob(kind,period){const J=lapJSPDF();if(!J)return null;const doc=
   else if(kind==='opname'){const rep=buildOpnameReport(period);y=pdfShopHead(doc,LANG==='en'?'Stocktake Report':'Laporan Opname Stok',rep.r.label);const ok=rep.logs.filter(x=>(x.qty||0)===0).length,nz=rep.logs.filter(x=>(x.qty||0)!==0).length;y=pdfBoxes(doc,y,[[LANG==='en'?'Items Counted':'Barang Diopname',String(rep.n)],[LANG==='en'?'Matched':'Sesuai',String(ok)],[LANG==='en'?'Difference':'Selisih',String(nz)],[LANG==='en'?'Total Difference':'Total Selisih',(rep.tot>0?'+':'')+rep.tot]]);y=pdfSectionHead(doc,y,LANG==='en'?'Details':'Rincian');y=pdfTable(doc,y,PDF_COLS.opn,pdfOpnRows(period),{zebra:true});}
   else return null;
   pdfFooterAll(doc);return doc.output('blob')}
+function logoDims(bytes,ext){
+  try{
+    if(ext==='png'&&bytes&&bytes.length>=24&&bytes[0]===0x89&&bytes[1]===0x50&&bytes[2]===0x4E&&bytes[3]===0x47){
+      const w=bytes[16]*16777216+bytes[17]*65536+bytes[18]*256+bytes[19];
+      const h=bytes[20]*16777216+bytes[21]*65536+bytes[22]*256+bytes[23];
+      if(w>0&&h>0)return{w:w,h:h};
+    }
+    if(ext==='jpeg'&&bytes&&bytes.length>4){
+      let i=2;
+      while(i+9<bytes.length){
+        if(bytes[i]!==0xFF){i++;continue}
+        const mk=bytes[i+1];
+        if(mk===0xC0||mk===0xC2){
+          const h=bytes[i+5]*256+bytes[i+6],w=bytes[i+7]*256+bytes[i+8];
+          if(w>0&&h>0)return{w:w,h:h};
+          return null;
+        }
+        if(mk===0xD8||mk===0xD9||(mk>=0xD0&&mk<=0xD7)){i+=2;continue}
+        const len=bytes[i+2]*256+bytes[i+3];
+        if(len<2)break;
+        i+=2+len;
+      }
+    }
+  }catch(e){}
+  return null;
+}
+function logoExtEMU(w,h){
+  const s=Math.min(1143000/w,571500/h);
+  return{cx:Math.round(w*s),cy:Math.round(h*s)};
+}
+function logoFitEMU(bytes,ext){
+  const d=logoDims(bytes,ext);
+  if(!d)return{cx:1143000,cy:571500};
+  return logoExtEMU(d.w,d.h);
+}
 function xlsxCol(n){let s='';while(n>0){const m=(n-1)%26;s=String.fromCharCode(65+m)+s;n=Math.floor((n-1)/26)}return s}
 function xlsxEsc(s){return String(s).replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g,'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function xlsxBlobFromRows(rows){const maxC=Math.max(1,...rows.map(r=>r.length));let cols='';for(let c=1;c<=maxC;c++)cols+='<col min="'+c+'" max="'+c+'" width="20"/>';let sh='<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><cols>'+cols+'</cols><sheetData>';rows.forEach((r,ri)=>{sh+='<row r="'+(ri+1)+'">';r.forEach((v,ci)=>{const ref=xlsxCol(ci+1)+(ri+1);const vs=v==null?'':String(v);if(vs===''){sh+='<c r="'+ref+'"/>'}else if(typeof v==='number'||(/^-?\d+(\.\d+)?$/.test(vs.trim())&&!/^0\d/.test(vs.trim()))){sh+='<c r="'+ref+'"><v>'+vs+'</v></c>'}else{sh+='<c r="'+ref+'" t="inlineStr"><is><t>'+xlsxEsc(vs)+'</t></is></c>'}});sh+='</row>'});sh+='</sheetData></worksheet>';const ct='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/></Types>';const rels='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>';const wb='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="Laporan" sheetId="1" r:id="rId1"/></sheets></workbook>';const wbrels='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/></Relationships>';const files=[['[Content_Types].xml',ct],['_rels/.rels',rels],['xl/workbook.xml',wb],['xl/_rels/workbook.xml.rels',wbrels],['xl/worksheets/sheet1.xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+sh]];const enc=new TextEncoder();const parts=[];const central=[];let off=0;const crcTable=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;crcTable[n]=c>>>0}function crc32(buf){let c=0xFFFFFFFF;for(let i=0;i<buf.length;i++)c=crcTable[(c^buf[i])&0xFF]^(c>>>8);return (c^0xFFFFFFFF)>>>0}function u16(n){return new Uint8Array([n&0xFF,(n>>8)&0xFF])}function u32(n){return new Uint8Array([n&0xFF,(n>>8)&0xFF,(n>>16)&0xFF,(n>>24)&0xFF])}function concat(arr){const t=new Uint8Array(arr.reduce((a,b)=>a+b.length,0));let o=0;arr.forEach(b=>{t.set(b,o);o+=b.length});return t}files.forEach(([name,content])=>{const nb=enc.encode(name),db=enc.encode(content),crc=crc32(db);const lh=concat([u32(0x04034b50),u16(20),u16(0x0800),u16(0),u16(0),u16(0),u32(crc),u32(db.length),u32(db.length),u16(nb.length),u16(0),nb,db]);parts.push(lh);central.push(concat([u32(0x02014b50),u16(20),u16(20),u16(0x0800),u16(0),u16(0),u16(0),u32(crc),u32(db.length),u32(db.length),u16(nb.length),u16(0),u16(0),u16(0),u16(0),u32(0),u32(off),nb]));off+=lh.length});const cdStart=off;const cd=concat(central);const eocd=concat([u32(0x06054b50),u16(0),u16(0),u16(files.length),u16(files.length),u32(cd.length),u32(cdStart),u16(0)]);return new Blob([concat([...parts,cd,eocd])],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'})}
@@ -8949,7 +9156,7 @@ const skip=Math.max(1,Math.ceil(n/15));
 const chart='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><c:chartSpace xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><c:chart><c:autoTitleDeleted val="1"/><c:plotArea><c:layout/><c:barChart><c:barDir val="col"/><c:grouping val="clustered"/><c:ser><c:idx val="0"/><c:order val="0"/><c:tx><c:strRef><c:f>Data!$B$1</c:f><c:strCache><c:ptCount val="1"/><c:pt idx="0"><c:v>Omzet</c:v></c:pt></c:strCache></c:strRef></c:tx><c:spPr><a:solidFill><a:srgbClr val="1B7A3D"/></a:solidFill></c:spPr><c:cat><c:strRef><c:f>Data!$A$2:$A$'+(n+1)+'</c:f><c:strCache><c:ptCount val="'+n+'"/>'+catPts+'</c:strCache></c:strRef></c:cat><c:val><c:numRef><c:f>Data!$B$2:$B$'+(n+1)+'</c:f><c:numCache><c:formatCode>#,##0</c:formatCode><c:ptCount val="'+n+'"/>'+valPts+'</c:numCache></c:numRef></c:val></c:ser><c:gapWidth val="100"/><c:overlap val="0"/><c:axId val="1"/><c:axId val="2"/></c:barChart><c:catAx><c:axId val="1"/><c:scaling><c:orientation val="minMax"/></c:scaling><c:delete val="0"/><c:axPos val="b"/><c:tickLblPos val="nextTo"/><c:crossAx val="2"/><c:crosses val="autoZero"/><c:tickLblSkip val="'+skip+'"/><c:tickMarkSkip val="'+skip+'"/></c:catAx><c:valAx><c:axId val="2"/><c:scaling><c:orientation val="minMax"/></c:scaling><c:delete val="0"/><c:axPos val="l"/><c:majorGridlines/><c:numFmt formatCode="#,##0" sourceLinked="0"/><c:tickLblPos val="nextTo"/><c:crossAx val="1"/><c:crosses val="autoZero"/><c:crossBetween val="between"/></c:valAx></c:plotArea><c:legend><c:legendPos val="b"/><c:overlay val="0"/></c:legend><c:plotVisOnly val="1"/></c:chart></c:chartSpace>';
 let logoBytes=null,logoExt='';
 try{const m=(shop.logo||'').match(/^data:image\/(png|jpeg|jpg);base64,(.+)$/);if(m){logoExt=(m[1]==='jpg')?'jpeg':m[1];const bin=atob(m[2]);const arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);logoBytes=arr}}catch(e){}
-const picPart=logoBytes?('<xdr:oneCellAnchor><xdr:from><xdr:col>0</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>0</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:from><xdr:ext cx="1143000" cy="571500"/><xdr:pic><xdr:nvPicPr><xdr:cNvPr id="1" name="Logo"/><xdr:cNvPicPr/></xdr:nvPicPr><xdr:blipFill><a:blip r:embed="rId2"/><a:stretch><a:fillRect/></a:stretch></xdr:blipFill><xdr:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="1143000" cy="571500"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></xdr:spPr></xdr:pic><xdr:clientData/></xdr:oneCellAnchor>'):'';
+const _le=logoBytes?logoFitEMU(logoBytes,logoExt):{cx:1143000,cy:571500};const picPart=logoBytes?('<xdr:oneCellAnchor><xdr:from><xdr:col>0</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>0</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:from><xdr:ext cx="'+_le.cx+'" cy="'+_le.cy+'"/><xdr:pic><xdr:nvPicPr><xdr:cNvPr id="1" name="Logo"/><xdr:cNvPicPr/></xdr:nvPicPr><xdr:blipFill><a:blip r:embed="rId2"/><a:stretch><a:fillRect/></a:stretch></xdr:blipFill><xdr:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="'+_le.cx+'" cy="'+_le.cy+'"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></xdr:spPr></xdr:pic><xdr:clientData/></xdr:oneCellAnchor>'):'';
 const drawing='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><xdr:wsDr xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'+picPart+'<xdr:twoCellAnchor><xdr:from><xdr:col>0</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>'+(chartTitleRow+1)+'</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:from><xdr:to><xdr:col>3</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>'+(chartTitleRow+16)+'</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:to><xdr:graphicFrame><xdr:nvGraphicFramePr><xdr:cNvPr id="2" name="Chart 1"/><xdr:cNvGraphicFramePr/></xdr:nvGraphicFramePr><xdr:xfrm><a:off x="0" y="0"/><a:ext cx="0" cy="0"/></xdr:xfrm><a:graphic><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/chart"><c:chart xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:id="rId1"/></a:graphicData></a:graphic></xdr:graphicFrame></xdr:twoCellAnchor></xdr:wsDr>';
 const sheetRels='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing" Target="../drawings/drawing1.xml"/></Relationships>';
 let drawRels='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart" Target="../charts/chart1.xml"/>';
@@ -9042,7 +9249,7 @@ pairs.forEach((p,i)=>{AR(i+2,[xlsxCell('H'+(i+2),p[0]),xlsxCell('I'+(i+2),p[1],s
 }
 let logoBytes=null,logoExt='';
 try{const m=(shop.logo||'').match(/^data:image\/(png|jpeg|jpg);base64,(.+)$/);if(m){logoExt=(m[1]==='jpg')?'jpeg':m[1];const bin=atob(m[2]);const arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);logoBytes=arr}}catch(e){}
-const picPart=logoBytes?('<xdr:oneCellAnchor><xdr:from><xdr:col>0</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>0</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:from><xdr:ext cx="1143000" cy="571500"/><xdr:pic><xdr:nvPicPr><xdr:cNvPr id="1" name="Logo"/><xdr:cNvPicPr/></xdr:nvPicPr><xdr:blipFill><a:blip r:embed="rId2"/><a:stretch><a:fillRect/></a:stretch></xdr:blipFill><xdr:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="1143000" cy="571500"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></xdr:spPr></xdr:pic><xdr:clientData/></xdr:oneCellAnchor>'):'';
+const _le=logoBytes?logoFitEMU(logoBytes,logoExt):{cx:1143000,cy:571500};const picPart=logoBytes?('<xdr:oneCellAnchor><xdr:from><xdr:col>0</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>0</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:from><xdr:ext cx="'+_le.cx+'" cy="'+_le.cy+'"/><xdr:pic><xdr:nvPicPr><xdr:cNvPr id="1" name="Logo"/><xdr:cNvPicPr/></xdr:nvPicPr><xdr:blipFill><a:blip r:embed="rId2"/><a:stretch><a:fillRect/></a:stretch></xdr:blipFill><xdr:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="'+_le.cx+'" cy="'+_le.cy+'"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></xdr:spPr></xdr:pic><xdr:clientData/></xdr:oneCellAnchor>'):'';
 let chart=null;
 if(series){
 const pairs=series[2];const n=pairs.length;
@@ -9108,7 +9315,7 @@ const J=lapJSPDF();if(!J)return null;
 const doc=new J({unit:'mm',format:'a4'});
 const r=reportRange(period);
 let y=pdfShopHead(doc,'Semua Laporan',r.label);
-const sec=(title,fn)=>{if(y>250){doc.addPage();y=10}y=pdfSectionHead(doc,y,title);return fn(y);};
+const sec=(title,fn)=>{if(y>250){doc.addPage();y=10}y=pdfSectionHead(doc,y,title);return fn(y)+6;};
 y=sec('Laporan Penjualan',()=>{const rep=buildReport(period);let yy=pdfBoxes(doc,y,[['Omzet',rp(rep.om)],['Profit Kotor',rp(rep.pf)],['Pengeluaran',rp(rep.te)],['Profit Bersih',rp(rep.net)]]);yy=pdfSectionHead(doc,yy,'Rincian');return pdfTable(doc,yy,PDF_COLS.jual,pdfJualRows(period),{zebra:true});});
 y=sec('Laporan Opname Stok',()=>{const rep=buildOpnameReport(period);const ok=rep.logs.filter(x=>(x.qty||0)===0).length,nz=rep.logs.filter(x=>(x.qty||0)!==0).length;let yy=pdfBoxes(doc,y,[['Barang Diopname',String(rep.n)],['Sesuai',String(ok)],['Selisih',String(nz)],['Total Selisih',(rep.tot>0?'+':'')+rep.tot]]);yy=pdfSectionHead(doc,yy,'Rincian');return pdfTable(doc,yy,PDF_COLS.opn,pdfOpnRows(period),{zebra:true});});
 y=sec('Laporan Pengeluaran',()=>{const rep=buildExpenseReport(period);const cats=new Set(rep.list.map(e=>e.category));const mx=rep.list.reduce((a,e)=>Math.max(a,e.amount),0);let yy=pdfBoxes(doc,y,[['Total',rp(rep.tot)],['Entri',String(rep.list.length)],['Kategori',String(cats.size)],['Terbesar',rp(mx)]]);yy=pdfSectionHead(doc,yy,'Rincian');return pdfTable(doc,yy,PDF_COLS.exp,pdfExpRows(period),{zebra:true});});
