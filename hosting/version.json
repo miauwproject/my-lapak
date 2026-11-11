@@ -1,7 +1,7 @@
 {
-  "versionCode": 70,
+  "versionCode": 71,
   "versionName": "1.1.0",
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code70/my-lapak_v1.1.0-code70.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTcwL215LWxhcGFrX3YxLjEuMC1jb2RlNzAuYXBr",
-  "notes": "STABIL code70: audit A/B menyeluruh vs preview (Produk fab ke aliran normal, grid 2 kolom, pensil+swipe hilang di v2; Kasir/Laporan/Dashboard ringkas; reverse leak v1 diperbaiki) + night mode 16 perbaikan kontras + izin GPS (COARSE+FINE) di manifest."
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code71/my-lapak_v1.1.0-code71.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTcxL215LWxhcGFrX3YxLjEuMC1jb2RlNzEuYXBr",
+  "notes": "STABIL code71: pin katalog 📍 (divIcon, gambar rusak hilang); keranjang katalog in-flow di atas testi + testi in-flow di bawah halaman; ekspedisi katalog sinkron dengan app (setting Jasa Ekspedisi kini naik ke cloud)."
 }
