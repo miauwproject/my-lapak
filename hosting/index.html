@@ -401,6 +401,7 @@ body.v2 #view-kasir [data-t="sort_label"],body.v2 #view-produk [data-t="sort_lab
 body.v2 #dashRefreshBtn{display:none}
 body.v2 #view-kasir>div:first-child>button.btn-green,body.v2 #view-produk>div:first-child>button.btn-green,body.v2 #view-laporan>div:first-child>button.btn-green,body.v2 #view-ownerdash>div:first-child>button.btn-green{display:none}
 body.v2 #dashBlocks,body.v2 #adminDashCard,body.v2 #dashBanner{display:none}
+body.v2 #newVerNotif{display:none!important}
 #dashV2Home{display:none}
 body.v2 #dashV2Home{display:block}
 body.v2 #floatBarInner{background:rgba(7,28,69,.5)}
@@ -1172,7 +1173,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 </header>
 
 <section id="view-dashboard" class="view active">
-  <div id="dashBanner"></div><div id="updateBanner" style="display:none"></div>
+  <div id="dashBanner"></div><div id="updateBanner" style="display:none"></div><div id="newVerNotif"></div>
   <div id="emailRemindCard" style="display:none"></div>
   <div class="card" id="whatsNewCard" style="display:none"></div>
   <div class="card" id="holidayBanner" style="display:none;border:1.5px solid var(--red)"><h3>🏖️ Toko Libur</h3><div id="holidayBannerNote" style="font-size:13px;color:var(--mut);margin-bottom:10px"></div><button class="btn btn-green btn-sm" id="holidayOpenBtn" onclick="saveHoliday(false)">Buka Lagi</button></div>
@@ -1923,7 +1924,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 const LS={get(k,d){try{const v=localStorage.getItem('wapp3_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('wapp3_'+k,JSON.stringify(v))}catch(e){}},del(k){localStorage.removeItem('wapp3_'+k)}};
 
 /* ================= v7.2: BAHASA, FLOAT BAR, BACK ================= */
-const APP_VERSION_CODE=67;const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
+const APP_VERSION_CODE=68;const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
 const L={id:{
 nav_dashboard:'Beranda',nav_kasir:'Pesanan',nav_produk:'Produk',nav_laporan:'Laporan',nav_ownerdash:'Dashboard',nav_pengaturan:'Pengaturan',online_label:'Order Online',
 back:'‹ Kembali',floatbar:'BANTUAN',
@@ -2607,7 +2608,7 @@ function setDarkMode(on){if(on){if(settings.theme!=='gelap')settings.lightTheme=
 /* ---------- ROLES ---------- */
 
 /* ---------- UI VERSION v2 (code66) ---------- */
-function uiV2(){try{return (settings&&settings.uiVersion||'baru')==='baru'}catch(e){return true}}
+function uiV2(){try{return (settings&&settings.uiVersion||'lama')==='baru'}catch(e){return false}}
 function applyUiVersion(){try{document.body.classList.toggle('v2',uiV2())}catch(e){}try{if(typeof refreshIcons==='function')refreshIcons()}catch(e){}}
 const ROLES=LANG==='en'?{owner:'Owner',admin:'Admin',kasir:'Cashier'}:{owner:'Owner',admin:'Admin',kasir:'Kasir'};
 function normRole(r){if(r==='penjaga'||r==='spesial')return 'admin';if(ROLES[r])return r;if((settings.rolePerms||{})[r])return r;return 'kasir'}
@@ -3556,12 +3557,15 @@ function renderShopBrand(){
   if(photoOK(shop.logo)){lg.src=shop.logo;lg.style.display='block';if(em)em.style.display='none'}
   else{lg.style.display='none';if(em)em.style.display='block'}
 }
-function renderDash(){renderShopBrand();renderSyncLine();
+function renderDash(){renderShopBrand();renderSyncLine();renderNewVerNotif();
  document.getElementById('dashBanner').innerHTML=photoOK(shop.banner)?`<img class="dash-banner" src="${shop.banner}">`:'';
  const low=products.filter(p=>p.stock<=settings.low);
  document.getElementById('lowStockList').innerHTML=low.length?low.map(p=>`<div class="list-item"><div class="inf"><div class="nm">${esc(p.name)}</div><div class="sub">Sisa ${p.stock} ${p.unit||'pcs'}</div></div><span class="badge ${p.stock===0?'out':'low'}">${p.stock===0?tr('out_stock'):tr('low_stock_b')}</span></div>`).join(''):'<div class="empty">'+tr('all_stock_ok')+'</div>';
  const dOpen=debts.filter(d=>(d.remaining||0)>0),dTot=dOpen.reduce((a,d)=>a+(d.remaining||0),0);
- document.getElementById('piutangBox').innerHTML=dOpen.length?`<div style="font-size:20px;font-weight:800;color:var(--orange-d)">${rp(dTot)}</div><div style="font-size:12px;color:var(--mut)">${dOpen.length} ${tr('debt_open_suffix')}</div>`:'<div class="empty">'+tr('no_debt')+'</div>';renderOwnerSum();checkEmailReminder();document.getElementById('adminDashCard').style.display=(MY_ROLE==='admin')?'':'none';renderSyncLine();renderWhatsNew();renderHolidayBanner();renderLogCard('dash');renderActivityCard('dash');renderNotesCard();applyCardOrder('dashboard');renderAturBtn('dashboard');if(typeof uiV2==='function'&&uiV2()){try{renderDashV2()}catch(e){}}} let testiDashFilter='Semua',testiDashLast=null,testiDashItems=[];
+ document.getElementById('piutangBox').innerHTML=dOpen.length?`<div style="font-size:20px;font-weight:800;color:var(--orange-d)">${rp(dTot)}</div><div style="font-size:12px;color:var(--mut)">${dOpen.length} ${tr('debt_open_suffix')}</div>`:'<div class="empty">'+tr('no_debt')+'</div>';renderOwnerSum();checkEmailReminder();document.getElementById('adminDashCard').style.display=(MY_ROLE==='admin')?'':'none';renderSyncLine();renderWhatsNew();renderHolidayBanner();renderLogCard('dash');renderActivityCard('dash');renderNotesCard();applyCardOrder('dashboard');renderAturBtn('dashboard');if(typeof uiV2==='function'&&uiV2()){try{renderDashV2()}catch(e){}}}
+function renderNewVerNotif(){var el=document.getElementById('newVerNotif');if(!el)return;if(typeof uiV2==='function'&&uiV2()){el.innerHTML='';return}if(settings&&settings.hideNewVerNotif){el.innerHTML='';return}el.innerHTML='<div class="card" style="border:1.5px solid #06b6d4;background:#ecfeff"><h3>Coba Versi Baru</h3><div style="font-size:13px;color:var(--mut);margin-bottom:10px">Tampilan baru lebih rapi & cepat. Data tetap sama.</div><div class="rowbtns"><button class="btn btn-green btn-sm" onclick="setUiVersion(\'baru\')">Coba Versi Baru</button><button class="btn btn-outline btn-sm" onclick="dismissNewVerNotif()">Nanti</button></div></div>'}
+function dismissNewVerNotif(){settings.hideNewVerNotif=true;try{if(typeof persistSettings==='function')persistSettings();else LS.set('settings',settings)}catch(e){try{LS.set('settings',settings)}catch(_e){}}var el=document.getElementById('newVerNotif');if(el)el.innerHTML=''}
+ let testiDashFilter='Semua',testiDashLast=null,testiDashItems=[];
 function testiDashSetFilter(f){testiDashFilter=f;['Semua','Tampil','Belum'].forEach(function(k){var b=document.getElementById('testiFlt'+k);if(b)b.className='btn btn-sm'+(k===f?' btn-green':' btn-outline');});renderTestiHistory(true);}
 async function renderTestiHistory(reset){var list=document.getElementById('testiDashList');if(!list)return;if(!FB||!FB.db||!SHOP_ID){list.innerHTML='<div class="empty">Testimoni tersedia untuk toko cloud.</div>';var m0=document.getElementById('testiDashMore');if(m0)m0.style.display='none';var p0=document.getElementById('testiDashPurge');if(p0)p0.style.display='none';return;}if(reset){testiDashItems=[];testiDashLast=null;list.innerHTML='<div class="empty">Memuat...</div>';}try{var q=FB.db.collection('shops').doc(SHOP_ID).collection('testimonials');if(testiDashFilter==='Tampil')q=q.where('approved','==',true);else if(testiDashFilter==='Belum')q=q.where('approved','==',false);q=q.orderBy('createdAt','desc').limit(30);if(testiDashLast)q=q.startAfter(testiDashLast);var snap=await q.get();var arr=[];snap.forEach(function(d){var t=d.data();t.id=d.id;arr.push(t);});if(reset)testiDashItems=arr;else testiDashItems=testiDashItems.concat(arr);testiDashLast=snap.docs.length?snap.docs[snap.docs.length-1]:null;var more=document.getElementById('testiDashMore');if(more)more.style.display=snap.docs.length===30?'':'none';var pur=document.getElementById('testiDashPurge');if(pur)pur.style.display=(testiDashFilter==='Belum'&&testiDashItems.length)?'':'none';if(!testiDashItems.length){list.innerHTML='<div class="empty">Belum ada testimoni.</div>';return;}list.innerHTML=testiDashItems.map(function(t){return '<div class="list-item"><div class="inf"><div class="nm">'+esc(t.name||'Pelanggan')+' <span class="badge '+(t.approved?'':'gray')+'">'+(t.approved?'Tampil':'Belum tampil')+'</span></div><div class="sub">'+esc(t.text||'')+'</div><div class="sub">'+fmtDT(t.createdAt||'')+(t.orderNo?' · Order: '+esc(t.orderNo):'')+'</div></div><div style="display:flex;gap:6px;flex-direction:column"><button class="btn btn-green btn-sm" onclick="testiDashToggle(\''+t.id+'\','+(t.approved?'false':'true')+')"> '+(t.approved?'Sembunyikan':'Tampil di katalog')+'</button><button class="btn btn-outline btn-sm" onclick="testiDashDel(\''+t.id+'\')">Hapus</button></div></div>';}).join('');}catch(e){if(reset)list.innerHTML='<div class="empty">Gagal memuat testimoni: '+esc(e.message||e)+'</div>';}}
 async function testiDashToggle(id,val){if(!FB||!FB.db||!SHOP_ID)return;try{await FB.db.collection('shops').doc(SHOP_ID).collection('testimonials').doc(id).update({approved:val});toast(val?'Testimoni ditampilkan di katalog':'Testimoni disembunyikan dari katalog');renderTestiHistory(true);testiDashBadgeRefresh();}catch(e){toast('Gagal: '+(e.message||e));}}
@@ -9540,6 +9544,7 @@ function openPanduan(gi,ii){const it=PANDUAN[gi].items[ii];openModal('<h2>📖 '
 document.getElementById('lapDate').value=todayStr();
 document.getElementById('lapDate').addEventListener('change',renderLap);
 (function init(){
+  if(!LS.get('verDefault68',false)){settings.uiVersion='lama';LS.set('settings',settings);try{if(typeof persist==='function'){var _mp=persist('settings');if(_mp&&_mp.catch)_mp.catch(function(){})}}catch(e){}LS.set('verDefault68',true)}
   applyLang();setupBackButton();applyTheme();
   const q=new URLSearchParams(location.search);
   const _kp=location.pathname.match(/^\/k\/([A-Za-z0-9]+)\/?$/);if(_kp){initCatalog(_kp[1].toUpperCase(),null,q.get('item'));return}
