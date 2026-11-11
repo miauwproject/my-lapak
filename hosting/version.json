@@ -1,7 +1,7 @@
 {
-  "versionCode": 67,
+  "versionCode": 68,
   "versionName": "1.1.0",
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code67/my-lapak_v1.1.0-code67.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTY3L215LWxhcGFrX3YxLjEuMC1jb2RlNjcuYXBr",
-  "notes": "STABIL code67: A/B total & smooth — Refresh & Atur Layout hilang di v2, ikon SVG pack, Scan bulat + barcode, voice FAB bersih, Voice Island klik (pop-up perintah + hapus semua), sync 1 baris, banner iklan Beranda, pull-to-refresh (header tetap, body ketarik, toast), Panduan Voice hanya di island, overlay pindah versi + toast, voice baca nama produk (fuzzy match)."
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code68/my-lapak_v1.1.0-code68.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTY4L215LWxhcGFrX3YxLjEuMC1jb2RlNjguYXBr",
+  "notes": "STABIL code68: default Versi Lama + notif Beranda 'Coba Versi Baru' (pindah via overlay + Nanti dismiss persist) + reset sekali ke Lama. Isi code67: A/B total & smooth, voice island pop-up + hapus semua, PTR header-tetap, overlay pindah versi, voice fuzzy match."
 }
