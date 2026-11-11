@@ -1,7 +1,7 @@
 {
-  "versionCode": 68,
+  "versionCode": 69,
   "versionName": "1.1.0",
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code68/my-lapak_v1.1.0-code68.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTY4L215LWxhcGFrX3YxLjEuMC1jb2RlNjguYXBr",
-  "notes": "STABIL code68: default Versi Lama + notif Beranda 'Coba Versi Baru' (pindah via overlay + Nanti dismiss persist) + reset sekali ke Lama. Isi code67: A/B total & smooth, voice island pop-up + hapus semua, PTR header-tetap, overlay pindah versi, voice fuzzy match."
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code69/my-lapak_v1.1.0-code69.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTY5L215LWxhcGFrX3YxLjEuMC1jb2RlNjkuYXBr",
+  "notes": "STABIL code69: 14 temuan inspeksi code68. v2: ikon SVG tidak raksasa, profil pop-up, hapus Tata Letak Layar, Pengingat Kirim ke Pengaturan, gear SVG, Pengaturan drill-down, tombol Kembali di atas nav, layar Produk v2, mode gelap gelap. Bersama: PDF tidak tumpang tindih, logo Excel sesuai rasio, caption general, picker lokasi ala Absensi Owner."
 }
