@@ -1,7 +1,7 @@
 {
-  "versionCode": 71,
+  "versionCode": 73,
   "versionName": "1.1.0",
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code71/my-lapak_v1.1.0-code71.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTcxL215LWxhcGFrX3YxLjEuMC1jb2RlNzEuYXBr",
-  "notes": "STABIL code71: pin katalog 📍 (divIcon, gambar rusak hilang); keranjang katalog in-flow di atas testi + testi in-flow di bawah halaman; ekspedisi katalog sinkron dengan app (setting Jasa Ekspedisi kini naik ke cloud)."
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code73/my-lapak_v1.1.0-code73.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTczL215LWxhcGFrX3YxLjEuMC1jb2RlNzMuYXBr",
+  "notes": "STABIL code73: floating bar katalog (keranjang+testi nempel bawah saat scroll); fix order katalog tidak muncul di Order Online (Refresh muat ulang orders + re-sync saat kembali ke foreground); nav v2 Dashboard untuk dev/owner, Laporan pindah ke shortcut Beranda; default kasir bisa order online manual."
 }
