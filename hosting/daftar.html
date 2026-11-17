@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Daftar Toko — My Lapak</title>
+<style>
+*{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#eff6ff;color:#0f172a}
+header{background:linear-gradient(160deg,#2563eb,#1e40af);color:#fff;padding:20px 16px 22px;border-radius:0 0 24px 24px}
+header .t1{font-size:13px;opacity:.9} header h1{font-size:24px;font-weight:800;margin:6px 0 0;line-height:1.2}
+header .t2{font-size:12px;opacity:.85;margin-top:6px}
+.wrap{max-width:480px;margin:0 auto;padding:14px 14px 40px}
+.card{background:#fff;border-radius:16px;padding:18px;box-shadow:0 1px 6px rgba(15,23,42,.08);margin-top:14px}
+.mut{color:#64748b;font-size:13px;line-height:1.5}
+label{display:block;font-size:13px;font-weight:700;margin:14px 0 5px}
+input,textarea,select{width:100%;padding:11px 12px;border:1px solid #cbd5e1;border-radius:10px;font-size:15px;font-family:inherit;background:#fff}
+input:focus,textarea:focus{outline:2px solid #93c5fd;border-color:#2563eb}
+textarea{min-height:70px;resize:vertical}
+.req{color:#dc2626}
+.pk{display:flex;flex-direction:column;gap:8px}
+.pk-opt{border:1.5px solid #cbd5e1;border-radius:12px;padding:12px;cursor:pointer;display:flex;gap:10px;align-items:flex-start}
+.pk-opt.on{border-color:#2563eb;background:#eff6ff}
+.pk-opt b{font-size:14px} .pk-opt .pr{font-size:12px;color:#475569;margin-top:2px}
+.pk-opt input{width:auto;margin-top:2px;accent-color:#2563eb}
+.btn{width:100%;padding:13px;border:0;border-radius:12px;background:#1e40af;color:#fff;font-size:16px;font-weight:800;cursor:pointer;margin-top:18px}
+.btn:disabled{opacity:.6;cursor:wait}
+.err{color:#dc2626;font-size:13px;min-height:18px;margin:8px 0 0}
+.est{background:#eff6ff;border-radius:10px;padding:10px 12px;font-size:13px;color:#1e40af;margin-top:10px;line-height:1.5}
+.ok-ic{width:64px;height:64px;border-radius:50%;background:#dcfce7;color:#16a34a;display:flex;align-items:center;justify-content:center;margin:6px auto 12px}
+.foot{text-align:center;color:#94a3b8;font-size:12px;margin-top:18px}
+.demo{background:#fef9c3;border:1.5px solid #facc15;border-radius:10px;padding:10px 12px;font-size:12.5px;color:#854d0e;line-height:1.5;margin-top:14px}
+</style>
+</head>
+<body>
+<header>
+  <div class="t1">My Lapak — Miauw Project</div>
+  <h1>Daftar Toko</h1>
+  <div class="t2">Coba gratis 7 hari. Kami aktifkan toko + license setelah pendaftaran disetujui.</div>
+</header>
+<div class="wrap">
+  <div class="card" id="formCard">
+    <p class="mut" style="margin-top:0">Isi data toko sekali — tim kami akan menghubungi kamu via WhatsApp / email untuk aktivasi. Tidak ada pembayaran di tahap ini.</p>
+    <form id="fDaftar" onsubmit="return kirimDaftar(event)">
+      <label>Nama toko <span class="req">*</span></label>
+      <input id="dNama" placeholder="cth Toko Berkah Jaya" autocomplete="organization">
+      <label>Nama owner <span class="req">*</span></label>
+      <input id="dOwner" placeholder="cth Budi Santoso" autocomplete="name">
+      <label>Email owner <span class="req">*</span></label>
+      <input id="dEmail" type="email" placeholder="cth budi.toko@gmail.com" autocomplete="email">
+      <p class="mut" style="margin:4px 0 0">Email ini dipakai untuk login Google ke aplikasi My Lapak.</p>
+      <label>Nomor HP / WhatsApp <span class="req">*</span></label>
+      <input id="dHp" type="tel" placeholder="cth 081234567890" autocomplete="tel">
+      <label>Jumlah HP yang dipakai <span class="req">*</span></label>
+      <input id="dJml" type="number" min="1" max="5" placeholder="1" oninput="hitungEstimasi()">
+      <label>Paket yang diinginkan <span class="req">*</span></label>
+      <div class="pk" id="pkList">
+        <label class="pk-opt on"><input type="radio" name="paket" value="trial" checked onchange="hitungEstimasi()"><span><b>Trial — Gratis 7 hari</b><div class="pr">Maks 1 HP · semua fitur · tanpa kartu kredit</div></span></label>
+        <label class="pk-opt"><input type="radio" name="paket" value="putus" onchange="hitungEstimasi()"><span><b>Beli Putus — Rp350rb</b><div class="pr">Sekali bayar · maks 3 HP · app jalan selamanya</div></span></label>
+        <label class="pk-opt"><input type="radio" name="paket" value="langganan" onchange="hitungEstimasi()"><span><b>Langganan — Rp50rb / bulan</b><div class="pr">Bayar per 3 bulan (Rp150rb) di muka · maks 5 HP · termasuk update + bantuan</div></span></label>
+      </div>
+      <div class="est" id="dEstimasi">Perkiraan biaya: Gratis — masa Trial 7 hari.</div>
+      <label>Alamat toko <span class="mut">(opsional)</span></label>
+      <input id="dAlamat" placeholder="cth Jl. Raya Bogor No. 12">
+      <label>Catatan <span class="mut">(opsional)</span></label>
+      <textarea id="dCatatan" placeholder="cth Butuh training online untuk kasir, dsb."></textarea>
+      <p class="err" id="dErr"></p>
+      <button class="btn" id="dBtn" type="submit">KIRIM PENDAFTARAN</button>
+      <p class="mut" style="text-align:center">Dengan mengirim pendaftaran, kamu menyetujui Syarat &amp; Ketentuan My Lapak.</p>
+    </form>
+  </div>
+  <div class="card" id="okCard" style="display:none;text-align:center">
+    <div class="ok-ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+    <h2 style="margin:0 0 6px">Pendaftaran diterima!</h2>
+    <p class="mut">Terima kasih — pendaftaran toko <b id="okNama">—</b> sudah masuk antrean. Kami akan menghubungi kamu via WhatsApp / email setelah pendaftaran disetujui. Setelah itu tinggal login Google di aplikasi — toko + license langsung aktif, tanpa ketik kode.</p>
+    <p class="mut">Biasanya diproses di hari kerja yang sama.</p>
+  </div>
+  <p class="foot">My Lapak — Miauw Project</p>
+</div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+// Config web app Firebase project toko-mobile-app (sama seperti di app utama; apiKey web bersifat publik, akses dibatasi Firestore rules)
+var CFG = {apiKey:'AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8', authDomain:'toko-mobile-app.firebaseapp.com', projectId:'toko-mobile-app'};
+</script>
+<script>
+function $(id){ return document.getElementById(id); }
+function paketDipilih(){ var r = document.querySelector('input[name="paket"]:checked'); return r ? r.value : 'trial'; }
+function hitungEstimasi(){
+  var j = parseInt($('dJml').value, 10) || 0;
+  var p = paketDipilih();
+  var t = '';
+  if (p === 'trial') t = 'Perkiraan biaya: Gratis — masa Trial 7 hari.';
+  else if (p === 'putus') t = 'Perkiraan biaya: Rp350.000 sekali bayar (maks 3 HP).';
+  else t = 'Perkiraan biaya: Rp150.000 per 3 bulan (Rp50rb / bulan × 3, maks 5 HP).';
+  $('dEstimasi').textContent = t;
+  document.querySelectorAll('.pk-opt').forEach(function(el){
+    el.classList.toggle('on', el.querySelector('input').checked);
+  });
+}
+async function kirimDaftar(ev){
+  ev.preventDefault();
+  var err = $('dErr'); err.textContent = '';
+  var nama = $('dNama').value.trim(), owner = $('dOwner').value.trim(),
+      email = $('dEmail').value.trim(), hp = $('dHp').value.trim(),
+      jml = parseInt($('dJml').value, 10) || 0, paket = paketDipilih();
+  if (!nama || !owner || !email || !hp || !jml) { err.textContent = 'Lengkapi semua kolom bertanda *.'; return false; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = 'Format email tidak valid.'; return false; }
+  if (paket === 'trial' && jml > 1) { err.textContent = 'Trial maks 1 HP. Pilih Beli Putus untuk 2–3 HP.'; return false; }
+  if (paket === 'putus' && jml > 3) { err.textContent = 'Beli Putus maks 3 HP. Pilih Langganan untuk 4–5 HP.'; return false; }
+  if (paket === 'langganan' && jml > 5) { err.textContent = 'Langganan maks 5 HP.'; return false; }
+  var btn = $('dBtn'); btn.disabled = true; btn.textContent = 'Mengirim…';
+  try {
+    if (!window.firebase) throw new Error('Firebase belum termuat — cek koneksi internet lalu coba lagi.');
+    if (!firebase.apps.length) firebase.initializeApp(CFG);
+    await firebase.firestore().collection('registrations').add({
+      shopName: nama, ownerName: owner, ownerEmail: email, phone: hp, jmlHp: jml, paket: paket,
+      alamat: $('dAlamat').value.trim(), catatan: $('dCatatan').value.trim(),
+      status: 'menunggu', createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    $('okNama').textContent = nama;
+    $('formCard').style.display = 'none';
+    $('okCard').style.display = 'block';
+    window.scrollTo(0, 0);
+  } catch(e) {
+    err.textContent = 'Gagal mengirim: ' + (e.message || e) + ' — coba lagi.';
+    btn.disabled = false; btn.textContent = 'KIRIM PENDAFTARAN';
+  }
+  return false;
+}
+</script>
+</body>
+</html>
