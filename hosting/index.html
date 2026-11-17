@@ -478,6 +478,12 @@ body.v2 .card{background:var(--card);border-color:var(--line)}
 #backBarV2{display:none}
 body.v2 #backBarV2.show{display:flex;position:fixed;bottom:66px;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:36;padding:0 14px 8px;pointer-events:none}
 body.v2 #backBarV2.show button{pointer-events:auto;background:#071c45;color:#fff;border:none;border-radius:12px;padding:10px 16px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.25)}
+/* v75: kartu Toko Libur — background tema libur semi-transparan (CSS-only, tanpa gambar) */
+#holidayBanner{position:relative;overflow:hidden;background:#fff}
+#holidayBanner::before{content:'';position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,205,105,.55) 0%,rgba(140,220,255,.5) 55%,rgba(255,178,205,.45) 100%),radial-gradient(circle at 88% 8%,rgba(255,255,255,.85) 0%,rgba(255,255,255,0) 42%);opacity:.55;pointer-events:none}
+#holidayBanner::after{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.55) 1.2px,transparent 1.3px);background-size:18px 18px;opacity:.5;pointer-events:none}
+#holidayBanner .holicont{position:relative;z-index:1}
+#holidayBanner .holideco{position:absolute;pointer-events:none;line-height:1;z-index:0}
 #setDetailRowsV2{display:none}
 body.v2 #setDetailRowsV2{display:block}
 body.v2 #view-pengaturan #kasirOrderCard{display:none}
@@ -1271,7 +1277,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <div id="dashBanner"></div><div id="updateBanner" style="display:none"></div><div id="newVerNotif"></div>
   <div id="emailRemindCard" style="display:none"></div>
   <div class="card" id="whatsNewCard" style="display:none"></div>
-  <div class="card" id="holidayBanner" style="display:none;border:1.5px solid var(--red)"><h3>🏖️ Toko Libur</h3><div id="holidayBannerNote" style="font-size:13px;color:var(--mut);margin-bottom:10px"></div><button class="btn btn-green btn-sm" id="holidayOpenBtn" onclick="saveHoliday(false)">Buka Lagi</button></div>
+  <div class="card" id="holidayBanner" style="display:none;border:1.5px solid var(--red);position:relative;overflow:hidden;background:#fff"><span class="holideco" style="right:8px;bottom:-10px;font-size:64px;opacity:.16">🌴</span><span class="holideco" style="right:14px;top:6px;font-size:44px;opacity:.2">☀️</span><span class="holideco" style="left:6px;bottom:-8px;font-size:40px;opacity:.13">🏖️</span><div class="holicont"><h3>🏖️ Toko Libur</h3><div id="holidayBannerNote" style="font-size:13px;color:var(--mut);margin-bottom:10px"></div><button class="btn btn-green btn-sm" id="holidayOpenBtn" onclick="saveHoliday(false)">Buka Lagi</button></div></div>
   <div id="syncRowOld" style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin:8px 0" data-noatur><div id="syncLine" style="font-size:11px;color:var(--mut);flex:1;min-width:0;line-height:1.4"></div><span id="syncBadge" style="flex:0 0 auto"></span><div style="display:flex;gap:8px;flex:0 0 auto" data-noatur><button class="btn btn-green btn-sm" id="dashRefreshBtn" onclick="manualRefresh()"><svg width="18" height="18" viewBox="0 0 48 48" style="vertical-align:-3px"><path d="M32.7,21.8 L36.3,22.3 L36.3,25.7 L32.7,26.2 L31.7,28.6 L33.9,31.5 L31.5,33.9 L28.6,31.7 L26.2,32.7 L25.7,36.3 L22.3,36.3 L21.8,32.7 L19.4,31.7 L16.5,33.9 L14.1,31.5 L16.3,28.6 L15.3,26.2 L11.7,25.7 L11.7,22.3 L15.3,21.8 L16.3,19.4 L14.1,16.5 L16.5,14.1 L19.4,16.3 L21.8,15.3 L22.3,11.7 L25.7,11.7 L26.2,15.3 L28.6,16.3 L31.5,14.1 L33.9,16.5 L31.7,19.4 Z M28.4,24.0 L28.3,25.1 L27.8,26.2 L27.1,27.1 L26.2,27.8 L25.1,28.3 L24.0,28.4 L22.9,28.3 L21.8,27.8 L20.9,27.1 L20.2,26.2 L19.7,25.1 L19.6,24.0 L19.7,22.9 L20.2,21.8 L20.9,20.9 L21.8,20.2 L22.9,19.7 L24.0,19.6 L25.1,19.7 L26.2,20.2 L27.1,20.9 L27.8,21.8 L28.3,22.9 Z" fill="#fff" fill-rule="evenodd"/><path d="M 4.7 18.8 A 20 20 0 0 1 39.3 11.1" stroke="#fff" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M 45.1 18.0 L 41.2 5.6 L 33.6 12.1 Z" fill="#fff"/><path d="M 43.3 29.2 A 20 20 0 0 1 8.7 36.9" stroke="#fff" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M 2.9 30.0 L 6.8 42.4 L 14.4 35.9 Z" fill="#fff"/></svg> Refresh</button><button class="btn btn-outline btn-sm" id="dashAturBtn" style="display:none" onclick="toggleAtur('dashboard')">⚙️ Atur Layout</button></div>
   </div><div id="dashBlocks">
   <div class="card" id="ownerSumCard" style="display:none"><h3 data-t="owner_sum">👑 Ringkasan Owner</h3><div class="grid3"><div class="sumcard" onclick="openSumDetail('day')"><div class="lbl">Omzet Harian</div><div class="val" id="osDay">Rp 0</div></div><div class="sumcard" onclick="openSumDetail('month')"><div class="lbl" data-t="om_month">Omzet bulan ini</div><div class="val" id="osOmzet">Rp 0</div></div><div class="sumcard" onclick="openSumDetail('profit')"><div class="lbl" data-t="profit_month">Laba bulan ini</div><div class="val" id="osProfit">Rp 0</div></div></div><button class="btn btn-outline btn-sm" style="margin-top:10px" data-t="view_dash" onclick="go('ownerdash')">Lihat Dashboard Lengkap →</button></div>
@@ -1549,7 +1555,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
 <section id="view-ownerdash" class="view">
   <div class="mtitle" id="mtitleDash"><h2>Dashboard</h2></div><div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:10px" data-noatur><button class="btn btn-green btn-sm" onclick="manualRefresh()">Refresh</button><button class="btn btn-outline btn-sm" id="odAturBtn" style="display:none" onclick="toggleAtur('ownerdash')">⚙️ Atur Layout</button></div>
-  <div class="card" id="testiDashCard" data-noatur data-cloud><h3>💬 Riwayat Testimoni <span id="testiDashBadge" style="display:none;background:#ef4444;color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px">● Baru</span></h3><div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap"><button class="btn btn-sm btn-green" id="testiFltSemua" onclick="testiDashSetFilter('Semua')">Semua</button><button class="btn btn-sm btn-outline" id="testiFltTampil" onclick="testiDashSetFilter('Tampil')">Tampil</button><button class="btn btn-sm btn-outline" id="testiFltBelum" onclick="testiDashSetFilter('Belum')">Belum tampil</button><button class="btn btn-sm btn-outline" onclick="renderTestiHistory(true)">↻ Refresh</button></div><div id="testiDashList"></div><button class="btn btn-outline btn-sm" id="testiDashMore" style="display:none;margin-top:10px" onclick="renderTestiHistory(false)">Muat lagi</button><button class="btn btn-outline btn-sm" id="testiDashPurge" style="display:none;margin-top:10px;margin-left:8px" onclick="testiDashPurge()">Hapus semua Belum tampil</button></div><div class="card" id="cancelHistCard" data-noatur><h3>History Pembatalan <span id="cancelHistBadge" style="display:none;background:#f59e0b;color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px">Menunggu</span></h3><div id="cancelDelegRow" style="display:none;margin-bottom:4px"><label style="display:flex;gap:6px;align-items:flex-start;font-size:12px"><input type="checkbox" id="allowAdminApproveChk" onchange="toggleAdminApprove()"> Admin boleh approve pembatalan administrasi (Tidak jadi, Toko tidak bisa penuhi) — kategori Rusak / Salah kirim / Refund tetap owner.</label></div><div id="cancelHistList"></div><button class="btn btn-outline btn-sm" onclick="renderCancelHistory()" style="margin-top:10px">Refresh</button></div>  <div class="tabs" id="odTabs">
+  <div class="card" id="testiDashCard" data-noatur data-cloud><h3>💬 Riwayat Testimoni <span id="testiDashBadge" style="display:none;background:#ef4444;color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px">● Baru</span></h3><div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap"><button class="btn btn-sm btn-green" id="testiFltSemua" onclick="testiDashSetFilter('Semua')">Semua</button><button class="btn btn-sm btn-outline" id="testiFltTampil" onclick="testiDashSetFilter('Tampil')">Tampil</button><button class="btn btn-sm btn-outline" id="testiFltBelum" onclick="testiDashSetFilter('Belum')">Belum tampil</button><button class="btn btn-sm btn-outline" onclick="renderTestiHistory(true)">↻ Refresh</button></div><div id="testiDashList"></div><button class="btn btn-outline btn-sm" id="testiDashMore" style="display:none;margin-top:10px" onclick="renderTestiHistory(false)">Muat lagi</button><button class="btn btn-outline btn-sm" id="testiDashPurge" style="display:none;margin-top:10px;margin-left:8px" onclick="testiDashPurge()">Hapus semua Belum tampil</button></div><div class="card" id="cancelHistCard" data-noatur><h3>Izin akses Pembatalan <span id="cancelHistBadge" style="display:none;background:#f59e0b;color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px">Menunggu</span></h3><div id="cancelDelegRow" style="display:none;margin-bottom:4px"><label style="display:flex;gap:10px;align-items:flex-start;font-size:12px"><input type="checkbox" id="allowAdminApproveChk" onchange="toggleAdminApprove()" style="width:20px;height:20px;flex-shrink:0;margin:1px 0 0 0"><span style="flex:1;line-height:1.5">Admin boleh approve pembatalan administrasi (Tidak jadi, Toko tidak bisa penuhi) — kategori Rusak / Salah kirim / Refund tetap owner.</span></label></div><div id="cancelHistList"></div><button class="btn btn-outline btn-sm" onclick="renderCancelHistory()" style="margin-top:10px">Refresh</button></div>  <div class="tabs" id="odTabs">
     <button id="odtSel" class="chip" onclick="odTabSheet()">Pilih ▾</button>
     <button id="odtRingkasan" class="on" data-t="od_sum" onclick="setOdTab('ringkasan')">Ringkasan</button>
     <button id="odtPenjualan" data-t="od_sales" onclick="setOdTab('penjualan')">Penjualan</button>
@@ -1602,7 +1608,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <button data-v="ownerdash" data-perm="dashboard_owner" onclick="go('ownerdash')"><span class="ic" data-ic="dash">📈</span>Dashboard</button>
   <button data-v="pengaturan" onclick="go('pengaturan')"><span style="position:relative"><span class="ic" data-ic="gear">⚙️</span><span id="navPengaturanBadge"></span></span>Pengaturan</button>
 </nav>
-<div id="backBarV2"><button onclick="goBack()">← Kembali</button></div>
 <nav id="mainNavV2">
   <button id="navBerandaBtn" data-v="dashboard" onclick="go('dashboard')"><span class="ic" data-ic="home"></span><span class="lbl">Beranda</span></button>
   <button id="navPesananBtn" data-v="kasir" onclick="go('kasir')"><span style="position:relative"><span class="ic" data-ic="cart"></span><span id="navKasirBadgeV2"></span></span><span class="lbl">Pesanan</span></button>
@@ -2034,7 +2039,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 const LS={get(k,d){try{const v=localStorage.getItem('wapp3_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('wapp3_'+k,JSON.stringify(v))}catch(e){}},del(k){localStorage.removeItem('wapp3_'+k)}};
 
 /* ================= v7.2: BAHASA, FLOAT BAR, BACK ================= */
-const APP_VERSION_CODE=74;const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
+const APP_VERSION_CODE=75;const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
 const L={id:{
 nav_dashboard:'Beranda',nav_kasir:'Pesanan',nav_produk:'Produk',nav_laporan:'Laporan',nav_ownerdash:'Dashboard',nav_pengaturan:'Pengaturan',online_label:'Order Online',
 back:'‹ Kembali',floatbar:'BANTUAN',
@@ -3111,7 +3116,7 @@ async function onLogin(u){
   const ud=await FB.db.collection('users').doc(u.uid).get();
   if(ud.exists){const _d=ud.data(),_old=LS.get(profileKey(),null);if(!_old||(_d.profileUpdatedAt&&(!_old.profileUpdatedAt||_d.profileUpdatedAt>_old.profileUpdatedAt))){LS.set(profileKey(),{name:_d.name||'',birth:_d.birth||'',wa:_d.wa||_d.phone||'',address:_d.address||'',avatar:_d.avatar||'',profileUpdatedAt:_d.profileUpdatedAt||''})}}
   document.getElementById('authScreen').style.display='none';
-  if(ud.exists&&ud.data().shopId){SHOP_ID=ud.data().shopId;MY_ROLE=normRole(ud.data().role||'kasir');let _dead=false;try{const _sd=await FB.db.collection('shops').doc(SHOP_ID).get();if(!_sd.exists)_dead=true;}catch(e){}if(_dead){try{await FB.db.collection('users').doc(u.uid).update({shopId:firebase.firestore.FieldValue.delete()});}catch(e){}try{notes=[];returns=[];activityCloud=[];lsave();}catch(e){}SHOP_ID=null;toast(tr('msg_shop_deleted_dev'));showWizard('join');}else{await cload();enterApp()}}
+  if(ud.exists&&ud.data().shopId){SHOP_ID=ud.data().shopId;MY_ROLE=normRole(ud.data().role||'kasir');let _dead=false;try{const _sd=await FB.db.collection('shops').doc(SHOP_ID).get();if(!_sd.exists)_dead=true;}catch(e){}if(_dead){try{await FB.db.collection('users').doc(u.uid).update({shopId:firebase.firestore.FieldValue.delete()});}catch(e){}try{notes=[];returns=[];activityCloud=[];lsave();}catch(e){}SHOP_ID=null;toast(tr('msg_shop_deleted_dev'));showWizard('join');}else{await autoPairLicenseFromCloud();await cload();enterApp()}}
   else { var _pc = ''; try { _pc = (LS.get('pendingShopCode','')||'').trim().toUpperCase(); } catch(e){} if (_pc) { await autoJoinPending(); } else showWizard('join'); }
 }
 function showWizard(mode){
@@ -3165,6 +3170,23 @@ async function autoJoinPending(){
   if (ok) { try { LS.del('pendingShopCode'); LS.del('pendingLicenseCode'); } catch(e){} }
   else { showWizard('join'); }
 }
+/* v75: auto-pair lisensi dari cloud — dibaca dari licensedShops/{SHOP_ID}
+   (dokumen ini ditulis Dev saat generate license & checkDeviceAndCloud).
+   Hanya jalan bila: mode cloud + online + ada SHOP_ID + belum ada kode
+   lisensi lokal. Offline (navigator.onLine===false) / gagal jaringan /
+   dokumen tidak ada / kode invalid → diam-diam tidak melakukan apa-apa
+   (state lokal tidak berubah, alur lama jalan seperti biasa). Kode expired
+   ikut disimpan via pairLicenseCode supaya statusnya "expired" (bukan
+   "no_license"); cload setelah ini yang menendang ke mode offline. */
+async function autoPairLicenseFromCloud(){
+  if(MODE!=='cloud'||!FB||!FB.db||!SHOP_ID)return false;
+  try{if(LS.get('licenseCode',''))return false;}catch(e){return false;}
+  if(typeof navigator!=='undefined'&&navigator.onLine===false)return false;
+  let code='';
+  try{const snap=await FB.db.collection('licensedShops').doc(SHOP_ID).get();if(!snap.exists)return false;code=String((snap.data()||{}).licenseCode||'').trim().toUpperCase();}catch(e){return false;}
+  if(!code)return false;
+  try{const r=await pairLicenseCode(code);return !!(r&&r.ok);}catch(e){return false;}
+}
 async function joinShop(_code, _lic, _auto){
   const code=(_code||((document.getElementById('joinCode')?document.getElementById('joinCode').value:'')||'')).trim().toUpperCase();if(code.length<4){toast(tr('i18n_074'));return false}
   try{
@@ -3180,9 +3202,10 @@ async function joinShop(_code, _lic, _auto){
   }
   if (_claim) MY_ROLE='owner';
   let dup=null;try{dup=await FB.db.collection('users').where('shopId','==',SHOP_ID).where('email','==',CUR_USER.email).limit(1).get();}catch(e){dup=null;}
-  if(dup&&!dup.empty){const r=dup.docs[0].data();if(_auto){MY_ROLE=normRole(r.role||'kasir');await cload();enterApp();if(_lic){await autoPairLicense(_lic);}return true}toast('Email ini sudah terdaftar sebagai '+roleLabel(normRole(r.role))+'. Login dengan akun yang sama.');return false}
+  if(dup&&!dup.empty){const r=dup.docs[0].data();if(_auto){MY_ROLE=normRole(r.role||'kasir');if(!_lic){await autoPairLicenseFromCloud();}await cload();enterApp();if(_lic){await autoPairLicense(_lic);}return true}toast('Email ini sudah terdaftar sebagai '+roleLabel(normRole(r.role))+'. Login dengan akun yang sama.');return false}
   await FB.db.collection('users').doc(CUR_USER.uid).set({shopId:SHOP_ID,role:(_claim?'owner':'kasir'),name:CUR_USER.name,email:CUR_USER.email,joinedAt:new Date().toISOString()});
   if (_claim) { try { await FB.db.collection('shops').doc(SHOP_ID).update({ownerUid: CUR_USER.uid, pendingOwner: false}); } catch(e){ toast('Klaim owner: gagal update toko (' + (e.message || e) + ')'); } }
+  if(!_lic){await autoPairLicenseFromCloud();}
   await cload();enterApp();toast('Berhasil gabung: '+shop.name);
   if (_lic) { await autoPairLicense(_lic); }
   return true;
@@ -3583,6 +3606,25 @@ const r=await licenseCheck(code);
 if(r.valid){LS.del('licExpired');LS.set('licenseCode',code);let _dc=null;try{_dc=await checkDeviceAndCloud()}catch(e){}if(_dc&&!_dc.allowed){CLOUD_BLOCKED=true;CLOUD_BLOCK_REASON=_dc.reasonText||'Cloud nonaktif';DEVICE_STATUS=_dc.status||'blocked';try{renderCloudBlocked()}catch(e){}toast(_dc.reasonText||'Cloud nonaktif')}else{toast(tr('lic_saved'))}renderLicenseStatus();}
 else if(r.expired){if(inp)inp.value=old;if(el)el.textContent=tr('lic_expired');toast(tr('lic_expired'))}
 else{if(inp)inp.value=old;if(el)el.textContent=tr('lic_invalid');toast(tr('lic_invalid'))}}
+/* v75: pairing lisensi terprogram (tanpa DOM) — dipakai auto-pair dari cloud.
+   Sama seperti cabang valid saveLicense: validasi licenseCheck, simpan kode,
+   lalu checkDeviceAndCloud (registrasi perangkat + tulis licensedShops).
+   Bedanya: kode expired IKUT disimpan (bukan ditolak) supaya status expired
+   yang tampil memang "Lisensi habis" — bukan "Belum ada kode". Kode invalid /
+   gagal jaringan (netFail) TIDAK disimpan, state lokal tidak berubah. */
+async function pairLicenseCode(code){
+  code=(code||'').trim().toUpperCase();if(!code)return {ok:false};
+  const r=await licenseCheck(code);
+  if(!r.valid&&!r.expired)return {ok:false,invalid:true};
+  if(r.valid)LS.del('licExpired');
+  LS.set('licenseCode',code);
+  let dc=null;try{dc=await checkDeviceAndCloud()}catch(e){}
+  if(dc&&!dc.allowed){CLOUD_BLOCKED=true;CLOUD_BLOCK_REASON=dc.reasonText||'Cloud nonaktif';DEVICE_STATUS=dc.status||'blocked';try{renderCloudBlocked()}catch(e){}return {ok:false,expired:!!r.expired,device:dc};}
+  CLOUD_BLOCKED=false;CLOUD_BLOCK_REASON='';DEVICE_STATUS=(dc&&dc.status)||'registered';
+  try{renderLicenseStatus()}catch(e){}
+  toast(tr('lic_saved'));
+  return {ok:true,expired:false,device:dc};
+}
 let updDismissed=false;let updInfo=null;
 async function checkUpdate(verbose){try{
 if(CLOUD_BLOCKED){try{renderCloudBlocked()}catch(e){}if(verbose)toast(tr('msg_cloud_off_update'));return}
@@ -3633,7 +3675,7 @@ function applyPerms(){
 function userMenu(){
   openModal(`<h2>👤 ${CUR_USER?esc(CUR_USER.name):(LANG==='en'?'Offline mode':'Mode Offline')}</h2>
   ${CUR_USER?`<div class="sub" style="color:var(--mut);margin-bottom:4px">${esc(CUR_USER.email)}</div><div style="margin-bottom:10px"><span class="role-badge">${isDeveloper()?'Developer':ROLES[MY_ROLE]}</span></div><div class="card" style="margin-bottom:10px"><h3>${tr('msg_bio_title')}</h3><div style="font-size:13px;line-height:1.7">${esc(getProfile().name||CUR_USER.name)}<br>${CUR_USER.email?esc(CUR_USER.email)+'<br>':''}${getProfile().wa?('WA: '+esc(getProfile().wa)+'<br>'):''}${getProfile().address?esc(getProfile().address):''}</div></div><div class="card" style="margin-bottom:10px"><h3>${tr('shop_code')}</h3><div style="font-size:26px;font-weight:800;letter-spacing:4px;text-align:center">${SHOP_CODE}</div><div style="text-align:center;margin-top:8px"><button class="btn btn-outline btn-sm" onclick="copyShopCode()">${tr('msg_copy_shop_code')}</button></div></div>${SHOP_CODE?'<div class="card" style="margin-bottom:10px"><h3>'+tr('msg_catalog_link_title')+'</h3><div style="font-size:13px;word-break:break-all;margin-bottom:8px">'+esc(catalogUrl())+'</div><div class="rowbtns"><button class="btn btn-blue btn-sm" onclick="shareCatalog()">'+tr('msg_copy_catalog_link')+'</button></div></div>':''}`:''}
-  <div class="rowbtns"><button class="btn btn-outline" onclick="closeModal();go('profil')">${tr('prof_title')}</button><button class="btn btn-outline" onclick="closeModal();goPass()">${tr('change_pass')}</button>${CUR_USER?'<button class="btn btn-red" onclick="gLogout()">'+tr('logout_switch')+'</button>':''}</div>`);
+  <div class="rowbtns" style="gap:6px"><button class="btn btn-outline" style="flex:1;font-size:11px;padding:8px 4px;line-height:1.3;white-space:nowrap" onclick="closeModal();go('profil')">${tr('prof_title')}</button><button class="btn btn-outline" style="flex:1;font-size:11px;padding:8px 4px;line-height:1.3;white-space:nowrap" onclick="closeModal();goPass()">${tr('change_pass')}</button>${CUR_USER?'<button class="btn btn-red" style="flex:1;font-size:11px;padding:8px 4px;line-height:1.3;white-space:nowrap" onclick="gLogout()">'+tr('logout_switch')+'</button>':''}</div>`);
 }
 async function gLogout(){try{LS.del('cart_'+SHOP_ID);LS.del('ocart_'+SHOP_ID);if(typeof CAT!=='undefined'&&CAT.shopId)LS.del('catcart_'+CAT.shopId);}catch(e){}try{if(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform()){try{const P=(window.Capacitor.Plugins&&window.Capacitor.Plugins.FirebaseAuthentication)||window.Capacitor.registerPlugin('FirebaseAuthentication');await P.signOut();}catch(e){}}}catch(e){}if(!FB||!FB.auth){location.reload();return}try{FB.auth.signOut().then(()=>location.reload()).catch(()=>location.reload())}catch(e){location.reload()}}
 
@@ -3765,18 +3807,11 @@ function renderNavV2(){
     }
   }
 }
-function updateBackBarV2(){
-  try{
-    const bar=document.getElementById('backBarV2');if(!bar)return;
-    const show=(typeof uiV2==='function'&&uiV2())&&viewStack.length>1;
-    bar.classList.toggle('show',!!show);
-    if(show){
-      const fab=document.getElementById('prodFabWrap');
-      const overFab=curView==='produk'&&!!fab&&fab.classList.contains('show');
-      bar.style.bottom=overFab?'215px':'66px';
-    }
-  }catch(e){}
-}
+/* v75: pill "← Kembali" v2 dihapus dari HTML (scope ke-3). Fungsi ini jadi
+   no-op supaya semua pemanggil lama tetap aman; swipe-back / tombol back
+   sistem tetap jalan lewat goBack() + setupBackButton() (float-back.js),
+   dan tombol .backlink di header layar dalam tidak disentuh. */
+function updateBackBarV2(){return;}
 function syncNavBadge(){
   const src=document.getElementById('navKasirBadge'),dst=document.getElementById('navKasirBadgeV2');
   if(!src||!dst)return;
@@ -9686,7 +9721,7 @@ function renderDashV2(){
   const topNotes=[...notes].sort((a,b)=>(b.ts||'').localeCompare(a.ts||'')).slice(0,2);
   el.innerHTML='<div class="v2hero" id="dashHeroV2"><div class="t">Jualan hari ini</div><div class="v">'+rp(ts.om)+'</div><div class="s">'+(isOwnerRole?('Profit '+rp(pfToday)+' • '):'')+ts.n+' transaksi</div><button class="v2cta" id="dashHeroCta" onclick="go(\'kasir\')">＋ Jualan Baru</button></div>'
   +'<div class="v2chips"><div class="v2chip"><b>'+ts.n+'</b><span>Transaksi</span></div><div class="v2chip"><b>'+qtyToday+'</b><span>Produk terjual</span></div><div class="v2chip" onclick="go(\'hutang\')"><b>'+rp(dTot)+'</b><span>Piutang ›</span></div></div>'
-  +(ads.length?'<div class="v2ads" id="dashAdsV2" onclick="dashAdsNext()"><img src="'+ads[adIx].img+'"><div class="cap">🎉 PROMO HARI INI'+(ads.length>1?' ('+(adIx+1)+'/'+ads.length+')':'')+'</div></div>':'')
+  +(ads.length?'<div class="v2ads" id="dashAdsV2" onclick="dashAdsNext()"><img src="'+ads[adIx].img+'"></div>':'')
   +(low.length?'<div class="v2alert" onclick="go(\'stok\')"><span>⚠ '+low.length+' produk stok menipis — '+esc(low.slice(0,3).map(p=>p.name).join(', '))+'</span><span>›</span></div>':'')
   +(isAdmin?'<div class="v2grid-h">⚡ Aksi Cepat</div><div class="rowbtns" style="flex-wrap:wrap"><button class="btn btn-green btn-sm" onclick="openProdForm()">＋ Tambah Produk</button><button class="btn btn-orange btn-sm" onclick="openStockIn()">＋ Tambah Stok</button><button class="btn btn-outline btn-sm" onclick="printReport(\'harian\')">'+iconHTML('printer')+' Laporan Harian</button></div>':'')
   +'<div class="v2grid-h">Lainnya</div><div class="v2grid">'+tiles.map(t=>'<div class="v2tile" onclick="'+t[2]+'"><span class="ic">'+t[0]+'</span>'+t[1]+'</div>').join('')+'</div>'
