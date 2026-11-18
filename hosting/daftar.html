@@ -15,6 +15,8 @@ header .t2{font-size:12px;opacity:.85;margin-top:6px}
 label{display:block;font-size:13px;font-weight:700;margin:14px 0 5px}
 input,textarea,select{width:100%;padding:11px 12px;border:1px solid #cbd5e1;border-radius:10px;font-size:15px;font-family:inherit;background:#fff}
 input:focus,textarea:focus{outline:2px solid #93c5fd;border-color:#2563eb}
+select:focus{outline:2px solid #93c5fd;border-color:#2563eb}
+select:disabled{background:#f1f5f9;color:#94a3b8;cursor:not-allowed}
 input[readonly]{background:#f1f5f9;color:#475569;cursor:not-allowed}
 textarea{min-height:70px;resize:vertical}
 .req{color:#dc2626}
@@ -30,6 +32,12 @@ textarea{min-height:70px;resize:vertical}
 .ok-ic{width:64px;height:64px;border-radius:50%;background:#dcfce7;color:#16a34a;display:flex;align-items:center;justify-content:center;margin:6px auto 12px}
 .foot{text-align:center;color:#94a3b8;font-size:12px;margin-top:18px}
 .demo{background:#fef9c3;border:1.5px solid #facc15;border-radius:10px;padding:10px 12px;font-size:12.5px;color:#854d0e;line-height:1.5;margin-top:14px}
+/* --- Picker alamat wilayah --- */
+.addr-sel{margin-top:8px}
+.addr-prev{background:#eff6ff;border-radius:10px;padding:10px 12px;font-size:13.5px;color:#1e40af;margin-top:12px;line-height:1.5}
+.addr-prev .lbl{font-size:12px;color:#475569}
+.addr-prev .warn{color:#dc2626;font-weight:700}
+.link-kecil{font-size:13px;color:#2563eb;text-decoration:underline;cursor:pointer}
 </style>
 </head>
 <body>
@@ -61,7 +69,27 @@ textarea{min-height:70px;resize:vertical}
       </div>
       <div class="est" id="dEstimasi">Perkiraan biaya: Gratis — masa Trial 7 hari.</div>
       <label>Alamat toko <span class="mut">(opsional)</span></label>
-      <input id="dAlamat" placeholder="cth Jl. Raya Bogor No. 12">
+      <div id="alamatPicker">
+        <select id="aProv" onchange="onProvChange()"><option value="">Memuat provinsi…</option></select>
+        <select id="aKab" class="addr-sel" disabled onchange="onKabChange()"><option value="">Pilih provinsi dulu</option></select>
+        <select id="aKec" class="addr-sel" disabled onchange="onKecChange()"><option value="">Pilih kota/kabupaten dulu</option></select>
+        <select id="aKel" class="addr-sel" disabled onchange="updateAlamatGabungan()"><option value="">Pilih kecamatan dulu</option></select>
+        <label style="margin-top:14px">Detail alamat tambahan <span class="mut" style="font-weight:400">(opsional)</span></label>
+        <textarea id="aDetail" rows="2" placeholder="Jl. Raya Bogor No. 12, RT 03/RW 05, patokan: dekat Masjid Al-Ikhlas" oninput="updateAlamatGabungan()"></textarea>
+        <p class="mut" style="margin:4px 0 0">Ketik bebas: nama jalan, nomor rumah, RT/RW, patokan (mis. dekat Masjid Al-Ikhlas, seberang Alfamart, gang masuk 50 m).</p>
+        <div class="addr-prev" id="aGabungBox">
+          <div class="lbl">Alamat lengkap (otomatis digabung):</div>
+          <div id="aGabung">— belum ada alamat dipilih —</div>
+          <div id="aHitung" class="lbl" style="margin-top:4px">0 / 200 karakter</div>
+        </div>
+        <p class="mut" style="margin:10px 0 0"><span class="link-kecil" onclick="pakaiManual(true)">isi manual saja</span> — ketik alamat bebas tanpa pilih wilayah.</p>
+      </div>
+      <div id="alamatManual" style="display:none">
+        <input id="dAlamatManual" placeholder="cth Jl. Raya Bogor No. 12, Tapos, Depok" oninput="updateAlamatGabungan()">
+        <p class="mut" id="aManualNote" style="margin:8px 0 0">Mode manual aktif.</p>
+        <p class="mut" style="margin:6px 0 0"><span class="link-kecil" onclick="pakaiManual(false)">kembali ke picker wilayah</span></p>
+      </div>
+      <input type="hidden" id="dAlamat">
       <label>Catatan <span class="mut">(opsional)</span></label>
       <textarea id="dCatatan" placeholder="cth Butuh training online untuk kasir, dsb."></textarea>
       <p class="err" id="dErr"></p>
@@ -99,6 +127,125 @@ function hitungEstimasi(){
     el.classList.toggle('on', el.querySelector('input').checked);
   });
 }
+/* ============ PICKER ALAMAT WILAYAH ============ */
+var API = 'https://www.emsifa.com/api-wilayah-indonesia/api';
+var manualMode = false;
+function titleCase(s){
+  return s.toLowerCase().replace(/(^|[\s\-\/])([a-z])/g, function(m, p1, p2){ return p1 + p2.toUpperCase(); });
+}
+function fillSelect(sel, items, placeholder){
+  sel.innerHTML = '';
+  var o0 = document.createElement('option');
+  o0.value = ''; o0.textContent = placeholder;
+  sel.appendChild(o0);
+  items.forEach(function(it){
+    var o = document.createElement('option');
+    o.value = it.id; o.textContent = titleCase(it.name);
+    sel.appendChild(o);
+  });
+}
+function resetSelect(sel, placeholder){
+  sel.innerHTML = '';
+  var o = document.createElement('option');
+  o.value = ''; o.textContent = placeholder;
+  sel.appendChild(o);
+  sel.disabled = true;
+}
+async function loadJSON(url){
+  var r = await fetch(url);
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  return r.json();
+}
+async function initWilayah(){
+  try {
+    var prov = await loadJSON(API + '/provinces.json');
+    fillSelect($('aProv'), prov, 'Pilih provinsi');
+    $('aProv').disabled = false;
+  } catch(e) {
+    pakaiManual(true, 'Database wilayah tidak bisa dimuat (' + (e.message || e) + ') — isi alamat manual di bawah.');
+  }
+}
+async function onProvChange(){
+  var id = $('aProv').value;
+  resetSelect($('aKab'), 'Pilih provinsi dulu');
+  resetSelect($('aKec'), 'Pilih kota/kabupaten dulu');
+  resetSelect($('aKel'), 'Pilih kecamatan dulu');
+  updateAlamatGabungan();
+  if (!id) return;
+  $('aKab').innerHTML = '<option value="">Memuat kota/kabupaten…</option>';
+  try {
+    var kab = await loadJSON(API + '/regencies/' + id + '.json');
+    fillSelect($('aKab'), kab, 'Pilih kota/kabupaten');
+    $('aKab').disabled = false;
+  } catch(e) {
+    resetSelect($('aKab'), 'Gagal memuat — coba pilih provinsi lagi');
+  }
+}
+async function onKabChange(){
+  var id = $('aKab').value;
+  resetSelect($('aKec'), 'Pilih kota/kabupaten dulu');
+  resetSelect($('aKel'), 'Pilih kecamatan dulu');
+  updateAlamatGabungan();
+  if (!id) return;
+  $('aKec').innerHTML = '<option value="">Memuat kecamatan…</option>';
+  try {
+    var kec = await loadJSON(API + '/districts/' + id + '.json');
+    fillSelect($('aKec'), kec, 'Pilih kecamatan');
+    $('aKec').disabled = false;
+  } catch(e) {
+    resetSelect($('aKec'), 'Gagal memuat — coba pilih kota lagi');
+  }
+}
+async function onKecChange(){
+  var id = $('aKec').value;
+  resetSelect($('aKel'), 'Pilih kecamatan dulu');
+  updateAlamatGabungan();
+  if (!id) return;
+  $('aKel').innerHTML = '<option value="">Memuat kelurahan…</option>';
+  try {
+    var kel = await loadJSON(API + '/villages/' + id + '.json');
+    fillSelect($('aKel'), kel, 'Pilih kelurahan');
+    $('aKel').disabled = false;
+  } catch(e) {
+    resetSelect($('aKel'), 'Gagal memuat — coba pilih kecamatan lagi');
+  }
+}
+function selectedText(sel){
+  if (!sel || !sel.value) return '';
+  var o = sel.options[sel.selectedIndex];
+  return o ? o.textContent : '';
+}
+function alamatGabungan(){
+  if (manualMode) return $('dAlamatManual').value.trim();
+  var parts = [
+    $('aDetail').value.trim(),
+    selectedText($('aKel')),
+    selectedText($('aKec')),
+    selectedText($('aKab')),
+    selectedText($('aProv'))
+  ].filter(function(p){ return p; });
+  return parts.join(', ');
+}
+function updateAlamatGabungan(){
+  var g = alamatGabungan();
+  $('dAlamat').value = g;
+  $('aGabung').textContent = g || '— belum ada alamat dipilih —';
+  var n = g.length;
+  var h = $('aHitung');
+  h.textContent = n + ' / 200 karakter' + (n > 200 ? ' — melebihi batas, persingkat detail alamat!' : '');
+  h.className = 'lbl' + (n > 200 ? ' warn' : '');
+  $('aGabungBox').style.border = n > 200 ? '1.5px solid #dc2626' : '';
+}
+function pakaiManual(on, note){
+  manualMode = on;
+  $('alamatPicker').style.display = on ? 'none' : '';
+  $('alamatManual').style.display = on ? '' : 'none';
+  if (on) $('aManualNote').textContent = note || 'Mode manual aktif — ketik alamat bebas di atas.';
+  updateAlamatGabungan();
+  return false;
+}
+/* ============ /PICKER ALAMAT WILAYAH ============ */
+
 async function kirimDaftar(ev){
   ev.preventDefault();
   var err = $('dErr'); err.textContent = '';
@@ -110,13 +257,15 @@ async function kirimDaftar(ev){
   if (paket === 'trial' && jml > 1) { err.textContent = 'Trial maks 1 HP. Pilih Beli Putus untuk 2–3 HP.'; return false; }
   if (paket === 'putus' && jml > 3) { err.textContent = 'Beli Putus maks 3 HP. Pilih Langganan untuk 4–5 HP.'; return false; }
   if (paket === 'langganan' && jml > 5) { err.textContent = 'Langganan maks 5 HP.'; return false; }
+  var alamat = alamatGabungan();
+  if (alamat.length > 200) { err.textContent = 'Alamat lebih dari 200 karakter (' + alamat.length + ') — persingkat detail alamat.'; return false; }
   var btn = $('dBtn'); btn.disabled = true; btn.textContent = 'Mengirim…';
   try {
     if (!window.firebase) throw new Error('Firebase belum termuat — cek koneksi internet lalu coba lagi.');
     if (!firebase.apps.length) firebase.initializeApp(CFG);
     await firebase.firestore().collection('registrations').add({
       shopName: nama, ownerName: owner, ownerEmail: email, phone: hp, jmlHp: jml, paket: paket,
-      alamat: $('dAlamat').value.trim(), catatan: $('dCatatan').value.trim(),
+      alamat: alamat, catatan: $('dCatatan').value.trim(),
       status: 'menunggu', createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
     $('okNama').textContent = nama;
@@ -130,6 +279,7 @@ async function kirimDaftar(ev){
   return false;
 }
 hitungEstimasi();
+initWilayah();
 </script>
 </body>
 </html>
