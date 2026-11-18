@@ -23,6 +23,9 @@ label { display: block; font-size: 13px; color: #555; margin: 12px 0 4px; }
 input[type=text], input[type=tel], input[type=email], input[type=date], input[type=password], select { width: 100%; padding: 11px 12px; border: 1px solid #ccc; border-radius: 10px; font-size: 15px; }
 .btn { border: none; border-radius: 10px; padding: 12px 16px; font-size: 15px; cursor: pointer; }
 .btn-green { background: #1b7a3d; color: #fff; width: 100%; font-weight: 700; }
+.btn-indigo { background: #4f46e5; color: #fff; width: 100%; font-weight: 700; }
+#regActionRow .btn { flex: 1 1 0; min-width: 0; width: auto; font-size: 12px; padding: 12px 6px; }
+#regApproveBtn { border: 2px solid #1b7a3d; }
 .btn-outline { background: #fff; color: #1b7a3d; border: 2px solid #1b7a3d; font-weight: 600; }
 .btn-sm { padding: 7px 12px; font-size: 13px; border-radius: 8px; }
 .btn-red { background: #fff; color: #b91c1c; border: 2px solid #b91c1c; font-weight: 600; }
@@ -127,7 +130,7 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 .devbox .cust { margin-top:10px; }
 
 
-/* ---- Layar Login profesional (code44): background brand + kartu floating ---- */
+/* ---- Layar Login profesional (code45): background brand + kartu floating ---- */
 #loginScreen { position:relative; min-height:100vh; min-height:100dvh; background:linear-gradient(160deg,#1769FF 0%,#0F56D6 42%,#102A56 100%); overflow:hidden; display:flex; align-items:center; justify-content:center; padding:32px 16px; }
 .login-bg { position:absolute; inset:0; overflow:hidden; pointer-events:none; }
 .blob { position:absolute; border-radius:50%; }
@@ -158,14 +161,14 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 .err-text { color:#dc2626; font-size:13px; min-height:18px; margin-top:6px; }
 
 
-/* ---- Empty-state Pendaftar (code44): ikon besar + judul + penjelasan ---- */
+/* ---- Empty-state Pendaftar (code45): ikon besar + judul + penjelasan ---- */
 .reg-empty { text-align:center; padding:28px 12px 22px; }
 .reg-empty svg { width:64px; height:64px; }
 .reg-empty-title { font-weight:800; font-size:16px; color:#102A56; margin-top:10px; }
 .reg-empty .note { margin-top:6px; }
 
 
-/* ---- Tiket (code44): badge notif di tombol nav ---- */
+/* ---- Tiket (code45): badge notif di tombol nav ---- */
 #devTiketNavBadge{position:absolute;top:4px;right:10px;background:#dc2626;color:#fff;font-size:11px;font-weight:800;min-width:20px;height:20px;line-height:20px;text-align:center;border-radius:10px;padding:0 5px;display:none;box-sizing:border-box}
 
 </style>
@@ -174,7 +177,7 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 <body>
 <header id="appHeader">
 <img id="appLogo" class="app-logo" src="icon.png" alt="MyLapak-Dev">
-<div class="hgrow"><h1>MyLapak-Dev</h1><p>Generate License Code • MyLapak App • v1.3.6 • code44</p></div>
+<div class="hgrow"><h1>MyLapak-Dev</h1><p>Generate License Code • MyLapak App • v1.3.6 • code45</p></div>
 </header>
 
 <div id="loginScreen">
@@ -198,7 +201,7 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
       <p class="login-foot">Login dengan akun Dev di Firebase Auth. Sesi dipertahankan di HP ini.</p>
     </div>
     <p class="login-sub">Sesi dipertahankan — buka app lagi dan sesi masih ada, langsung masuk Client tanpa ketik ulang.</p>
-    <p class="login-sub dim">My Lapak Dev v1.3.6 • code44</p>
+    <p class="login-sub dim">My Lapak Dev v1.3.6 • code45</p>
   </div>
 </div>
 
@@ -273,7 +276,7 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 
 <div class="card" id="devFbCard">
 <h2>Firebase</h2>
-<p class="note">Terhubung otomatis ke proyek toko-mobile-app (config sudah ditanam di app). Daftar perangkat dibaca dari Firestore <b>licenses/{kode}/devices/</b> — sumber yang sama persis dengan app MyLapak utama. Nonaktifkan di sini = set <b>active=false</b> di dokumen device itu.</p>
+<p class="note">Terhubung otomatis ke proyek toko-mobile-app (config sudah ditanam di app). Daftar perangkat dimuat dari tab Client.</p>
 <div class="note" id="devFbStatus">Belum login.</div>
 <div class="row" style="margin-top:10px">
 <button class="btn btn-outline btn-sm grow" onclick="devFbLogout()">Logout</button>
@@ -315,13 +318,14 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 
 
 <button class="setting-item" onclick="openSettingCard('aboutCard','Tentang APK')"><span class="si-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span><span class="si-grow">Tentang APK<small>Versi, package, kunci, dan logo</small></span><span class="si-chev">›</span></button>
+<button class="setting-item" onclick="openSettingCard('devFbCard','Firebase')"><span class="si-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></span><span class="si-grow">Firebase<small>Proyek, status login &amp; logout</small></span><span class="si-chev">›</span></button>
 </div>
 
 
 <div class="card hidden" id="aboutCard">
 <h2>Tentang APK</h2>
 <img class="about-logo" src="logo-dev.png" alt="MyLapak Developer">
-<p class="note">MyLapak-Dev v1.3.6 (code44) • My Lapak • Data client di Firestore (cloud).<br>Package APK: com.miauwproject.mylapakadmin • Login: email Dev (Firebase Auth), tanpa PIN.<br>Istilah di app ini: Client = pembeli app, Kode lisensi = kode ML-XXXX-XXXX-XXXX.</p>
+<p class="note">MyLapak-Dev v1.3.6 (code45) • My Lapak • Data client di Firestore (cloud).<br>Package APK: com.miauwproject.mylapakadmin • Login: email Dev (Firebase Auth), tanpa PIN.<br>Istilah di app ini: Client = pembeli app, Kode lisensi = kode ML-XXXX-XXXX-XXXX.</p>
 </div>
 
 
@@ -338,8 +342,8 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 <h2>Detail Pendaftar</h2>
 <div id="regDetailBody"></div>
 <div class="preview" id="regPreviewBox" style="margin-top:12px"></div>
-<div style="margin-top:14px"><button class="btn btn-green" id="regApproveBtn" onclick="approveReg()">✓ SETUJUI &amp; AKTIFKAN</button></div>
-<div class="row" style="margin-top:8px"><button class="btn btn-red" onclick="rejectReg()">✕ Tolak</button></div>
+<div id="regActionRow"><div class="row" style="margin-top:14px"><button class="btn btn-green grow" id="regApproveBtn" onclick="approveReg()">✓ SETUJUI &amp; AKTIFKAN</button><button class="btn btn-red grow" onclick="rejectReg()">✕ Tolak</button></div></div>
+<div id="regKirimApkBox" class="hidden" style="margin-top:14px"><p class="note" id="regKirimApkNote"></p><button class="btn btn-indigo" onclick="kirimApkReg()">✉️ KIRIM APK KE TOKO</button><p class="note" id="kirimApkMsgReg" style="margin-top:8px"></p></div>
 <p class="note">Setelah disetujui: toko + lisensi dibuat otomatis di Firestore, client tinggal login Google lalu gabung pakai kode toko — lisensi nempel sendiri, tanpa ketik kode.</p>
 <div style="margin-top:14px"><button class="btn btn-outline" style="width:100%" onclick="goBack()">Kembali</button></div>
 </div>
@@ -382,7 +386,7 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 <h3>Cara pakai Pendaftar</h3>
 <p>Pendaftaran dari form Daftar Toko muncul di tab Pendaftar (badge merah = jumlah menunggu). Klik Lihat Detail untuk memeriksa, lalu SETUJUI &amp; AKTIFKAN untuk membuat toko + lisensi otomatis, atau Tolak.</p>
 <h3>Cara pakai Setting</h3>
-<p>Setting berisi: Tema Aplikasi, Tentang APK.</p>
+<p>Setting berisi: Tema Aplikasi, Tentang APK, Firebase.</p>
 <h3>Kalau ada masalah</h3>
 <ul>
 <li>Kode tidak valid di HP Client: pastikan dokumen licenses ada, field type dan status active, dan expiresAt belum lewat (kecuali Lifetime tanpa expiresAt). Perpanjang dari Dev menulis langsung ke Firestore — tidak perlu cek console lagi.</li>
@@ -620,7 +624,7 @@ function updateGenPreview(){
 
 
 
-// code44: tanpa PIN — gerbangnya layar Login (#loginScreen), bukan PIN.
+// code45: tanpa PIN — gerbangnya layar Login (#loginScreen), bukan PIN.
 function showLoginScreen(){
   if (typeof stopSyncTimer === 'function') stopSyncTimer();
   var am = document.getElementById('appMain'); if (am) am.classList.add('hidden');
@@ -662,7 +666,7 @@ var extendCode = null;
 var extMode = 'extend';
 var extPending = null;
 var TAB_GROUPS = {
-  client: ['migrCard','reminderCard','listCard','devFbCard'],
+  client: ['migrCard','reminderCard','listCard'],
   pendaftar: ['pendaftarCard'],
   generator: ['genPkgCard','resultCard','oldCustCard'],
   tiket: ['tiketCard'],
@@ -778,6 +782,7 @@ function renderCustomers(){
       html += '<div class="row" style="margin-top:10px">';
       html += '<button class="btn btn-outline btn-sm" onclick="copyStr(\'' + c.code + '\')">Salin kode</button>';
       html += '<button class="btn btn-outline btn-sm" onclick="devToggleDevices(\'' + c.code + '\')">Lihat perangkat</button>';
+      if (c.status !== 'revoked') html += '<button class="btn btn-outline btn-sm" onclick="kirimApkClient(\'' + c.code + '\')">✉️ Kirim APK</button>';
       if (c.status !== 'revoked') {
         html += '<button class="btn btn-green btn-sm"' + dis + ' onclick="openExtend(\'' + c.code + '\')">Perpanjang</button>';
         html += '<button class="btn btn-red btn-sm"' + dis + ' onclick="revokeCloud(\'' + c.code + '\')">Cabut</button>';
@@ -1035,6 +1040,10 @@ function openRegDetail(id){
   for (var i = 0; i < pendingRegs.length; i++) if (pendingRegs[i]._id === id) r = pendingRegs[i];
   if (!r) { showToast('Pendaftar tidak ditemukan'); return; }
   curReg = r;
+  lastApprovedApk = null;
+  var _ar0 = document.getElementById('regActionRow'); if (_ar0) _ar0.classList.remove('hidden');
+  var _kb0 = document.getElementById('regKirimApkBox'); if (_kb0) _kb0.classList.add('hidden');
+  var _km0 = document.getElementById('kirimApkMsgReg'); if (_km0) _km0.textContent = '';
   var p = regPkgInfo(r.paket);
   var expPreview = 'Lifetime (tanpa tanggal)';
   if (p.days) { var nd = new Date(); nd.setDate(nd.getDate() + p.days); expPreview = fmt(nd); }
@@ -1120,7 +1129,14 @@ async function approveReg(id){
     renderCustomers(); renderPendaftar();
     if (typeof syncClients === 'function') syncClients();
     showToast('Toko ' + (cur.shopName || '') + ' aktif! Kode toko: ' + shopCode, 'ok');
-    if (regDetailVisible()) goBack();
+    if (regDetailVisible()) {
+      lastApprovedApk = {shopName: cur.shopName || '', shopCode: shopCode, licenseCode: licCode, ownerEmail: cur.ownerEmail || '', paketLabel: p.label, maxDevices: p.maxDevices};
+      var _ar = document.getElementById('regActionRow'); if (_ar) _ar.classList.add('hidden');
+      var _kb = document.getElementById('regKirimApkBox'); if (_kb) _kb.classList.remove('hidden');
+      var _kn = document.getElementById('regKirimApkNote');
+      if (_kn) _kn.textContent = 'Aktif! Kode toko: ' + shopCode + ' • Lisensi: ' + licCode + '. Kirim APK + panduan ke email toko di bawah.';
+      var _km = document.getElementById('kirimApkMsgReg'); if (_km) _km.textContent = '';
+    }
   } catch(e) {
     showToast('Gagal menyetujui: ' + (e.message || e));
   } finally {
@@ -1173,8 +1189,8 @@ try {
 
 // ===== v1.2 patch: tema, pageBar sliver, Setting jadi menu =====
 var LS_THEME = 'ml_admin_theme_v1';
-var SETTING_CARDS = ['aboutCard','themeCard'];
-var SETTING_TITLES = { aboutCard:'Tentang APK', themeCard:'Tema Aplikasi' };
+var SETTING_CARDS = ['aboutCard','themeCard','devFbCard'];
+var SETTING_TITLES = { aboutCard:'Tentang APK', themeCard:'Tema Aplikasi', devFbCard:'Firebase' };
 function getTheme(){ try { return localStorage.getItem(LS_THEME) || 'default'; } catch(e) { return 'default'; } }
 function setTheme(t){
   try { localStorage.setItem(LS_THEME, t); } catch(e) {}
@@ -1302,7 +1318,7 @@ setTheme(getTheme());
 
 <script>
 // ===== v1.3.0 devices: daftar perangkat Firestore, sumber sama dengan MyLapak utama =====
-// ===== v1.3.6 code44: Tiket Contact Developer — port dari v1.3.9-code25 =====
+// ===== v1.3.6 code45: Tiket Contact Developer — port dari v1.3.9-code25 =====
 // Koleksi tickets (cloud). Baca: auth. Tulis Dev: reply (replies+updatedAt),
 // status non-Selesai (status+updatedAt), flag (needsUpdate+updatedAt),
 // Selesai via arsip (ticketArchives + archived=true + kesimpulan) —
@@ -1400,13 +1416,64 @@ async function devTiketArchiveAndDone(id){
     await DEV_FB.db.collection('tickets').doc(id).update({ status: 'Selesai', archived: true, conclusionCategory: conclCat, conclusionText: conclText, concludedAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
     showToast('✅ Tiket selesai, lampiran diarsipkan' + (_skipped ? (' (' + _skipped + ' lampiran baru tidak ikut arsip, tetap di daftar aktif)') : '') + (ex.exists ? ' (arsip lama dipakai)' : '') + ''); await devTiketLoad(); devTiketOpen(id);
   } catch(e) { showToast('Gagal menyelesaikan tiket (status TIDAK diubah): ' + (e.message || e)); } }
-// code44 (A3): Refresh di kartu Tiket — adapter devRefreshAll code25.
+// code45 (A3): Refresh di kartu Tiket — adapter devRefreshAll code25.
 // Versi code25 memanggil devPanelCode/devLoadDevices/devAutoClientsLoad
 // yang tidak ada di basis ini; di sini refresh Tiket + syncClients saja.
 async function devRefreshAll(){ var fails = [];
   try { await devTiketLoad(); } catch(e) { fails.push('Tiket'); }
   try { if (typeof syncClients === 'function') await syncClients(); } catch(e) { fails.push('Client'); }
   if (fails.length) showToast('Refresh selesai sebagian, gagal: ' + fails.join(', ')); else showToast('✅ Refresh berhasil'); }
+
+// ===== v1.3.6 code45: Kirim APK + Panduan — pola Absensi (mailto) =====
+// Email berisi data toko + SATU link panduan; login My Lapak pakai Kode Lisensi
+// (tidak ada kata sandi di email). Tombol membuka aplikasi email user; user
+// ketuk Kirim sendiri. Dipakai dari detail Pendaftar (sesudah approve) dan
+// dari kartu Client aktif (kirim ulang).
+var PANDUAN_URL_MYLAPAK = 'https://mylapak.web.app/panduan.html';
+var lastApprovedApk = null; // {shopName, shopCode, licenseCode, ownerEmail, paketLabel, maxDevices}
+function bangunEmailApkLap(d){
+  var to = (d.ownerEmail || '').trim();
+  var shopName = d.shopName || d.name || '';
+  var licCode = d.licenseCode || d.code || '';
+  var paketLbl = d.paketLabel || '—';
+  if (!d.paketLabel) {
+    if (d.type === 'putus') paketLbl = 'Beli Putus';
+    else if (typeof PKGS !== 'undefined' && PKGS[d.type]) paketLbl = PKGS[d.type].label;
+    else if (d.type) paketLbl = d.type;
+  }
+  var maxHp = (typeof d.maxDevices === 'number') ? d.maxDevices : '';
+  var subject = 'Aplikasi My Lapak — ' + (shopName || d.shopCode || '');
+  var body =
+'Halo tim ' + (shopName || d.shopCode || '') + ',\n\n' +
+'Terima kasih sudah membeli My Lapak. Berikut data & panduan untuk toko Anda:\n\n' +
+'Nama Toko: ' + (shopName || '—') + '\n' +
+'Kode Toko: ' + (d.shopCode || '—') + '\n' +
+'Kode Lisensi: ' + (licCode || '—') + '\n' +
+'Email: ' + (to || '—') + '\n' +
+'Paket: ' + paketLbl + (maxHp !== '' ? ' (' + maxHp + ' HP)' : '') + '\n\n' +
+'Download aplikasi + panduan pemakaian: ' + PANDUAN_URL_MYLAPAK + '\n\n' +
+'Cara login: buka aplikasi My Lapak, masukkan Kode Lisensi di atas. Lisensi langsung aktif, tanpa ketik kode lain.\n\n' +
+'Salam,\nMiauw Project';
+  return {to: to, subject: subject, body: body, href: 'mailto:' + to + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body)};
+}
+function kirimApkEmailLap(d, msgElId){
+  if (!d) { showToast('Data toko tidak ditemukan', 'err'); return; }
+  var e = bangunEmailApkLap(d);
+  if (!e.to) { showToast('Email toko belum terisi', 'err'); return; }
+  window.location.href = e.href;
+  var msg = msgElId ? document.getElementById(msgElId) : null;
+  if (msg) msg.textContent = 'Email disiapkan untuk ' + e.to + ' — ketuk Kirim di aplikasi email.';
+  else showToast('Email disiapkan untuk ' + e.to + ' — ketuk Kirim di aplikasi email.', 'ok');
+}
+function kirimApkReg(){
+  kirimApkEmailLap(lastApprovedApk, 'kirimApkMsgReg');
+}
+function kirimApkClient(code){
+  var c = (typeof findCloud === 'function') ? findCloud(code) : null;
+  if (!c) { showToast('Client tidak ditemukan', 'err'); return; }
+  if (c.status === 'revoked') { showToast('Client sudah dicabut', 'err'); return; }
+  kirimApkEmailLap({shopName: c.name, shopCode: c.shopCode, licenseCode: c.code, ownerEmail: c.ownerEmail, type: c.type, maxDevices: c.maxDevices}, null);
+}
 
 var DEV_FB = null;
 var LS_DEV_EMAIL = 'ml_admin_dev_email_v1';
@@ -1644,7 +1711,7 @@ try { devFbRestore(); } catch(e) {}
 </script>
 
 <script>
-// ===== v1.3.6 code44: daftar client dari cloud + migrasi 1x + sync berkala (1 data, tanpa PIN, tanpa kunci perangkat) =====
+// ===== v1.3.6 code45: daftar client dari cloud + migrasi 1x + sync berkala (1 data, tanpa PIN, tanpa kunci perangkat) =====
 // Daftar client dibaca dari licensedShops (1 query get() per refresh, N read,
 // tanpa listener). Daftar lokal (LS_CUST) hanya untuk client "belum pindah"
 // (tanpa toko) — bukan sumber ganda.
