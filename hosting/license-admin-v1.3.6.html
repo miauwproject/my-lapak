@@ -54,7 +54,6 @@ td.v { font-family: ui-monospace, monospace; word-break: break-all; }
 .toast-ok .t-ic { background:#22c55e; }
 .toast-err .t-ic { background:#ef4444; }
 .toast-info .t-ic { background:#3b82f6; }
-#lockScreen { max-width: 480px; margin: 40px auto; padding: 16px; }
 header { background: var(--header-bg); }
 #appHeader { display:flex; align-items:center; gap:10px; }
 #appHeader .hgrow { flex:1; }
@@ -127,33 +126,69 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 .devbox { border-top:1px solid var(--line); margin-top:10px; padding-top:6px; }
 .devbox .cust { margin-top:10px; }
 
+
+/* ---- Layar Login profesional (code42): background brand + kartu floating ---- */
+#loginScreen { position:relative; min-height:100vh; min-height:100dvh; background:linear-gradient(160deg,#1769FF 0%,#0F56D6 42%,#102A56 100%); overflow:hidden; display:flex; align-items:center; justify-content:center; padding:32px 16px; }
+.login-bg { position:absolute; inset:0; overflow:hidden; pointer-events:none; }
+.blob { position:absolute; border-radius:50%; }
+.b1 { width:360px; height:360px; left:-110px; top:-110px; background:radial-gradient(circle,rgba(255,255,255,.30),rgba(255,255,255,0) 68%); }
+.b2 { width:440px; height:440px; right:-150px; bottom:-140px; background:radial-gradient(circle,rgba(56,189,248,.38),rgba(56,189,248,0) 68%); }
+.b3 { width:220px; height:220px; right:6%; top:10%; background:radial-gradient(circle,rgba(255,213,0,.20),rgba(255,213,0,0) 68%); }
+.b4 { width:180px; height:180px; left:10%; bottom:6%; background:radial-gradient(circle,rgba(255,255,255,.16),rgba(255,255,255,0) 68%); }
+.login-wrap { position:relative; z-index:1; width:100%; max-width:380px; }
+.login-card { background:#ffffff; color:#102A56; border-radius:24px; padding:30px 26px 24px; box-shadow:0 24px 60px rgba(4,18,48,.45),0 2px 10px rgba(4,18,48,.28); }
+.login-brand { text-align:center; margin-bottom:18px; }
+.login-logo { width:58px; height:58px; margin:0 auto 12px; border-radius:18px; background:linear-gradient(135deg,#1769FF,#0F56D6); display:flex; align-items:center; justify-content:center; box-shadow:0 8px 20px rgba(23,105,255,.45); }
+.login-logo svg { width:30px; height:30px; }
+.login-brand h1 { margin:0; font-size:22px; font-weight:800; color:#102A56; letter-spacing:-.2px; }
+.login-brand p { margin:5px 0 0; font-size:13px; color:#5A6B8A; }
+.login-note { font-size:13px; line-height:1.55; color:#5A6B8A; text-align:center; margin:0 0 18px; }
+.login-note b { color:#102A56; }
+.login-card .login-label { display:block; font-size:13px; font-weight:700; color:#102A56; margin:14px 0 6px; }
+.login-card .login-input { width:100%; background:#F8FAFF; color:#102A56; border:1.5px solid #DCE6F5; border-radius:12px; padding:12px 14px; font-size:15px; }
+.login-card .login-input:focus { outline:none; border-color:#1769FF; box-shadow:0 0 0 3px rgba(23,105,255,.16); background:#fff; }
+.login-card .login-btn { width:100%; padding:13px 14px; border-radius:12px; font-size:15px; }
+.login-card .btn-green { background:#1769FF; }
+.login-card .btn-outline { background:#fff; color:#1769FF; border:2px solid #1769FF; }
+.login-div { display:flex; align-items:center; gap:12px; margin:16px 0; color:#8AA0C2; font-size:12.5px; }
+.login-div::before, .login-div::after { content:""; flex:1; height:1px; background:#DCE6F5; }
+.login-foot { font-size:12.5px; line-height:1.5; color:#5A6B8A; text-align:center; margin:16px 0 0; }
+.login-sub { font-size:12.5px; line-height:1.55; color:rgba(255,255,255,.88); text-align:center; margin:18px 4px 0; }
+.login-sub.dim { color:rgba(255,255,255,.6); margin-top:8px; font-size:12px; }
+.err-text { color:#dc2626; font-size:13px; min-height:18px; margin-top:6px; }
+
 </style>
 <script>try{ if(localStorage.getItem('ml_admin_theme_v1')==='gelap') document.documentElement.setAttribute('data-theme','gelap'); }catch(e){}</script>
 </head>
 <body>
 <header id="appHeader">
 <img id="appLogo" class="app-logo" src="icon.png" alt="MyLapak-Dev">
-<div class="hgrow"><h1>MyLapak-Dev</h1><p>Generate License Code • MyLapak App • v1.3.6</p></div>
+<div class="hgrow"><h1>MyLapak-Dev</h1><p>Generate License Code • MyLapak App • v1.3.6 • code42</p></div>
 </header>
 
-<div id="lockScreen">
-<div class="card hidden" id="pinSetupCard">
-<h2>Atur PIN (sekali saja)</h2>
-<p class="note">PIN ini kunci app di HP ini. Buat PIN 6 angka yang cuma lo tahu. Kalau lupa PIN, data tidak bisa dibuka kecuali lewat file backup + PIN lama.</p>
-<label>PIN baru (6 angka)</label><input type="password" id="pinNew" inputmode="numeric" maxlength="6" placeholder="cth: 123456">
-<label>Ulangi PIN</label><input type="password" id="pinNew2" inputmode="numeric" maxlength="6" placeholder="Ulangi PIN">
-<div style="margin-top:14px"><button class="btn btn-green" onclick="setupPin()">Simpan PIN dan buka app</button></div>
-</div>
-<div class="card hidden" id="pinLockCard">
-<h2>App terkunci</h2>
-<p class="note">Masukkan PIN untuk membuka data Client. App ini terkunci di HP ini: tanpa PIN, data tidak bisa dibuka.</p>
-<label>PIN</label><input type="password" id="pinInput" inputmode="numeric" maxlength="6" placeholder="6 angka">
-<div style="margin-top:14px"><button class="btn btn-green" onclick="unlockPin()">Buka app</button></div>
-<div style="margin-top:12px" class="note" id="pinError" style="color:#b91c1c"></div>
-<hr style="margin:16px 0">
-<h3>Lupa PIN / Pindah HP</h3>
-<p class="note">Lupa PIN? Hapus data aplikasi (Pengaturan Android → Aplikasi → MyLapak-Dev → Hapus data), lalu buka app lagi dan atur PIN baru. Data client tetap aman di cloud — tidak ada yang hilang. Di HP baru, install APK lalu atur PIN: daftar client langsung tersinkron dari cloud. Selesaikan migrasi ke cloud di HP lama dulu bila ada client yang belum pindah.</p>
-</div>
+<div id="loginScreen">
+  <div class="login-bg" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span><span class="blob b4"></span></div>
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-brand">
+        <div class="login-logo"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.7-5h14.6L21 9"/><path d="M4 9v11h16V9"/><path d="M9 20v-6h6v6"/></svg></div>
+        <h1>My Lapak Dev</h1>
+        <p>Panel Developer — Miauw Project</p>
+      </div>
+      <p class="login-note">Satu login untuk masuk <b>sekaligus</b> auth ke Firebase. Abis login, semua menu kebuka. Tidak ada PIN di patch ini.</p>
+      <label class="login-label" for="loginEmail">Email (akun Dev di Firebase Auth)</label>
+      <input type="email" id="loginEmail" class="login-input" value="miauwdesu.project@gmail.com" autocomplete="username">
+      <label class="login-label" for="loginPass">Password</label>
+      <input type="password" id="loginPass" class="login-input" placeholder="password akun Dev" autocomplete="current-password" onkeydown="if(event.key==='Enter')devFbLoginEmail()">
+      <div class="err-text" id="loginError"></div>
+      <div style="margin-top:14px"><button class="btn btn-green login-btn" onclick="devFbLoginEmail()">Login Email (APK)</button></div>
+      <div class="login-div"><span>atau</span></div>
+      <div><button class="btn btn-outline login-btn" onclick="devFbLogin()">Login Google</button></div>
+      <p class="login-foot">Login dengan akun Dev di Firebase Auth. Sesi dipertahankan di HP ini.</p>
+    </div>
+    <p class="login-sub">Sesi dipertahankan — buka app lagi dan sesi masih ada, langsung masuk Client tanpa ketik ulang.</p>
+    <p class="login-sub dim">My Lapak Dev v1.3.6 • code42</p>
+  </div>
 </div>
 
 <main id="appMain" class="hidden">
@@ -180,8 +215,6 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 <button class="btn btn-outline grow hidden" id="migrVerifyBtn" onclick="verifyMigration()">Verifikasi migrasi</button>
 </div>
 <div id="migrCleanWrap" class="hidden" style="margin-top:12px">
-<label>PIN saat ini (6 angka) — untuk membersihkan data lokal yang sudah pindah</label>
-<input type="password" id="migrPin" inputmode="numeric" maxlength="6" placeholder="6 angka">
 <div class="row" style="margin-top:10px"><button class="btn btn-red grow" onclick="cleanupLocal()">Bersihkan data lokal yang sudah pindah</button></div>
 </div>
 </div>
@@ -230,20 +263,17 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 <div class="card" id="devFbCard">
 <h2>Firebase</h2>
 <p class="note">Terhubung otomatis ke proyek toko-mobile-app (config sudah ditanam di app). Daftar perangkat dibaca dari Firestore <b>licenses/{kode}/devices/</b> — sumber yang sama persis dengan app MyLapak utama. Nonaktifkan di sini = set <b>active=false</b> di dokumen device itu.</p>
-<div class="note" id="devFbStatus">Belum terhubung Firebase.</div>
-<label>Email (akun admin di Firebase Auth)</label><input type="email" id="devFbEmail" placeholder="email admin">
-<label>Password</label><input type="password" id="devFbPass" placeholder="password akun admin">
+<div class="note" id="devFbStatus">Belum login.</div>
 <div class="row" style="margin-top:10px">
-<button class="btn btn-green btn-sm" onclick="devFbLogin()">Login Google</button>
-<button class="btn btn-green btn-sm" onclick="devFbLoginEmail()">Login Email (APK)</button>
-<button class="btn btn-outline btn-sm" onclick="devFbLogout()">Keluar Firebase</button>
+<button class="btn btn-outline btn-sm grow" onclick="devFbLogout()">Logout</button>
+<button class="btn btn-outline btn-sm grow" onclick="devFbLogout()">Ganti Akun</button>
 </div>
-<p class="note" style="margin-top:8px">Email diingat di HP ini — login ulang hanya muncul kalau sesi Firebase habis. Sesi dipertahankan otomatis.</p>
+<p class="note" style="margin-top:8px">Logout → kembali ke layar Login. Login dilakukan di layar awal saat buka app.</p>
 </div>
 
 <div class="card" id="listCard">
 <h2>Daftar Client</h2>
-<div class="note" id="syncLabel">Belum tersinkron — hubungkan Firebase dulu.</div>
+<div class="note" id="syncLabel">Belum tersinkron — login dulu di layar awal.</div>
 <div class="row" style="margin-top:8px"><button class="btn btn-outline btn-sm" onclick="syncClients()">Muat Ulang</button><span id="syncSpin" class="hidden" style="font-size:14px"><span class="sp">⟳</span> Menyinkronkan…</span></div>
 <label>Cari nama / kode / WA / Catatan</label><input type="text" id="searchBox" placeholder="Ketik untuk mencari..." oninput="onSearchInput()">
 <label>Filter</label>
@@ -270,26 +300,16 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 <h2>Setting</h2>
 <p class="note">Pilih menu di bawah. Card menu yang lo pilih akan muncul sendiri, menu lain disembunyikan sampai lo kembali.</p>
 <button class="setting-item" onclick="openSettingCard('themeCard','Tema Aplikasi')"><span class="si-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0 0 20c1.5 0 2-1 2-2s-1-2-2-2a4 4 0 0 1-4-4c0-2 1-3 3-3s3-1 3-3-1-3-3-3z"/></svg></span><span class="si-grow">Tema Aplikasi<small>Default (biru logo) atau Gelap</small></span><span class="si-chev">›</span></button>
-<button class="setting-item" onclick="openSettingCard('settingCard','Pengaturan &amp; Kunci')"><span class="si-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="si-grow">PIN<small>Ganti PIN</small></span><span class="si-chev">›</span></button>
 
 
 <button class="setting-item" onclick="openSettingCard('aboutCard','Tentang APK')"><span class="si-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span><span class="si-grow">Tentang APK<small>Versi, package, kunci, dan logo</small></span><span class="si-chev">›</span></button>
 </div>
 
-<div class="card hidden" id="settingCard">
-<h2>PIN</h2>
-<p class="note" id="deviceInfo"></p>
-<label>PIN lama</label><input type="password" id="oldPin" inputmode="numeric" maxlength="6">
-<label>PIN baru (6 angka)</label><input type="password" id="newPin" inputmode="numeric" maxlength="6">
-<div class="row" style="margin-top:10px"><button class="btn btn-outline grow" onclick="changePin()">Ganti PIN</button><button class="btn btn-red grow" onclick="lockApp()">Kunci app sekarang</button></div>
-
-<div class="note" style="margin-top:12px">Data client tersimpan di Firestore (cloud), bukan di HP ini. Mencabut lisensi di sini langsung mengubah status di Firestore — HP Client tidak bisa login sampai lisensi baru dibuat.</div>
-</div>
 
 <div class="card hidden" id="aboutCard">
 <h2>Tentang APK</h2>
 <img class="about-logo" src="logo-dev.png" alt="MyLapak Developer">
-<p class="note">MyLapak-Dev v1.3.6 • My Lapak • Data client di Firestore (cloud).<br>Package APK: com.miauwproject.mylapakadmin • Kunci: PIN 6 angka.<br>Istilah di app ini: Client = pembeli app, Kode lisensi = kode ML-XXXX-XXXX-XXXX.</p>
+<p class="note">MyLapak-Dev v1.3.6 (code42) • My Lapak • Data client di Firestore (cloud).<br>Package APK: com.miauwproject.mylapakadmin • Login: email Dev (Firebase Auth), tanpa PIN.<br>Istilah di app ini: Client = pembeli app, Kode lisensi = kode ML-XXXX-XXXX-XXXX.</p>
 </div>
 
 
@@ -331,16 +351,16 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 <h2>Panduan MyLapak-Dev v1.3.6</h2>
 <h3>Yang berubah di v1.3.6</h3>
 <ul>
-<li>Buka app makin praktis: sesi Firebase dipertahankan — login email hanya muncul kalau sesi habis. PIN 6 angka tetap jadi gerbang buka app + konfirmasi hapus/cabut/bersihkan. Kunci perangkat dihapus (cuma lo yang pakai Dev ini).</li>
+<li>Buka app: layar Login di awal — login email Dev sekaligus auth ke Firebase. Sesi dipertahankan, jadi buka app lagi langsung masuk tanpa ketik ulang. Tanpa PIN: hapus/cabut tinggal dialog konfirmasi. Kunci perangkat dihapus (cuma lo yang pakai Dev ini).</li>
 <li>Buat Client 1 tombol: isi nama toko, nama owner, WA, email toko (wajib), pilih paket, klik Buat Client — toko + lisensi langsung tersimpan di cloud. Tidak ada lagi Generate lalu Simpan.</li>
 <li>1 data: daftar hanya dari cloud. Client lokal yang sudah terikat ke toko hilang otomatis dari daftar lokal — tidak pernah dobel.</li>
 <li>Perangkat ada di dalam kartu client: ketuk Lihat perangkat, daftarnya membuka di kartu itu (lengkap dengan Nonaktifkan/Aktifkan).</li>
-<li>Hapus baris lokal (belum pindah) HANYA menghapus data lokal — lisensi di cloud tidak disentuh. Hapus baris cloud tetap menghapus semuanya (pakai PIN + 2x konfirmasi).</li>
+<li>Hapus baris lokal (belum pindah) HANYA menghapus data lokal — lisensi di cloud tidak disentuh. Hapus baris cloud tetap menghapus semuanya (dialog konfirmasi 2x).</li>
 <li>Toast jelas ala My Absensi (hijau = berhasil, merah = gagal, biru = info) dan menyebut hasil tiap aksi. Export backup lewat share — toast hanya bilang berhasil kalau file beneran tersimpan/dibagikan.</li>
-<li>Setting ringkas: Tema, PIN, Tentang.</li>
+<li>Setting ringkas: Tema, Tentang.</li>
 </ul>
 <h3>Migrasi ke cloud (sekali saja)</h3>
-<p>Saat pertama kali migrasi ke cloud, kartu Migrasi ke cloud muncul di tab Client. Urutannya: Export backup JSON dulu (wajib, tombol migrasi tidak aktif sebelum itu) → Mulai migrasi → Verifikasi migrasi (hitungan + detail) → Bersihkan data lokal (perlu PIN). Client yang belum punya toko tetap tersimpan lokal + badge "belum pindah" sampai tokonya dibuat. Selesaikan migrasi di HP lama sebelum pindah HP.</p>
+<p>Saat pertama kali migrasi ke cloud, kartu Migrasi ke cloud muncul di tab Client. Urutannya: Export backup JSON dulu (wajib, tombol migrasi tidak aktif sebelum itu) → Mulai migrasi → Verifikasi migrasi (hitungan + detail) → Bersihkan data lokal. Client yang belum punya toko tetap tersimpan lokal + badge "belum pindah" sampai tokonya dibuat. Selesaikan migrasi di HP lama sebelum pindah HP.</p>
 <h3>Cara pakai Client</h3>
 <p>Tab Client menampilkan daftar client dari cloud. Cari lewat kotak Cari nama / kode / WA / Catatan, filter status, urutkan lewat kotak Urutkan. Tiap baris: nama toko, kode lisensi, paket, tanggal hangus, WA, status. Tombol: Salin kode, Lihat perangkat, Perpanjang, Cabut, Hapus. Label "Terakhir sync" menunjukkan kapan daftar terakhir diperbarui. Perangkat dibuka di dalam kartu client itu — bukan panel di bawah daftar.</p>
 <h3>Cara pakai Generator (Buat Client)</h3>
@@ -350,12 +370,12 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 <h3>Cara pakai Pendaftar</h3>
 <p>Pendaftaran dari form Daftar Toko muncul di tab Pendaftar (badge merah = jumlah menunggu). Klik Lihat Detail untuk memeriksa, lalu SETUJUI &amp; AKTIFKAN untuk membuat toko + lisensi otomatis, atau Tolak.</p>
 <h3>Cara pakai Setting</h3>
-<p>Setting berisi: Tema Aplikasi, PIN (ganti PIN), Tentang APK.</p>
+<p>Setting berisi: Tema Aplikasi, Tentang APK.</p>
 <h3>Kalau ada masalah</h3>
 <ul>
 <li>Kode tidak valid di HP Client: pastikan dokumen licenses ada, field type dan status active, dan expiresAt belum lewat (kecuali Lifetime tanpa expiresAt). Perpanjang dari Dev menulis langsung ke Firestore — tidak perlu cek console lagi.</li>
 <li>Tulis ke Firestore ditolak (permission-denied): kemungkinan rules baru (v1.3.6) belum dipublish di Console. Publish rules dulu, baru pakai fitur tulis.</li>
-<li>Lupa PIN: hapus data aplikasi lalu atur PIN baru. Data client tetap di cloud.</li>
+<li>Lupa password login: reset lewat Firebase Console (Authentication → pengguna miauwdesu.project@gmail.com → reset password). Data client tetap di cloud.</li>
 </ul>
 <div style="margin-top:14px"><button class="btn btn-outline" style="width:100%" onclick="goBack()">Kembali</button></div>
 </div>
@@ -369,14 +389,6 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 </nav>
 
 <div id="toast" class="toast" onclick="hideToast()"><span class="t-ic" id="toastIc"></span><span id="toastMsg"></span></div>
-<div id="pinActionModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:70;display:flex;align-items:center;justify-content:center;padding:16px">
-<div class="card" style="width:100%;max-width:380px;margin:0">
-<h2>Konfirmasi PIN</h2>
-<p class="note" id="pinActionLabel">Konfirmasi aksi ini dengan PIN.</p>
-<label>PIN (6 angka)</label><input type="password" id="pinActionInput" inputmode="numeric" maxlength="6" placeholder="6 angka">
-<div class="note" id="pinActionError" style="color:#b91c1c;margin-top:8px"></div>
-<div class="row" style="margin-top:14px"><button class="btn btn-green grow" onclick="confirmPinAction()">Konfirmasi</button><button class="btn btn-outline grow" onclick="cancelPinAction()">Batal</button></div>
-</div></div>
 <script>
 var CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 var PKGS = {
@@ -388,7 +400,6 @@ var sel = 'langganan';
 var cur = null;
 var customers = [];
 var LS_CUST = 'ml_admin_customers_v2';
-var LS_PIN = 'ml_admin_pin_hash_v2';
 
 function pad(n){ return (n < 10 ? '0' : '') + n; }
 function fmt(d){ return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
@@ -469,12 +480,7 @@ function saveCustomers(){ localStorage.setItem(LS_CUST, JSON.stringify(customers
 
 
 
-function showLockCard(which){
-  ['pinSetupCard','pinLockCard'].forEach(function(id){
-    var el = document.getElementById(id); if(el) el.classList.add('hidden');
-  });
-  var el = document.getElementById(which); if(el) el.classList.remove('hidden');
-}
+
 
 function dispStatus(c){
   if (c.status === 'revoked') return { label: 'Dicabut', cls: 'badge-grey' };
@@ -522,7 +528,7 @@ async function saveCurrentCustomer(){
   if (!cur) { generate(); }
   if (typeof findCloud === 'function' && findCloud(cur.code)) { showToast('Kode ini sudah ada di daftar cloud', 'err'); return false; }
   if (findCust(cur.code)) { showToast('Kode ini sudah ada di daftar lokal (belum pindah)', 'err'); return false; }
-  if (!DEV_FB || !DEV_FB.db) { showToast('Hubungkan Firebase dulu — simpan butuh online', 'err'); return false; }
+  if (!DEV_FB || !DEV_FB.db) { showToast('Login dulu di layar awal — simpan butuh online', 'err'); return false; }
   if (typeof navigator !== 'undefined' && navigator.onLine === false) { showToast('Offline — simpan butuh internet', 'err'); return false; }
   try {
     var shopCode = await genShopCode();
@@ -576,73 +582,30 @@ function updateGenPreview(){
   document.getElementById('syncNote').textContent = 'Belum dibuat — isi form di atas lalu klik Buat Client.';
 }
 
-var pinActionCb = null;
-function askPinAction(label, cb){
-  pinActionCb = cb || null;
-  var m = document.getElementById('pinActionModal');
-  var l = document.getElementById('pinActionLabel');
-  if (l) l.textContent = 'Konfirmasi dengan PIN untuk: ' + label + '.';
-  var inp = document.getElementById('pinActionInput');
-  if (inp) inp.value = '';
-  var err = document.getElementById('pinActionError');
-  if (err) err.textContent = '';
-  if (m) m.classList.remove('hidden');
-  if (inp) { try { inp.focus(); } catch(e) {} }
-}
-async function confirmPinAction(){
-  var inp = document.getElementById('pinActionInput');
-  var pin = inp ? inp.value.trim() : '';
-  var err = document.getElementById('pinActionError');
-  if (!/^[0-9]{6}$/.test(pin)) { if (err) err.textContent = 'PIN harus 6 angka.'; return; }
-  var h = await sha256(pin);
-  if (h !== localStorage.getItem(LS_PIN)) { if (err) err.textContent = 'PIN salah. Aksi dibatalkan.'; showToast('PIN salah — aksi dibatalkan', 'err'); return; }
-  var cb = pinActionCb; pinActionCb = null;
-  var m = document.getElementById('pinActionModal');
-  if (m) m.classList.add('hidden');
-  if (cb) cb();
-}
-function cancelPinAction(){
-  pinActionCb = null;
-  var m = document.getElementById('pinActionModal');
-  if (m) m.classList.add('hidden');
-}
 
 
 
 
-async function setupPin(){
-  var p1 = document.getElementById('pinNew').value.trim();
-  var p2 = document.getElementById('pinNew2').value.trim();
-  if (!/^[0-9]{6}$/.test(p1)) { alert('PIN harus 6 angka.'); return; }
-  if (p1 !== p2) { alert('PIN tidak sama, ulangi.'); return; }
-  var h = await sha256(p1);
-  localStorage.setItem(LS_PIN, h);
-  loadCustomers(); showApp();
-}
-async function unlockPin(){
-  var p = document.getElementById('pinInput').value.trim();
-  var h = await sha256(p);
-  if (h === localStorage.getItem(LS_PIN)) { loadCustomers(); showApp(); }
-  else { document.getElementById('pinError').textContent = 'PIN salah. Coba lagi.'; }
-}
 
 
 
-function lockApp(){
-  document.getElementById('appMain').classList.add('hidden');
-  document.getElementById('lockScreen').classList.remove('hidden');
-  showLockCard('pinLockCard');
-  document.getElementById('pinInput').value = '';
+
+
+// code42: tanpa PIN — gerbangnya layar Login (#loginScreen), bukan PIN.
+function showLoginScreen(){
+  if (typeof stopSyncTimer === 'function') stopSyncTimer();
+  var am = document.getElementById('appMain'); if (am) am.classList.add('hidden');
+  var nv = document.getElementById('bottomNav'); if (nv) nv.classList.add('hidden');
+  var hd = document.getElementById('appHeader'); if (hd) hd.classList.add('hidden');
+  var ls = document.getElementById('loginScreen'); if (ls) ls.classList.remove('hidden');
+  var le = document.getElementById('loginError'); if (le) le.textContent = '';
+  var lp = document.getElementById('loginPass'); if (lp) lp.value = '';
+  try { window.scrollTo(0, 0); } catch(e) {}
 }
 function showApp(){
-  document.getElementById('lockScreen').classList.add('hidden');
+  var ls = document.getElementById('loginScreen'); if (ls) ls.classList.add('hidden');
+  var hd = document.getElementById('appHeader'); if (hd) hd.classList.remove('hidden');
   document.getElementById('appMain').classList.remove('hidden');
-  var acc = '(belum terhubung Firebase)';
-  try {
-    if (typeof DEV_FB !== 'undefined' && DEV_FB && DEV_FB.auth && DEV_FB.auth.currentUser) acc = DEV_FB.auth.currentUser.email || DEV_FB.auth.currentUser.uid || acc;
-  } catch(e) {}
-  var di = document.getElementById('deviceInfo');
-  if (di) di.textContent = 'Masuk sebagai: ' + acc + '. PIN 6 angka melindungi app ini.';
   renderCustomers();
 }
 document.getElementById('pkgs').addEventListener('click', function(e){
@@ -656,13 +619,7 @@ document.getElementById('pkgs').addEventListener('click', function(e){
 document.getElementById('saveCustBtn').addEventListener('click', saveNewClient);
 (function init(){
   loadCustomers();
-  document.getElementById('lockScreen').classList.remove('hidden');
-  var pinHash = localStorage.getItem(LS_PIN);
-  if (!pinHash) {
-    showLockCard('pinSetupCard');
-  } else {
-    showLockCard('pinLockCard');
-  }
+  showLoginScreen();
   updateGenPreview();
 })();
 </script>
@@ -850,7 +807,7 @@ async function addOldCustomer(){
   if (type === 'lifetime') exp = null;
   if (typeof findCloud === 'function' && findCloud(code)) { alert('Kode ini sudah ada di daftar cloud.'); return; }
   if (findCust(code)) { alert('Kode ini sudah ada di daftar lokal (belum pindah).'); return; }
-  if (!DEV_FB || !DEV_FB.db) { alert('Hubungkan Firebase dulu — tambah client lama butuh online untuk cek lisensi.'); return; }
+  if (!DEV_FB || !DEV_FB.db) { alert('Login dulu di layar awal — tambah client lama butuh online untuk cek lisensi.'); return; }
   try {
     var snap = await DEV_FB.db.collection('licenses').doc(code).get();
     if (!snap.exists) { alert('Kode tidak ditemukan di Firestore. Pastikan lisensi sudah dibuat.'); return; }
@@ -874,8 +831,7 @@ async function addOldCustomer(){
 
 
 async function exportBackup(){
-  var pinHash = localStorage.getItem(LS_PIN) || '';
-  var data = { app: 'my-lapak-admin-lisensi', version: 4, exportedAt: new Date().toISOString(), pinCheck: pinHash, customers: customers, cloudClients: (typeof cloudClients !== 'undefined') ? cloudClients : [] };
+  var data = { app: 'my-lapak-admin-lisensi', version: 4, exportedAt: new Date().toISOString(), customers: customers, cloudClients: (typeof cloudClients !== 'undefined') ? cloudClients : [] };
   var json = JSON.stringify(data, null, 2);
   var fname = 'my-lapak-pelanggan-backup-' + todayStr() + '.json';
   var saved = false;
@@ -910,16 +866,7 @@ async function exportBackup(){
 
 
 
-async function changePin(){
-  var oldP = document.getElementById('oldPin').value.trim();
-  var newP = document.getElementById('newPin').value.trim();
-  var hOld = await sha256(oldP);
-  if (hOld !== localStorage.getItem(LS_PIN)) { alert('PIN lama salah.'); return; }
-  if (!/^[0-9]{6}$/.test(newP)) { alert('PIN baru harus 6 angka.'); return; }
-  localStorage.setItem(LS_PIN, await sha256(newP));
-  document.getElementById('oldPin').value = ''; document.getElementById('newPin').value = '';
-  showToast('PIN berhasil diganti', 'ok');
-}
+
 
 
 
@@ -963,7 +910,7 @@ function calcExtend(kind, val){
 async function saveExtend(){
   var g = getClient(extendCode); if (!g || !g.rec) return;
   var c = g.rec;
-  if (!DEV_FB || !DEV_FB.db) { showToast('Hubungkan Firebase dulu — perpanjangan butuh online'); return; }
+  if (!DEV_FB || !DEV_FB.db) { showToast('Login dulu di layar awal — perpanjangan butuh online'); return; }
   if (typeof navigator !== 'undefined' && navigator.onLine === false) { showToast('Offline — perpanjangan butuh internet'); return; }
   var ns = document.getElementById('extNewExp').value;
   if (extMode !== 'unlimited' && !ns) { alert('Isi tanggal hangus baru dulu, atau klik +7 hari / +3 bulan / Unlimited.'); return; }
@@ -1019,7 +966,7 @@ function renderPendaftar(){
     else badge.style.display = 'none';
   }
   if (!DEV_FB || !DEV_FB.db) {
-    if (list) list.innerHTML = '<div class="note">Hubungkan Firebase dulu (tab Client → bagian Firebase) untuk melihat pendaftar.</div>';
+    if (list) list.innerHTML = '<div class="note">Login dulu di layar awal untuk melihat pendaftar.</div>';
     if (cnt) cnt.textContent = '';
     setBadge(0);
     return;
@@ -1107,7 +1054,7 @@ function regDetailVisible(){
 async function approveReg(id){
   if (!id && curReg) id = curReg._id;
   if (!id) { showToast('Pendaftar tidak ditemukan'); return; }
-  if (!DEV_FB || !DEV_FB.db) { showToast('Hubungkan Firebase dulu'); return; }
+  if (!DEV_FB || !DEV_FB.db) { showToast('Login dulu di layar awal'); return; }
   var r = null;
   for (var i = 0; i < pendingRegs.length; i++) if (pendingRegs[i]._id === id) r = pendingRegs[i];
   if (!r && curReg && curReg._id === id) r = curReg;
@@ -1153,7 +1100,7 @@ async function approveReg(id){
 async function rejectReg(id){
   if (!id && curReg) id = curReg._id;
   if (!id) { showToast('Pendaftar tidak ditemukan'); return; }
-  if (!DEV_FB || !DEV_FB.db) { showToast('Hubungkan Firebase dulu'); return; }
+  if (!DEV_FB || !DEV_FB.db) { showToast('Login dulu di layar awal'); return; }
   if (!confirm('Tolak pendaftaran ini?')) return;
   try {
     await DEV_FB.db.collection('registrations').doc(id).update({status:'ditolak', decidedAt: firebase.firestore.FieldValue.serverTimestamp()});
@@ -1168,28 +1115,13 @@ async function rejectReg(id){
 
 function openGuide(){ openDetail('viewGuide'); }
 
-function lockApp(){
-  if (typeof stopSyncTimer === 'function') stopSyncTimer();
-  document.getElementById('appMain').classList.add('hidden');
-  var nav = document.getElementById('bottomNav'); if (nav) nav.classList.add('hidden');
-  var hb = document.getElementById('pageHelpBtn'); if (hb) hb.classList.add('hidden');
-  var bb = document.getElementById('pageBackBtn'); if (bb) bb.classList.add('hidden');
-  document.getElementById('lockScreen').classList.remove('hidden');
-  showLockCard('pinLockCard');
-  document.getElementById('pinInput').value = '';
-  detailStack = []; tabHistory = ['client']; currentTab = 'client';
-}
+
 function showApp(){
-  document.getElementById('lockScreen').classList.add('hidden');
+  var ls = document.getElementById('loginScreen'); if (ls) ls.classList.add('hidden');
+  var hd = document.getElementById('appHeader'); if (hd) hd.classList.remove('hidden');
   document.getElementById('appMain').classList.remove('hidden');
   var nav = document.getElementById('bottomNav'); if (nav) nav.classList.remove('hidden');
   var hb = document.getElementById('pageHelpBtn'); if (hb) hb.classList.remove('hidden');
-  var acc = '(belum terhubung Firebase)';
-  try {
-    if (typeof DEV_FB !== 'undefined' && DEV_FB && DEV_FB.auth && DEV_FB.auth.currentUser) acc = DEV_FB.auth.currentUser.email || DEV_FB.auth.currentUser.uid || acc;
-  } catch(e) {}
-  var di = document.getElementById('deviceInfo');
-  if (di) di.textContent = 'Masuk sebagai: ' + acc + '. PIN 6 angka melindungi app ini.';
   tabHistory = ['client']; detailStack = []; currentTab = 'client';
   showTab('client');
   if (typeof startSyncTimer === 'function') startSyncTimer();
@@ -1211,8 +1143,8 @@ try {
 
 // ===== v1.2 patch: tema, pageBar sliver, Setting jadi menu =====
 var LS_THEME = 'ml_admin_theme_v1';
-var SETTING_CARDS = ['settingCard','aboutCard','themeCard'];
-var SETTING_TITLES = { settingCard:'PIN', aboutCard:'Tentang APK', themeCard:'Tema Aplikasi' };
+var SETTING_CARDS = ['aboutCard','themeCard'];
+var SETTING_TITLES = { aboutCard:'Tentang APK', themeCard:'Tema Aplikasi' };
 function getTheme(){ try { return localStorage.getItem(LS_THEME) || 'default'; } catch(e) { return 'default'; } }
 function setTheme(t){
   try { localStorage.setItem(LS_THEME, t); } catch(e) {}
@@ -1401,6 +1333,7 @@ async function devFbLogin(){
     var u = auth.currentUser;
     devFbSetStatus('Terhubung Firebase sebagai ' + (u ? (u.email || u.uid) : 'login') + '. Memuat daftar client…');
     showToast('Firebase terhubung', 'ok');
+    showApp();
     if (typeof syncClients === 'function') syncClients();
   } catch(e) {
     DEV_FB = null;
@@ -1411,13 +1344,15 @@ async function devFbLogin(){
 async function devFbLogout(){
   try { if (DEV_FB && DEV_FB.auth) await DEV_FB.auth.signOut(); } catch(e) {}
   DEV_FB = null;
-  devFbSetStatus('Belum terhubung Firebase.');
-  showToast('Keluar Firebase');
+  if (typeof stopSyncTimer === 'function') stopSyncTimer();
+  devFbSetStatus('Belum login.');
+  showLoginScreen();
+  showToast('Sudah logout — silakan login lagi', 'info');
 }
 async function devFbLoginEmail(){
-  var emailEl = document.getElementById('devFbEmail'), passEl = document.getElementById('devFbPass');
+  var emailEl = document.getElementById('loginEmail'), passEl = document.getElementById('loginPass');
   var email = emailEl ? emailEl.value.trim() : '', pass = passEl ? passEl.value : '';
-  if (!email || !pass) { showToast('Isi email dan password dulu', 'err'); return; }
+  if (!email || !pass) { showToast('Isi email dan password dulu', 'err'); var le0 = document.getElementById('loginError'); if (le0) le0.textContent = 'Isi email dan password dulu.'; return; }
   devFbSetStatus('Menghubungkan Firebase... (memuat library, tunggu 5-10 detik, jangan ketuk tombol lagi)');
   showToast('Menghubungkan Firebase...', 'info');
   var cfg = devFbConfig();
@@ -1433,6 +1368,7 @@ async function devFbLoginEmail(){
     var u = auth.currentUser;
     devFbSetStatus('Terhubung Firebase sebagai ' + (u ? (u.email || u.uid) : 'login email') + '. Memuat daftar client…');
     showToast('Firebase terhubung sebagai ' + (u ? (u.email || 'login email') : 'login email'), 'ok');
+    showApp();
     if (typeof syncClients === 'function') {
       await syncClients();
     }
@@ -1440,6 +1376,7 @@ async function devFbLoginEmail(){
     DEV_FB = null;
     devFbSetStatus('Gagal login Email: ' + (e.message || e));
     showToast('Gagal login Email: ' + (e.message || e), 'err');
+    var le = document.getElementById('loginError'); if (le) le.textContent = 'Gagal login: ' + (e.message || e);
   }
 }
 function devFbRestore(){
@@ -1447,7 +1384,7 @@ function devFbRestore(){
   if (!cfg || !cfg.apiKey) return;
   try {
     var em = localStorage.getItem(LS_DEV_EMAIL);
-    if (em) { var eEl = document.getElementById('devFbEmail'); if (eEl && !eEl.value) eEl.value = em; }
+    if (em) { var eEl = document.getElementById('loginEmail'); if (eEl && !eEl.value) eEl.value = em; }
   } catch(e) {}
   devLoadFirebase(cfg).then(function(){
     if (!firebase.apps.length) firebase.initializeApp(cfg);
@@ -1459,7 +1396,15 @@ function devFbRestore(){
         devFbSetStatus('Terhubung Firebase sebagai ' + (u.email || u.uid) + '. Ketuk Lihat perangkat di Client untuk memuat daftar.');
         try {
           var am = document.getElementById('appMain');
-          if (am && !am.classList.contains('hidden') && typeof syncClients === 'function') syncClients();
+          if (am && am.classList.contains('hidden')) {
+            if (typeof showApp === 'function') showApp();
+          } else if (typeof syncClients === 'function') syncClients();
+        } catch(e) {}
+      } else {
+        // Sesi habis / logout di tempat lain: kembali ke layar Login (kalau app sedang terbuka).
+        try {
+          var am2 = document.getElementById('appMain');
+          if (am2 && !am2.classList.contains('hidden')) { DEV_FB = null; if (typeof showLoginScreen === 'function') showLoginScreen(); }
         } catch(e) {}
       }
     });
@@ -1473,7 +1418,7 @@ async function devLoadDevices(code){
   var box = document.getElementById('devbox-' + devSafeId(code));
   var sumSpan = document.getElementById('devsum-' + devSafeId(code));
   if (!DEV_FB || !DEV_FB.db) {
-    if (box) box.innerHTML = '<p class="note">Belum terhubung Firebase — daftar perangkat tidak bisa dibaca. Hubungkan dulu, karena daftar ini dibaca dari Firestore, bukan dari daftar lokal.</p>';
+    if (box) box.innerHTML = '<p class="note">Belum login — daftar perangkat tidak bisa dibaca. Login dulu di layar awal, karena daftar ini dibaca dari Firestore, bukan dari daftar lokal.</p>';
     return null;
   }
   if (box) box.innerHTML = '<p class="note">Memuat...</p>';
@@ -1527,7 +1472,7 @@ function devToggleDevices(code){
   devLoadDevices(code);
 }
 async function devDeactivateDevice(code, did){
-  if (!DEV_FB || !DEV_FB.db) { showToast('Hubungkan Firebase dulu', 'err'); return; }
+  if (!DEV_FB || !DEV_FB.db) { showToast('Login dulu di layar awal', 'err'); return; }
   if (!confirm('Nonaktifkan perangkat ini? Slot akan bebas untuk HP baru. Perubahan ini langsung terlihat di MyLapak utama saat dibuka / Refresh berikutnya.')) return;
   try {
     await DEV_FB.db.collection('licenses').doc(code).collection('devices').doc(did).set({ active: false, deactivatedAt: new Date().toISOString() }, { merge: true });
@@ -1536,7 +1481,7 @@ async function devDeactivateDevice(code, did){
   } catch(e) { showToast('Gagal: ' + (e.message || e), 'err'); }
 }
 async function devReactivateDevice(code, did){
-  if (!DEV_FB || !DEV_FB.db) { showToast('Hubungkan Firebase dulu', 'err'); return; }
+  if (!DEV_FB || !DEV_FB.db) { showToast('Login dulu di layar awal', 'err'); return; }
   try {
     var snap = await DEV_FB.db.collection('licenses').doc(code).collection('devices').get();
     var active = 0;
@@ -1559,7 +1504,7 @@ try { devFbRestore(); } catch(e) {}
 </script>
 
 <script>
-// ===== v1.3.6: daftar client dari cloud + migrasi 1x + sync berkala (1 data, PIN aksi, tanpa kunci perangkat) =====
+// ===== v1.3.6 code42: daftar client dari cloud + migrasi 1x + sync berkala (1 data, tanpa PIN, tanpa kunci perangkat) =====
 // Daftar client dibaca dari licensedShops (1 query get() per refresh, N read,
 // tanpa listener). Daftar lokal (LS_CUST) hanya untuk client "belum pindah"
 // (tanpa toko) — bukan sumber ganda.
@@ -1655,9 +1600,9 @@ async function syncClients(){
     var cache0 = loadCloudCache();
     if (cache0 && cache0.clients.length) {
       cloudClients = cache0.clients;
-      setSyncLabel('Belum terhubung Firebase — menampilkan cache terakhir (' + (cache0.syncedAt || '').slice(0, 16).replace('T', ' ') + '). Hubungkan Firebase di bawah.');
+      setSyncLabel('Belum login — menampilkan cache terakhir (' + (cache0.syncedAt || '').slice(0, 16).replace('T', ' ') + '). Login di layar awal untuk data terbaru.');
     } else {
-      setSyncLabel('Belum terhubung Firebase. Login di kartu Firebase di bawah untuk memuat daftar client.');
+      setSyncLabel('Belum login. Masuk lewat layar Login untuk memuat daftar client.');
     }
     safeRenderCustomers();
     return;
@@ -1741,7 +1686,7 @@ function renderMigrCard(){
   var body = document.getElementById('migrBody');
   var N = local.length;
   var html = '<b>' + N + ' client lokal akan dipindah ke cloud.</b><br>';
-  html += 'Urutan: 1) Export backup JSON dulu (wajib) → 2) Mulai migrasi → 3) Verifikasi → 4) Bersihkan data lokal (perlu PIN).<br>';
+  html += 'Urutan: 1) Export backup JSON dulu (wajib) → 2) Mulai migrasi → 3) Verifikasi → 4) Bersihkan data lokal.<br>';
   html += 'Backup JSON sesi ini: ' + (migState.backupDone ? 'sudah diekspor ✓' : 'belum — tombol migrasi tidak aktif sampai backup diekspor') + '.<br>';
   if (run) {
     html += 'Hasil migrasi terakhir: berhasil pindah ' + run.M + ' dari ' + run.N + ' • belum pindah ' + run.K + ' (tanpa toko)' + (run.failed && run.failed.length ? ' • gagal ' + run.failed.length : '') + '.<br>';
@@ -1777,7 +1722,7 @@ async function moveOneClient(c){
 }
 async function runMigration(){
   if (!migState.backupDone) { showToast('Export backup JSON dulu (wajib) sebelum migrasi'); return; }
-  if (!DEV_FB || !DEV_FB.db) { showToast('Hubungkan Firebase dulu'); return; }
+  if (!DEV_FB || !DEV_FB.db) { showToast('Login dulu di layar awal'); return; }
   var local = customers.slice();
   var N = local.length;
   if (!N) { showToast('Tidak ada client lokal untuk dipindah'); return; }
@@ -1796,7 +1741,7 @@ async function runMigration(){
 async function verifyMigration(){
   var run = migState.run || migrLoadRun();
   if (!run) { showToast('Jalankan migrasi dulu'); return; }
-  if (!DEV_FB || !DEV_FB.db) { showToast('Hubungkan Firebase dulu'); return; }
+  if (!DEV_FB || !DEV_FB.db) { showToast('Login dulu di layar awal'); return; }
   var countOk = (run.M === run.N - run.K);
   var detailOk = true, detailFail = [];
   for (var i = 0; i < run.movedCodes.length; i++) {
@@ -1825,11 +1770,6 @@ async function verifyMigration(){
 async function cleanupLocal(){
   var run = migState.run || migrLoadRun();
   if (!run || !run.verified) { showToast('Verifikasi migrasi dulu sebelum membersihkan data lokal'); return; }
-  var pinEl = document.getElementById('migrPin');
-  var pin = pinEl ? pinEl.value.trim() : '';
-  if (!/^[0-9]{6}$/.test(pin)) { alert('Masukkan PIN 6 angka dulu.'); return; }
-  var h = await sha256(pin);
-  if (h !== localStorage.getItem(LS_PIN)) { alert('PIN salah. Bersihkan data lokal dibatalkan.'); return; }
   var moved = {};
   (run.movedCodes || []).forEach(function(c){ moved[c] = true; });
   var kept = customers.filter(function(c){ return !moved[c.code]; });
@@ -1839,14 +1779,13 @@ async function cleanupLocal(){
   else saveCustomers();
   run.cleaned = true;
   migrSaveRun(run);
-  if (pinEl) pinEl.value = '';
   renderMigrCard(); renderCustomers();
   showToast('Data lokal yang sudah pindah dibersihkan (' + removed + ' client). Yang belum pindah tetap tersimpan lokal.');
 }
 async function retryMoveClient(code){
   var c = findCust(code);
   if (!c) { showToast('Client tidak ditemukan di daftar lokal'); return; }
-  if (!DEV_FB || !DEV_FB.db) { showToast('Hubungkan Firebase dulu'); return; }
+  if (!DEV_FB || !DEV_FB.db) { showToast('Login dulu di layar awal'); return; }
   var r = await moveOneClient(c);
   if (r.ok) {
     var run = migState.run || migrLoadRun() || { N: customers.length, M: 0, K: 0, failed: [], movedCodes: [], verified: false, cleaned: false, at: new Date().toISOString() };
@@ -1868,13 +1807,13 @@ async function retryMoveClient(code){
 async function revokeCloud(code){
   var g = getClient(code);
   if (!g || !g.rec) return;
-  askPinAction('Cabut lisensi ' + code, function(){ revokeCloudConfirmed(code); });
+  revokeCloudConfirmed(code);
 }
 async function revokeCloudConfirmed(code){
   var g = getClient(code);
   if (!g || !g.rec) return;
   if (!confirm('Cabut lisensi ' + code + '? HP Client tidak bisa login sampai lisensi baru dibuat. Status di Firestore jadi revoked.')) return;
-  if (!DEV_FB || !DEV_FB.db) { showToast('Hubungkan Firebase dulu — cabut butuh online', 'err'); return; }
+  if (!DEV_FB || !DEV_FB.db) { showToast('Login dulu di layar awal — cabut butuh online', 'err'); return; }
   if (typeof navigator !== 'undefined' && navigator.onLine === false) { showToast('Offline — cabut butuh internet', 'err'); return; }
   try {
     await DEV_FB.db.collection('licenses').doc(code).update({ status: 'revoked' });
@@ -1890,14 +1829,14 @@ async function revokeCloudConfirmed(code){
 async function deleteCloud(code){
   var g = getClient(code);
   if (!g || !g.rec) return;
-  askPinAction('Hapus client ' + code, function(){ deleteCloudConfirmed(code); });
+  deleteCloudConfirmed(code);
 }
 async function deleteCloudConfirmed(code){
   var g = getClient(code);
   if (!g || !g.rec) return;
   if (!confirm('HAPUS SEMUA untuk ' + code + '? Ini menghapus licensedShops + licenses + menonaktifkan semua perangkat. TIDAK BISA DIBATALKAN — lisensi tidak bisa diaktifkan lagi, harus buat baru. Data toko (produk/transaksi) tetap.')) return;
   if (!confirm('Yakin? Ketuk OK untuk menghapus permanen.')) return;
-  if (!DEV_FB || !DEV_FB.db) { showToast('Hubungkan Firebase dulu — hapus butuh online', 'err'); return; }
+  if (!DEV_FB || !DEV_FB.db) { showToast('Login dulu di layar awal — hapus butuh online', 'err'); return; }
   if (typeof navigator !== 'undefined' && navigator.onLine === false) { showToast('Offline — hapus butuh internet', 'err'); return; }
   try {
     var snap = await DEV_FB.db.collection('licenses').doc(code).collection('devices').get();
@@ -1919,7 +1858,8 @@ async function deleteCloudConfirmed(code){
 async function deleteLocal(code){
   var c = (typeof findCust === 'function') ? findCust(code) : null;
   if (!c) { showToast('Client lokal tidak ditemukan', 'err'); return; }
-  askPinAction('Hapus client lokal ' + (c.name || code), function(){ deleteLocalConfirmed(code); });
+  if (!confirm('Hapus client lokal ' + (c.name || code) + '? Data cloud tidak disentuh.')) return;
+  deleteLocalConfirmed(code);
 }
 function deleteLocalConfirmed(code){
   customers = customers.filter(function(c){ return c.code !== code; });
