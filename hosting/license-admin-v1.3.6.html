@@ -127,7 +127,7 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 .devbox .cust { margin-top:10px; }
 
 
-/* ---- Layar Login profesional (code42): background brand + kartu floating ---- */
+/* ---- Layar Login profesional (code43): background brand + kartu floating ---- */
 #loginScreen { position:relative; min-height:100vh; min-height:100dvh; background:linear-gradient(160deg,#1769FF 0%,#0F56D6 42%,#102A56 100%); overflow:hidden; display:flex; align-items:center; justify-content:center; padding:32px 16px; }
 .login-bg { position:absolute; inset:0; overflow:hidden; pointer-events:none; }
 .blob { position:absolute; border-radius:50%; }
@@ -157,13 +157,20 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 .login-sub.dim { color:rgba(255,255,255,.6); margin-top:8px; font-size:12px; }
 .err-text { color:#dc2626; font-size:13px; min-height:18px; margin-top:6px; }
 
+
+/* ---- Empty-state Pendaftar (code43): ikon besar + judul + penjelasan ---- */
+.reg-empty { text-align:center; padding:28px 12px 22px; }
+.reg-empty svg { width:64px; height:64px; }
+.reg-empty-title { font-weight:800; font-size:16px; color:#102A56; margin-top:10px; }
+.reg-empty .note { margin-top:6px; }
+
 </style>
 <script>try{ if(localStorage.getItem('ml_admin_theme_v1')==='gelap') document.documentElement.setAttribute('data-theme','gelap'); }catch(e){}</script>
 </head>
 <body>
 <header id="appHeader">
 <img id="appLogo" class="app-logo" src="icon.png" alt="MyLapak-Dev">
-<div class="hgrow"><h1>MyLapak-Dev</h1><p>Generate License Code • MyLapak App • v1.3.6 • code42</p></div>
+<div class="hgrow"><h1>MyLapak-Dev</h1><p>Generate License Code • MyLapak App • v1.3.6 • code43</p></div>
 </header>
 
 <div id="loginScreen">
@@ -187,7 +194,7 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
       <p class="login-foot">Login dengan akun Dev di Firebase Auth. Sesi dipertahankan di HP ini.</p>
     </div>
     <p class="login-sub">Sesi dipertahankan — buka app lagi dan sesi masih ada, langsung masuk Client tanpa ketik ulang.</p>
-    <p class="login-sub dim">My Lapak Dev v1.3.6 • code42</p>
+    <p class="login-sub dim">My Lapak Dev v1.3.6 • code43</p>
   </div>
 </div>
 
@@ -288,6 +295,7 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 <p class="note">Client ini belum punya toko, jadi belum bisa dibuatkan dokumen cloud. Tetap tersimpan lokal sampai tokonya dibuat.</p>
 <div id="unmovedList"></div>
 </div>
+</div>
 <div class="card hidden" id="pendaftarCard">
 <h2>Pendaftar Baru</h2>
 <p class="note">Pendaftaran dari form Daftar Toko. Yang menunggu persetujuan tampil di sini — terbaru di atas. Setujui untuk membuat toko + lisensi otomatis.</p>
@@ -309,7 +317,7 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 <div class="card hidden" id="aboutCard">
 <h2>Tentang APK</h2>
 <img class="about-logo" src="logo-dev.png" alt="MyLapak Developer">
-<p class="note">MyLapak-Dev v1.3.6 (code42) • My Lapak • Data client di Firestore (cloud).<br>Package APK: com.miauwproject.mylapakadmin • Login: email Dev (Firebase Auth), tanpa PIN.<br>Istilah di app ini: Client = pembeli app, Kode lisensi = kode ML-XXXX-XXXX-XXXX.</p>
+<p class="note">MyLapak-Dev v1.3.6 (code43) • My Lapak • Data client di Firestore (cloud).<br>Package APK: com.miauwproject.mylapakadmin • Login: email Dev (Firebase Auth), tanpa PIN.<br>Istilah di app ini: Client = pembeli app, Kode lisensi = kode ML-XXXX-XXXX-XXXX.</p>
 </div>
 
 
@@ -591,7 +599,7 @@ function updateGenPreview(){
 
 
 
-// code42: tanpa PIN — gerbangnya layar Login (#loginScreen), bukan PIN.
+// code43: tanpa PIN — gerbangnya layar Login (#loginScreen), bukan PIN.
 function showLoginScreen(){
   if (typeof stopSyncTimer === 'function') stopSyncTimer();
   var am = document.getElementById('appMain'); if (am) am.classList.add('hidden');
@@ -982,7 +990,7 @@ function renderPendaftar(){
     });
     setBadge(pendingRegs.length);
     if (!pendingRegs.length) {
-      if (list) list.innerHTML = '<div class="note">Tidak ada pendaftar yang menunggu. Pendaftaran baru dari form Daftar Toko akan muncul di sini.</div>';
+      if (list) list.innerHTML = '<div class="reg-empty"><svg viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg><div class="reg-empty-title">Belum ada pendaftar</div><div class="note">Tidak ada pendaftar yang menunggu. Pendaftaran baru dari form Daftar Toko akan muncul di sini.</div></div>';
       if (cnt) cnt.textContent = '';
       return;
     }
@@ -1504,7 +1512,7 @@ try { devFbRestore(); } catch(e) {}
 </script>
 
 <script>
-// ===== v1.3.6 code42: daftar client dari cloud + migrasi 1x + sync berkala (1 data, tanpa PIN, tanpa kunci perangkat) =====
+// ===== v1.3.6 code43: daftar client dari cloud + migrasi 1x + sync berkala (1 data, tanpa PIN, tanpa kunci perangkat) =====
 // Daftar client dibaca dari licensedShops (1 query get() per refresh, N read,
 // tanpa listener). Daftar lokal (LS_CUST) hanya untuk client "belum pindah"
 // (tanpa toko) — bukan sumber ganda.
