@@ -1,7 +1,7 @@
 {
-  "versionCode": 81,
+  "versionCode": 82,
   "versionName": "2.0.0-beta",
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v2.0.0-beta-code81/my-lapak_v2.0.0-beta-code81.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92Mi4wLjAtYmV0YS1jb2RlODEvbXktbGFwYWtfdjIuMC4wLWJldGEtY29kZTgxLmFwaw==",
-  "notes": "BETA code81: bales otomatis tiket +5 kategori menu (tambah & atur produk, pakai kasir, catat keuangan, atur profil toko, atur pengguna & peran) + 3 koreksi teks (link katalog ?katalog=KODE, POS lewat Kasir, apiKey disederhanakan)."
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v2.0.0-beta-code82/my-lapak_v2.0.0-beta-code82.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92Mi4wLjAtYmV0YS1jb2RlODIvbXktbGFwYWtfdjIuMC4wLWJldGEtY29kZTgyLmFwaw==",
+  "notes": "BETA code82: font Plus Jakarta Sans untuk judul saja (nama toko, judul kartu, kode toko, harga) + kartu popup Detail Toko (ketuk nama toko di header v1/v2): logo bisa diganti dari kartu, Kode Toko + Salin, Alamat, Link Katalog + Salin/Buka, Status Toko + shortcut Atur. Kode Toko & Link Katalog dihapus dari layar Profil."
 }
