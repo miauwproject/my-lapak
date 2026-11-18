@@ -1,0 +1,490 @@
+// =====================================================================
+// code75 (BELUM PUBLISH): basis = file ini (v113 + distanceKm + ads, live 11 Nov 2026)
+// SATU-SATUNYA perubahan: + match /registrations (pendaftaran publik dari
+// daftar.html, create tervalidasi ketat, baca/ubah/hapus Dev-only).
+// Publish MANUAL di Console bersama rilis code75. Rollback = publish ulang
+// deploy-stage1-fixed/firestore-publish.rules.
+// =====================================================================
+// DRAFT Tahap 1 FIX (BELUM PUBLISH, untuk dites dulu): draft TANPA cek items.all.
+// ALASAN: fungsi .all TIDAK ADA di Firestore Rules (rules tidak bisa iterasi list;
+// v116 dulu skip validasi per-item karena alasan yang sama). Validasi per-item
+// (productId/nama/harga/buy/qty) DIHAPUS; sisanya tetap (15 kunci, status, source,
+// total, customer, history). TRADE-OFF: qty ngawur kini ALLOW di rules — order tetap
+// butuh konfirmasi WA merchant sebelum diproses, jadi risikonya spam, bukan stok hilang.
+// Basis = v113 persis, SATU-SATUNYA perubahan: match /orders/{d} allow create
+// (dari `if true` tanpa validasi -> tervalidasi ketat, lihat blok orders).
+// Semua aturan lain IDENTIK dengan v113. Rollback = publish ulang v113.
+// Tes di Rules Playground (Console) SEBELUM publish:
+//   ALLOW: order katalog valid persis bentuk catSubmit (15 field, status 'baru',
+//          source 'katalog', items 1-20, qty 1-100, total == subtotal + ongkir).
+//   DENY: tanpa nama / tanpa phone / items kosong / items 21+ / qty 0 / qty 101 /
+//         field tambahan di luar 15 / status bukan 'baru' / source bukan 'katalog' /
+//         total != subtotal + ongkir / id dokumen != field id.
+// =====================================================================
+// MyLapak — Firestore Rules v113 (TESTIMONI: = v112 + shops/{shopId}/testimonials)
+// File ini = rules v112 DITAMBAH koleksi testimonials untuk katalog.
+// v113 MENGGANTIKAN v112 — publish file ini di atas v112 yang sudah live. Satu-satunya perubahan dari v112: aturan testimonials (list/get publik hanya approved==true, create publik tervalidasi approved=false + tanpa link + maks 200 karakter, kelola oleh login).
+// + INDEX KOMPOSIT (sekali, di Console): koleksi testimonials, field approved ASC + createdAt DESC — tanpa index ini, query katalog/Dashboard gagal failed-precondition.
+// JANGAN publish file ini dengan tool
+// otomatis — user pilih opsi A: publish MANUAL di Console (lihat langkah
+// di bawah). Sampai file ini dipublish, kirim testimoni dari katalog akan gagal
+// permission-denied — itu normal, bukan bug APK.
+// Aturan tiket (v106) TIDAK berubah di file ini.
+// ---------------------------------------------------------------------
+// PANDUAN PUBLISH MANUAL (opsi A, ~2 menit):
+//   1. Buka Firebase Console > project toko-mobile-app > Firestore Database
+//   2. Tab "Rules" > hapus isi lama > paste SELURUH isi file ini
+//   3. Klik "Publish" > tunggu konfirmasi "Rules published"
+//   4. Tes di HP: kirim tiket dari app utama > balas dari Dev > set Selesai
+//      (lampiran harus pindah ke arsip, tiket tampil "Lampiran: diarsipkan")
+//   5. Tes kontrol (SETELAH build utama code 22 + Dev code 23): tambah email
+//      dari Dev (Setting > Kontrol App Utama) > login ulang app utama >
+//      gabung toko client pakai kode > email itu dikenali developer.
+//   6. Tes gabung (SETELAH publish v108, tanpa build baru): login email baru >
+//      Gabung pakai kode toko > harus berhasil (sebelumnya permission-denied).
+//      Penegakan binding lisensi menyusul di build utama berikutnya; publish
+//      v108 saja belum memblokir pemakaian 1 lisensi di banyak toko.
+// ---------------------------------------------------------------------
+// PRINSIP (sama jujurnya dengan baseline):
+// - list licenses TIDAK PERNAH diizinkan (Dev tidak bisa scan lisensi).
+// - delete tiket / arsip SELALU ditolak. Hapus lampiran aktif HANYA boleh
+//   bila dokumen arsip ticketArchives/{ticketId} sudah ada (alur Selesai).
+// - Isolasi per toko di rules ini auth-only, SAMA seperti wildcard shops
+//   di baseline: user login mana pun secara rules bisa membaca tiket mana
+//   pun. Isolasi praktis ditegakkan di APP: app utama hanya query tiket
+//   dengan shopCode tokonya sendiri, dan Dev dipakai developer saja.
+//   Jangan klaim rules ini membuktikan isolasi per toko secara keras.
+// - Ukuran foto (maks 3, total maks 500KB, kompresi bertingkat) adalah
+//   aturan APP, bukan rules — rules tidak bisa memeriksa dimensi gambar.
+// - Urutan arsip saat Selesai (wajib di Dev): salin ke ticketArchives
+//   dulu -> hapus dari subkoleksi aktif -> baru update status Selesai.
+//   Bila salin gagal, hapus dibatalkan dan status TIDAK jadi Selesai.
+// =====================================================================
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /shops/{shopId} {
+      // Merchant yang login: akses penuh ke dokumen toko
+      allow read, write: if request.auth != null;
+      // Katalog publik: cari toko berdasarkan kode
+      allow list: if true;
+      match /products/{d} {
+        // Merchant yang login: akses penuh
+        allow read, write: if request.auth != null;
+        // Katalog publik: baca produk + kurangi stok saja
+        // (harga/nama tidak bisa diubah publik; stok hanya boleh TURUN,
+        //  tidak boleh dinaikkan — cegah oversell dari order palsu)
+        // CATATAN: set stok jadi 0 masih mungkin (barang hilang dari
+        // katalog), tapi terlihat dan bisa di-restock merchant.
+        allow read: if true;
+        allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(['stock'])
+          && request.resource.data.stock <= resource.data.stock;
+      }
+      match /orders/{d} {
+        // Merchant yang login: akses penuh
+        allow read, write: if request.auth != null;
+        // Katalog publik: hanya boleh BUAT order, TERVALIDASI (Tahap 1 anti-bot).
+        // Bentuk wajib = persis payload catSubmit (katalog-publik.js): 16 field
+        // (distanceKm ditambah 2026-11-11: catSubmit selalu kirim distanceKm top-level;
+        //  tanpanya SEMUA checkout katalog ditolak rules — temuan #39).
+        // status 'baru', source 'katalog', items 1-20, qty 1-100, total == subtotal + ongkir.
+        // (tidak bisa baca/ubah/hapus order orang lain)
+        allow create: if request.resource.data.keys().hasOnly(['id','ts','date','customer','distanceKm','items','subtotal','ongkir','total','expedition','resi','note','status','source','no','history'])
+          && request.resource.data.id == d
+          && request.resource.data.id is string && request.resource.data.id.size() >= 1 && request.resource.data.id.size() <= 50
+          && request.resource.data.ts is string && request.resource.data.ts.size() <= 30
+          && request.resource.data.date is string && request.resource.data.date.size() <= 30
+          && request.resource.data.customer is map
+          && request.resource.data.customer.name is string && request.resource.data.customer.name.size() >= 1 && request.resource.data.customer.name.size() <= 100
+          && request.resource.data.customer.phone is string && request.resource.data.customer.phone.size() >= 1 && request.resource.data.customer.phone.size() <= 20
+          && request.resource.data.customer.address is string && request.resource.data.customer.address.size() >= 1 && request.resource.data.customer.address.size() <= 300
+          && (!('distanceKm' in request.resource.data) || request.resource.data.distanceKm is number || request.resource.data.distanceKm == null)
+          && request.resource.data.items is list && request.resource.data.items.size() >= 1 && request.resource.data.items.size() <= 20
+          && request.resource.data.subtotal is number && request.resource.data.subtotal >= 0
+          && request.resource.data.ongkir is number && request.resource.data.ongkir >= 0
+          && request.resource.data.total is number && request.resource.data.total >= 0
+          && request.resource.data.total == request.resource.data.subtotal + request.resource.data.ongkir
+          && request.resource.data.expedition is string && request.resource.data.expedition.size() <= 50
+          && request.resource.data.resi is string && request.resource.data.resi.size() <= 50
+          && request.resource.data.note is string && request.resource.data.note.size() <= 300
+          && request.resource.data.status == 'baru'
+          && request.resource.data.source == 'katalog'
+          && request.resource.data.no is string && request.resource.data.no.size() >= 1 && request.resource.data.no.size() <= 30
+          && request.resource.data.history is list && request.resource.data.history.size() == 1
+          && request.resource.data.history[0].s == 'baru'
+          && request.resource.data.history[0].by == 'katalog'
+          && request.resource.data.history[0].ts is string;
+      }
+      match /private/{d} {
+        // Settings privat toko (email/WA/script/token): hanya untuk login.
+        // CATATAN JUJUR: match ini menegaskan lokasi settings privat, tapi
+        // wildcard auth-only di bawah tetap mengizinkan user login mana pun
+        // membaca sub-koleksi toko mana pun (sifat union rules). Isolasi
+        // penuh per toko menuntut wildcard dipecah jadi match eksplisit
+        // per koleksi dengan cek shopId — belum dilakukan di v7.5.1.
+        allow read, write: if request.auth != null;
+      }
+      match /testimonials/{tid} {
+      // Katalog publik: hanya testimoni yang sudah disetujui owner (approved==true).
+      // Query katalog WAJIB where approved==true (butuh index komposit approved+createdAt).
+      allow list: if resource.data.approved == true;
+      allow get: if resource.data.approved == true;
+      // Kirim testimoni publik: wajib approved=false, nama 1-100, teks 1-200, tanpa link.
+      allow create: if request.resource.data.keys().hasOnly(['name', 'text', 'orderNo', 'approved', 'createdAt'])
+        && request.resource.data.approved == false
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 1
+        && request.resource.data.name.size() <= 100
+        && request.resource.data.text is string
+        && request.resource.data.text.size() >= 1
+        && request.resource.data.text.size() <= 200
+        && !request.resource.data.text.matches('.*https?://.*')
+        && !request.resource.data.text.matches('.*www\\..*')
+        && request.resource.data.orderNo is string
+        && request.resource.data.createdAt is string;
+      // Kelola (login): baca/ubah/hapus oleh owner (juga dicover catch-all shops).
+      allow read, update, delete: if request.auth != null;
+    }
+    match /ads/{aid} {
+      // Katalog publik: hanya iklan aktif (query katalog orderBy('order')).
+      allow get, list: if resource.data.active == true;
+      // Kelola (login): baca/ubah/hapus (juga dicover catch-all shops).
+      allow read, write: if request.auth != null;
+    }
+    match /{document=**} {
+        // Merchant yang login: akses penuh ke sub-koleksi lain
+        // (transaksi, pengeluaran, stok, hutang, private)
+        allow read, write: if request.auth != null;
+      }
+    }
+    match /licenses/{lid} {
+      // Lisensi update My Lapak: baca dokumen tunggal publik
+      // (kode 16 karakter acak membuat enumerasi tidak praktis).
+      // Penjual kelola via app Dev (developer) atau console (melewati rules).
+      allow get: if true;
+      allow list: if false;
+      // ===== v111: KELOLA LISENSI DARI APP DEV (developer saja) =====
+      // Buat: dari Generator Dev (Simpan Client / Kirim ke Firestore).
+      // Ubah siklus: Perpanjang (expiresAt/type) & Hapus License butuh
+      // update status — semua dibatasi developer + validasi field.
+      // Hapus: Hapus License (developer saja). Binding (v108) TIDAK
+      // berubah dan tetap berlaku lewat cabang allow update-nya sendiri.
+      allow create: if request.auth != null
+        && (request.auth.token.email == 'miauwdesu.project@gmail.com'
+          || (exists(/databases/$(database)/documents/appConfig/developers)
+            && request.auth.token.email in get(/databases/$(database)/documents/appConfig/developers).data.emails))
+        && request.resource.data.keys().hasOnly(['type', 'status', 'expiresAt', 'maxDevices', 'createdAt'])
+        && request.resource.data.type in ['trial', 'langganan', 'lifetime', 'putus']
+        && request.resource.data.status == 'active'
+        && request.resource.data.maxDevices is int
+        && request.resource.data.maxDevices >= 1
+        && request.resource.data.maxDevices <= 10
+        && (!('expiresAt' in request.resource.data) || request.resource.data.expiresAt is string)
+        && request.resource.data.createdAt is string;
+      allow update: if request.auth != null
+        && (request.auth.token.email == 'miauwdesu.project@gmail.com'
+          || (exists(/databases/$(database)/documents/appConfig/developers)
+            && request.auth.token.email in get(/databases/$(database)/documents/appConfig/developers).data.emails))
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['type', 'status', 'expiresAt', 'maxDevices'])
+        && request.resource.data.type in ['trial', 'langganan', 'lifetime', 'putus']
+        && request.resource.data.status in ['active', 'revoked']
+        && request.resource.data.maxDevices is int
+        && request.resource.data.maxDevices >= 1
+        && request.resource.data.maxDevices <= 10
+        && (!('expiresAt' in request.resource.data) || request.resource.data.expiresAt is string);
+      allow delete: if request.auth != null
+        && (request.auth.token.email == 'miauwdesu.project@gmail.com'
+          || (exists(/databases/$(database)/documents/appConfig/developers)
+            && request.auth.token.email in get(/databases/$(database)/documents/appConfig/developers).data.emails));
+      // ===== v108: BINDING LISENSI <-> TOKO (satu lisensi = satu toko) =====
+      // Dokumen lisensi boleh berubah HANYA pada 3 field binding ini;
+      // field lain (tipe, masa aktif, active, dsb.) TIDAK boleh berubah
+      // lewat aturan ini (diff hasOnly). Tanpa binding, lisensi hanya
+      // diperiksa per perangkat, sehingga 1 kode bisa dipakai di banyak
+      // toko (termasuk toko berbeda di HP yang sama).
+      // - Bind pertama (belum terikat) / refresh binding yang sama:
+      //   anggota toko tujuan (dokumen users-nya ber-shopId sama dengan
+      //   boundShopId baru) ATAU developer (email utama / email di
+      //   appConfig/developers).
+      // - Pindah binding ke toko lain (rebind) / lepas binding:
+      //   HANYA developer.
+      // - App WAJIB menulis binding dengan update() / set(..., merge:true),
+      //   BUKAN set() tanpa merge (set tanpa merge menghapus field lain
+      //   dan akan ditolak hasOnly di atas).
+      // - Penegakan di APP (cek binding saat validasi lisensi) menyusul
+      //   di build utama berikutnya; rules ini hanya MEMBUKA jalur tulis.
+      allow update: if request.auth != null
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['boundShopId', 'boundShopCode', 'boundAt'])
+        && (
+          ((request.resource.data.get('boundShopId', null) == resource.data.get('boundShopId', null)
+            || resource.data.get('boundShopId', null) == null)
+          && ((exists(/databases/$(database)/documents/users/$(request.auth.uid))
+            && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.shopId == request.resource.data.get('boundShopId', null))
+            || request.auth.token.email == 'miauwdesu.project@gmail.com'
+            || (exists(/databases/$(database)/documents/appConfig/developers)
+              && request.auth.token.email in get(/databases/$(database)/documents/appConfig/developers).data.emails)))
+          || (resource.data.get('boundShopId', null) != null
+            && request.resource.data.get('boundShopId', null) != resource.data.get('boundShopId', null)
+            && (request.auth.token.email == 'miauwdesu.project@gmail.com'
+              || (exists(/databases/$(database)/documents/appConfig/developers)
+                && request.auth.token.email in get(/databases/$(database)/documents/appConfig/developers).data.emails)))
+        );
+      // ===== v1.0.4 FINAL: daftar perangkat per lisensi =====
+      // Satu sumber kebenaran: licenses/{kode}/devices/{deviceId}.
+      // Nonaktifkan di MyLapak utama MAUPUN di MyLapak-Dev = set
+      // active=false di dokumen yang sama, jadi langsung terlihat di
+      // app lain saat dibuka / Refresh / login / sync online berikutnya.
+      // Bukan push instan saat app tertutup (tidak ada listener realtime
+      // khusus device di desain ini).
+      // BATASAN JUJUR (baca sebelum publish):
+      // - Rules devices ini auth-only, BUKAN verifikasi shop membership
+      //   keras. Dokumen device tidak menyimpan shopId, dan rules tidak
+      //   bisa query shops berdasarkan developerUid/ownerUid, jadi rules
+      //   tidak bisa membedakan Owner/Developer vs Kasir/Admin untuk
+      //   satu lisensi. Pembatasan "hanya Owner/Developer boleh
+      //   nonaktifkan" ditegakkan di UI app (menu Perangkat disembunyikan
+      //   untuk Kasir/Admin, tombol Nonaktifkan hanya tampil untuk
+      //   Owner/Developer), BUKAN di rules. User login yang paham teknis
+      //   dan tahu kode lisensi + deviceId secara teori bisa mengubah
+      //   active lewat API langsung. Mitigasi: Owner/Developer bisa
+      //   mengaktifkan lagi dari Dev (dengan cek slot), dan perubahan
+      //   asing akan terlihat di daftar perangkat.
+      // - List devices hanya untuk login (bukan publik). Filter per
+      //   Owner/Developer dilakukan di client app, bukan di rules.
+      match /devices/{did} {
+        // Baca satu dokumen / daftar: hanya user login.
+        allow get, list: if request.auth != null;
+        // Buat: hanya user login, did harus sama dengan deviceId yang
+        // dikirim, active harus true (tidak boleh create inactive palsu),
+        // dan userUid harus uid pembuat sendiri (device didaftarkan oleh
+        // user yang login di HP itu, sesuai app utama).
+        allow create: if request.auth != null
+          && did == request.resource.data.deviceId
+          && request.resource.data.active == true
+          && request.resource.data.userUid == request.auth.uid;
+        // Ubah: hanya user login, dan field identitas TIDAK boleh berubah
+        // (deviceId, firstSeen, model, platform, source, isDeveloper).
+        // Yang boleh berubah hanya: lastSeen, active, appVersion,
+        // userUid, userName, role, deactivatedAt, reactivatedAt.
+        // Ini mencakup: update lastSeen oleh device sendiri, dan
+        // nonaktifkan/aktifkan lagi oleh Owner/Developer lewat app.
+        // (Lihat batasan di atas: rules tidak memverifikasi Owner/Developer.)
+        allow update: if request.auth != null
+          && request.resource.data.get('deviceId', null) == resource.data.get('deviceId', null)
+          && request.resource.data.get('firstSeen', null) == resource.data.get('firstSeen', null)
+          && request.resource.data.get('model', null) == resource.data.get('model', null)
+          && request.resource.data.get('platform', null) == resource.data.get('platform', null)
+          && request.resource.data.get('source', null) == resource.data.get('source', null)
+          && request.resource.data.get('isDeveloper', null) == resource.data.get('isDeveloper', null)
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['lastSeen', 'active', 'appVersion', 'userUid', 'userName', 'role', 'deactivatedAt', 'reactivatedAt']);
+        // Hapus: tolak. Nonaktifkan saja, jangan hapus, supaya riwayat tetap.
+        allow delete: if false;
+      }
+    }
+    match /users/{uid} {
+      // Baca: dokumen sendiri, atau sesama anggota toko yang sama, atau
+      // dokumen yang email-nya sama dengan email login requester.
+      // Daftar member app memakai query users where shopId == SHOP_ID,
+      // jadi aturan ini mendukung query tersebut (requester harus punya
+      // shopId yang sama di dokumennya sendiri).
+      // Cabang ketiga (email) WAJIB ada untuk alur gabung toko: joinShop
+      // mengecek duplikat dengan query users where shopId == TOKO_TUJUAN
+      // dan email == EMAIL_SENDIRI. Tanpa cabang ini, email yang belum
+      // menjadi anggota toko tujuan SELALU ditolak (permission-denied)
+      // karena dua cabang pertama tidak terpenuhi — persis toast
+      // "Gagal gabung: Missing or insufficient permissions."
+      // Cabang ini aman: requester hanya bisa membaca dokumen yang
+      // email-nya sama dengan email loginnya sendiri.
+      allow read: if request.auth != null
+        && (request.auth.uid == uid
+          || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.shopId == resource.data.shopId
+          || resource.data.email == request.auth.token.email);
+      // Buat: hanya dokumen sendiri (alur gabung/buat toko).
+      allow create: if request.auth != null && request.auth.uid == uid;
+      // Ubah: dokumen sendiri TANPA ganti role, atau owner toko
+      // (ownerUid tercatat di dokumen toko saat toko dibuat, ATAU
+      //  requester ber-role 'owner' di dokumen users-nya sendiri di
+      //  toko yang sama — agar owner hasil promosi bisa kelola member).
+      allow update: if request.auth != null
+        && ((request.auth.uid == uid && request.resource.data.role == resource.data.role)
+          || get(/databases/$(database)/documents/shops/$(resource.data.shopId)).data.ownerUid == request.auth.uid
+          || (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.shopId == resource.data.shopId
+            && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'owner'));
+      // Hapus: owner toko atau developer toko
+      // (developerUid tercatat di dokumen toko saat toko dibuat,
+      //  toko lama dimigrasi dari ownerUid saat pertama dibuka).
+      // Owner hasil promosi (role 'owner' di dokumen users-nya) juga
+      // boleh menghapus member di tokonya sendiri.
+      allow delete: if request.auth != null
+        && (get(/databases/$(database)/documents/shops/$(resource.data.shopId)).data.ownerUid == request.auth.uid
+          || get(/databases/$(database)/documents/shops/$(resource.data.shopId)).data.developerUid == request.auth.uid
+          || (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.shopId == resource.data.shopId
+            && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'owner'));
+    }
+
+    // ===== v1.0.5: TIKET CONTACT DEVELOPER =====
+    match /tickets/{tid} {
+      // Baca: user login (app utama memfilter shopCode sendiri; Dev membaca
+      // semua tiket untuk dibalas — konsisten dengan wildcard shops baseline).
+      allow get, list: if request.auth != null;
+      // Buat: user login, id dokumen harus sama dengan nomor tiket, status
+      // awal harus Baru, flag/arsip harus false, field hanya yang diizinkan.
+      allow create: if request.auth != null
+        && tid == request.resource.data.ticketNo
+        && request.resource.data.shopCode is string
+        && request.resource.data.status == 'Baru'
+        && request.resource.data.needsUpdate == false
+        && request.resource.data.archived == false
+        && request.resource.data.keys().hasOnly(['ticketNo', 'shopCode', 'shopId', 'shopName', 'licenseCode', 'licenseExpiresAt', 'category', 'title', 'description', 'status', 'needsUpdate', 'appVersion', 'appVersionName', 'deviceModel', 'platform', 'createdAt', 'updatedAt', 'replies', 'archived', 'attachmentCount', 'attachmentNames']);
+      // Ubah: user login, field identitas TIDAK boleh berubah, hanya field
+      // kerja yang boleh berubah, status hanya 4 nilai, dan status Selesai
+      // hanya boleh bila archived == true (arsip sudah dibuat dulu).
+      allow update: if request.auth != null
+        && request.resource.data.get('ticketNo', null) == resource.data.get('ticketNo', null)
+        && request.resource.data.get('shopCode', null) == resource.data.get('shopCode', null)
+        && request.resource.data.get('shopId', null) == resource.data.get('shopId', null)
+        && request.resource.data.get('shopName', null) == resource.data.get('shopName', null)
+        && request.resource.data.get('licenseCode', null) == resource.data.get('licenseCode', null)
+        && request.resource.data.get('licenseExpiresAt', null) == resource.data.get('licenseExpiresAt', null)
+        && request.resource.data.get('category', null) == resource.data.get('category', null)
+        && request.resource.data.get('title', null) == resource.data.get('title', null)
+        && request.resource.data.get('description', null) == resource.data.get('description', null)
+        && request.resource.data.get('createdAt', null) == resource.data.get('createdAt', null)
+        && request.resource.data.get('appVersion', null) == resource.data.get('appVersion', null)
+        && request.resource.data.get('appVersionName', null) == resource.data.get('appVersionName', null)
+        && request.resource.data.get('deviceModel', null) == resource.data.get('deviceModel', null)
+        && request.resource.data.get('platform', null) == resource.data.get('platform', null)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'needsUpdate', 'replies', 'updatedAt', 'archived', 'attachmentCount', 'attachmentNames', 'conclusionCategory', 'conclusionText', 'concludedAt'])
+        && request.resource.data.status in ['Baru', 'Diproses', 'Menunggu user', 'Selesai']
+        && (request.resource.data.status != 'Selesai' || request.resource.data.archived == true);
+      // Hapus tiket: tolak total. Tiket selesai tetap tersimpan sebagai teks.
+      allow delete: if false;
+      match /attachments/{aid} {
+        allow get, list: if request.auth != null;
+        allow create: if request.auth != null
+          && request.resource.data.keys().hasOnly(['name', 'data', 'sizeKB', 'createdAt']);
+        allow update: if false;
+        // Hapus lampiran aktif HANYA bila arsipnya sudah ada (alur Selesai).
+        allow delete: if request.auth != null
+          && exists(/databases/$(database)/documents/ticketArchives/$(tid));
+      }
+    }
+    match /ticketArchives/{tid} {
+      allow get, list: if request.auth != null;
+      allow create: if request.auth != null
+        && request.resource.data.keys().hasOnly(['ticketNo', 'shopCode', 'archivedAt', 'attachments']);
+      // Arsip tidak boleh diubah / dihapus.
+      allow update, delete: if false;
+    }
+
+    // ===== v107: KONTROL APP UTAMA — EMAIL DEVELOPER GLOBAL =====
+    // Jalur kontrol Dev -> app utama. Dokumen tunggal appConfig/developers
+    // berisi daftar email developer TAMBAHAN (maks 2). Email utama
+    // (miauwdesu.project@gmail.com) tertanam di kode app utama sebagai
+    // fallback dan TIDAK disimpan di dokumen ini, jadi total maks 3 email.
+    // - Baca: user login mana pun (app utama membacanya tiap login cloud).
+    //   Daftar ini berisi email developer saja; email utama sudah menjadi
+    //   kontak publik, jadi baca auth-only konsisten dengan rules lain
+    //   di file ini (isolasi keras bukan di rules, tapi di APP).
+    // - Tulis: HANYA email utama (cek token.email). Email tambahan boleh
+    //   membaca, tapi tidak boleh mengubah daftar (cegah pengambilalihan).
+    // - Format email, huruf kecil, tanpa duplikat: ditegakkan di APP Dev,
+    //   bukan di rules (rules hanya membatasi jumlah + penulis + kunci).
+    // - Dev WAJIB menulis kedua kunci (emails + updatedAt) tiap simpan.
+    // - Sampai rules ini dipublish, simpan dari Dev = permission-denied.
+    match /appConfig/developers {
+      allow get: if request.auth != null;
+      allow create, update: if request.auth != null
+        && request.auth.token.email == 'miauwdesu.project@gmail.com'
+        && request.resource.data.keys().hasOnly(['emails', 'updatedAt'])
+        && request.resource.data.emails is list
+        && request.resource.data.emails.size() <= 2
+        && request.resource.data.updatedAt is string;
+      // Hapus: hanya email utama (kembali ke fallback email utama saja).
+      allow delete: if request.auth != null
+        && request.auth.token.email == 'miauwdesu.project@gmail.com';
+    }
+
+    // ===== v109: KODE TOKO PENSIUN (hapus toko) =====
+    // Satu dokumen per kode yang dipensiunkan; ID dokumen = kode toko.
+    // Dipakai app utama untuk: (a) menolak gabung pakai kode pensiun,
+    // (b) melewati kode pensiun saat generate kode toko baru.
+    // Baca: merchant yang login (cek get per kode, bukan list).
+    // Buat: HANYA developer (email utama / email di appConfig/developers).
+    // Permanen: tidak bisa diubah / dihapus lewat rules. Rollback hanya
+    // via Console oleh developer bila benar-benar perlu.
+    // Tes setelah publish: hapus toko dari Dev > Setting > Hapus Toko >
+    // gabung pakai kode itu harus ditolak; buat toko baru tidak mendapat
+    // kode pensiun tersebut.
+    match /retiredShopCodes/{code} {
+      allow get: if request.auth != null;
+      allow list: if false;
+      allow create: if request.auth != null
+        && (request.auth.token.email == 'miauwdesu.project@gmail.com'
+          || (exists(/databases/$(database)/documents/appConfig/developers)
+            && request.auth.token.email in get(/databases/$(database)/documents/appConfig/developers).data.emails));
+      allow update, delete: if false;
+    }
+
+    // AUTO-CLIENT: satu dokumen per toko berlisensi, ditulis app utama saat
+    // validasi lisensi terikat (bind baru + refresh). Dibaca HANYA developer
+    // untuk daftar Otomatis di tab Client Dev (nama toko pendaftar lisensi).
+    // Tulis: anggota toko itu sendiri (users doc ber-shopId sama) ATAU
+    // developer. Hapus: developer saja (dipakai alur hapus toko Dev).
+    // ===== v112: AUTO-ONBOARDING =====
+    // v112 = v111 + satu perubahan: anggota toko boleh GET dokumen
+    // licensedShops tokonya sendiri (untuk verifikasi pairing dari app
+    // utama). LIST tetap developer-only. Selain itu identik dengan v111.
+    match /licensedShops/{shopId} {
+      allow get: if request.auth != null
+        && (request.auth.token.email == 'miauwdesu.project@gmail.com'
+          || (exists(/databases/$(database)/documents/appConfig/developers)
+            && request.auth.token.email in get(/databases/$(database)/documents/appConfig/developers).data.emails)
+          || (exists(/databases/$(database)/documents/users/$(request.auth.uid))
+            && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.shopId == shopId));
+      allow list: if request.auth != null
+        && (request.auth.token.email == 'miauwdesu.project@gmail.com'
+          || (exists(/databases/$(database)/documents/appConfig/developers)
+            && request.auth.token.email in get(/databases/$(database)/documents/appConfig/developers).data.emails));
+      allow create, update: if request.auth != null
+        && request.resource.data.shopId == shopId
+        && request.resource.data.keys().hasOnly(['shopId', 'shopCode', 'shopName', 'licenseCode', 'licenseType', 'expiresAt', 'boundAt', 'updatedAt', 'maxDevices', 'status', 'phone', 'note'])
+        && ((exists(/databases/$(database)/documents/users/$(request.auth.uid))
+          && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.shopId == shopId)
+          || request.auth.token.email == 'miauwdesu.project@gmail.com'
+          || (exists(/databases/$(database)/documents/appConfig/developers)
+            && request.auth.token.email in get(/databases/$(database)/documents/appConfig/developers).data.emails));
+      allow delete: if request.auth != null
+        && (request.auth.token.email == 'miauwdesu.project@gmail.com'
+          || (exists(/databases/$(database)/documents/appConfig/developers)
+            && request.auth.token.email in get(/databases/$(database)/documents/appConfig/developers).data.emails));
+    }
+
+    /* ---------- registrations (pendaftaran publik dari daftar.html — code75) ---------- */
+    // Form publik tanpa login. Create: siapa saja, TAPI field dibatasi ketat + status wajib
+    // 'menunggu' + createdAt wajib serverTimestamp. Baca/ubah/hapus: HANYA developer.
+    // Spam = antrean noise saja — toko/lisensi TIDAK terbuat sebelum Dev setujui.
+    match /registrations/{regId} {
+      allow create: if request.resource.data.keys().hasOnly(['shopName','ownerName','ownerEmail','phone','jmlHp','paket','alamat','catatan','status','createdAt'])
+        && request.resource.data.status == 'menunggu'
+        && request.resource.data.shopName is string && request.resource.data.shopName.size() > 0 && request.resource.data.shopName.size() <= 100
+        && request.resource.data.ownerName is string && request.resource.data.ownerName.size() > 0 && request.resource.data.ownerName.size() <= 100
+        && request.resource.data.ownerEmail is string && request.resource.data.ownerEmail.matches('.*@.*\\..*')
+        && request.resource.data.phone is string && request.resource.data.phone.size() > 0 && request.resource.data.phone.size() <= 20
+        && request.resource.data.jmlHp is int && request.resource.data.jmlHp >= 1 && request.resource.data.jmlHp <= 5
+        && request.resource.data.paket in ['trial','putus','langganan']
+        && request.resource.data.alamat is string && request.resource.data.alamat.size() <= 200
+        && request.resource.data.catatan is string && request.resource.data.catatan.size() <= 500
+        && request.resource.data.createdAt == request.time;
+      allow get, list: if request.auth != null
+        && (request.auth.token.email == 'miauwdesu.project@gmail.com'
+          || (exists(/databases/$(database)/documents/appConfig/developers)
+            && request.auth.token.email in get(/databases/$(database)/documents/appConfig/developers).data.emails));
+      allow update, delete: if request.auth != null
+        && (request.auth.token.email == 'miauwdesu.project@gmail.com'
+          || (exists(/databases/$(database)/documents/appConfig/developers)
+            && request.auth.token.email in get(/databases/$(database)/documents/appConfig/developers).data.emails));
+    }
+
+  }
+}
