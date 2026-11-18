@@ -1,7 +1,7 @@
 {
-  "versionCode": 80,
+  "versionCode": 81,
   "versionName": "2.0.0-beta",
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v2.0.0-beta-code80/my-lapak_v2.0.0-beta-code80.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92Mi4wLjAtYmV0YS1jb2RlODAvbXktbGFwYWtfdjIuMC4wLWJldGEtY29kZTgwLmFwaw==",
-  "notes": "BETA code80: kartu Cloud nonaktif kini tampil di Beranda v2 (slot sendiri di bawah header); v1 tidak berubah; banner update v2 tetap jalan."
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v2.0.0-beta-code81/my-lapak_v2.0.0-beta-code81.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92Mi4wLjAtYmV0YS1jb2RlODEvbXktbGFwYWtfdjIuMC4wLWJldGEtY29kZTgxLmFwaw==",
+  "notes": "BETA code81: bales otomatis tiket +5 kategori menu (tambah & atur produk, pakai kasir, catat keuangan, atur profil toko, atur pengguna & peran) + 3 koreksi teks (link katalog ?katalog=KODE, POS lewat Kasir, apiKey disederhanakan)."
 }
