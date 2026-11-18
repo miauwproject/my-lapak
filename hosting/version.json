@@ -1,7 +1,7 @@
 {
-  "versionCode": 76,
+  "versionCode": 77,
   "versionName": "1.1.0",
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code76/my-lapak_v1.1.0-code76.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTc2L215LWxhcGFrX3YxLjEuMC1jb2RlNzYuYXBr",
-  "notes": "STABIL code76: alamat toko kini terisi otomatis dari picker peta (Profil Toko) + ikut tersimpan cloud; tombol Buka Katalog di kartu Link Katalog; banner toko tampil sebagai background hero Beranda v2."
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code77/my-lapak_v1.1.0-code77.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTc3L215LWxhcGFrX3YxLjEuMC1jb2RlNzcuYXBr",
+  "notes": "STABIL code77: tombol voice pindah ke toolbar Kasir v2 (mic di kanan kolom cari + tombol panduan), FAB voice disembunyikan di v2, mic docked merah saat sesi voice aktif, island voice morph lingkaran ke pill."
 }
