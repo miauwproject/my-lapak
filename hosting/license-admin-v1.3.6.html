@@ -25,6 +25,8 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 .btn-green { background: #1b7a3d; color: #fff; width: 100%; font-weight: 700; }
 .btn-indigo { background: #4f46e5; color: #fff; width: 100%; font-weight: 700; }
 #regActionRow .btn { flex: 1 1 0; min-width: 0; width: auto; font-size: 12px; padding: 12px 6px; }
+.regListBtns .btn { flex: 1 1 0; min-width: 0; width: auto; }
+.regListBtns .btn-green { border: 2px solid #1b7a3d; }
 #regApproveBtn { border: 2px solid #1b7a3d; }
 .btn-outline { background: #fff; color: #1b7a3d; border: 2px solid #1b7a3d; font-weight: 600; }
 .btn-sm { padding: 7px 12px; font-size: 13px; border-radius: 8px; }
@@ -130,7 +132,7 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 .devbox .cust { margin-top:10px; }
 
 
-/* ---- Layar Login profesional (code45): background brand + kartu floating ---- */
+/* ---- Layar Login profesional (code46): background brand + kartu floating ---- */
 #loginScreen { position:relative; min-height:100vh; min-height:100dvh; background:linear-gradient(160deg,#1769FF 0%,#0F56D6 42%,#102A56 100%); overflow:hidden; display:flex; align-items:center; justify-content:center; padding:32px 16px; }
 .login-bg { position:absolute; inset:0; overflow:hidden; pointer-events:none; }
 .blob { position:absolute; border-radius:50%; }
@@ -161,14 +163,14 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 .err-text { color:#dc2626; font-size:13px; min-height:18px; margin-top:6px; }
 
 
-/* ---- Empty-state Pendaftar (code45): ikon besar + judul + penjelasan ---- */
+/* ---- Empty-state Pendaftar (code46): ikon besar + judul + penjelasan ---- */
 .reg-empty { text-align:center; padding:28px 12px 22px; }
 .reg-empty svg { width:64px; height:64px; }
 .reg-empty-title { font-weight:800; font-size:16px; color:#102A56; margin-top:10px; }
 .reg-empty .note { margin-top:6px; }
 
 
-/* ---- Tiket (code45): badge notif di tombol nav ---- */
+/* ---- Tiket (code46): badge notif di tombol nav ---- */
 #devTiketNavBadge{position:absolute;top:4px;right:10px;background:#dc2626;color:#fff;font-size:11px;font-weight:800;min-width:20px;height:20px;line-height:20px;text-align:center;border-radius:10px;padding:0 5px;display:none;box-sizing:border-box}
 
 </style>
@@ -177,7 +179,7 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 <body>
 <header id="appHeader">
 <img id="appLogo" class="app-logo" src="icon.png" alt="MyLapak-Dev">
-<div class="hgrow"><h1>MyLapak-Dev</h1><p>Generate License Code • MyLapak App • v1.3.6 • code45</p></div>
+<div class="hgrow"><h1>MyLapak-Dev</h1><p>Generate License Code • MyLapak App • v1.3.6 • code46</p></div>
 </header>
 
 <div id="loginScreen">
@@ -201,7 +203,7 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
       <p class="login-foot">Login dengan akun Dev di Firebase Auth. Sesi dipertahankan di HP ini.</p>
     </div>
     <p class="login-sub">Sesi dipertahankan — buka app lagi dan sesi masih ada, langsung masuk Client tanpa ketik ulang.</p>
-    <p class="login-sub dim">My Lapak Dev v1.3.6 • code45</p>
+    <p class="login-sub dim">My Lapak Dev v1.3.6 • code46</p>
   </div>
 </div>
 
@@ -325,7 +327,7 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 <div class="card hidden" id="aboutCard">
 <h2>Tentang APK</h2>
 <img class="about-logo" src="logo-dev.png" alt="MyLapak Developer">
-<p class="note">MyLapak-Dev v1.3.6 (code45) • My Lapak • Data client di Firestore (cloud).<br>Package APK: com.miauwproject.mylapakadmin • Login: email Dev (Firebase Auth), tanpa PIN.<br>Istilah di app ini: Client = pembeli app, Kode lisensi = kode ML-XXXX-XXXX-XXXX.</p>
+<p class="note">MyLapak-Dev v1.3.6 (code46) • My Lapak • Data client di Firestore (cloud).<br>Package APK: com.miauwproject.mylapakadmin • Login: email Dev (Firebase Auth), tanpa PIN.<br>Istilah di app ini: Client = pembeli app, Kode lisensi = kode ML-XXXX-XXXX-XXXX.</p>
 </div>
 
 
@@ -624,7 +626,7 @@ function updateGenPreview(){
 
 
 
-// code45: tanpa PIN — gerbangnya layar Login (#loginScreen), bukan PIN.
+// code46: tanpa PIN — gerbangnya layar Login (#loginScreen), bukan PIN.
 function showLoginScreen(){
   if (typeof stopSyncTimer === 'function') stopSyncTimer();
   var am = document.getElementById('appMain'); if (am) am.classList.add('hidden');
@@ -1026,7 +1028,8 @@ function renderPendaftar(){
       var p = regPkgInfo(r.paket);
       return '<div class="cust" style="margin-bottom:10px"><div class="row"><b class="grow">' + esc(r.shopName || '-') + '</b><span class="badge">' + esc(p.label) + '</span></div>'
         + '<div style="font-size:12px;color:#555;margin-top:4px">Owner: ' + esc(r.ownerName || '-') + ' · ' + esc(r.ownerEmail || '') + '<br>WA: ' + esc(r.phone || '-') + ' · ' + esc(String(r.jmlHp || '')) + ' HP<br>Daftar: ' + esc(regDateStr(r.createdAt)) + '</div>'
-        + '<div class="row" style="margin-top:8px"><button class="btn btn-blue btn-sm" onclick="openRegDetail(\'' + r._id + '\')">Lihat Detail</button><button class="btn btn-green btn-sm" onclick="approveReg(\'' + r._id + '\')">Setujui</button><button class="btn btn-red btn-sm" onclick="rejectReg(\'' + r._id + '\')">Tolak</button></div></div>';
+        + '<div class="row" style="margin-top:8px"><button class="btn btn-blue btn-sm" onclick="openRegDetail(\'' + r._id + '\')">Lihat Detail</button></div>'
+        + '<div class="row regListBtns" style="margin-top:8px"><button class="btn btn-green btn-sm" onclick="approveReg(\'' + r._id + '\')">Setujui</button><button class="btn btn-red btn-sm" onclick="rejectReg(\'' + r._id + '\')">Tolak</button></div></div>';
     }).join('');
   }).catch(function(e){
     if (list) list.innerHTML = '<div class="note">Gagal memuat pendaftar: ' + esc(e.message || e) + '</div>';
@@ -1318,7 +1321,7 @@ setTheme(getTheme());
 
 <script>
 // ===== v1.3.0 devices: daftar perangkat Firestore, sumber sama dengan MyLapak utama =====
-// ===== v1.3.6 code45: Tiket Contact Developer — port dari v1.3.9-code25 =====
+// ===== v1.3.6 code46: Tiket Contact Developer — port dari v1.3.9-code25 =====
 // Koleksi tickets (cloud). Baca: auth. Tulis Dev: reply (replies+updatedAt),
 // status non-Selesai (status+updatedAt), flag (needsUpdate+updatedAt),
 // Selesai via arsip (ticketArchives + archived=true + kesimpulan) —
@@ -1416,7 +1419,7 @@ async function devTiketArchiveAndDone(id){
     await DEV_FB.db.collection('tickets').doc(id).update({ status: 'Selesai', archived: true, conclusionCategory: conclCat, conclusionText: conclText, concludedAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
     showToast('✅ Tiket selesai, lampiran diarsipkan' + (_skipped ? (' (' + _skipped + ' lampiran baru tidak ikut arsip, tetap di daftar aktif)') : '') + (ex.exists ? ' (arsip lama dipakai)' : '') + ''); await devTiketLoad(); devTiketOpen(id);
   } catch(e) { showToast('Gagal menyelesaikan tiket (status TIDAK diubah): ' + (e.message || e)); } }
-// code45 (A3): Refresh di kartu Tiket — adapter devRefreshAll code25.
+// code46 (A3): Refresh di kartu Tiket — adapter devRefreshAll code25.
 // Versi code25 memanggil devPanelCode/devLoadDevices/devAutoClientsLoad
 // yang tidak ada di basis ini; di sini refresh Tiket + syncClients saja.
 async function devRefreshAll(){ var fails = [];
@@ -1424,7 +1427,7 @@ async function devRefreshAll(){ var fails = [];
   try { if (typeof syncClients === 'function') await syncClients(); } catch(e) { fails.push('Client'); }
   if (fails.length) showToast('Refresh selesai sebagian, gagal: ' + fails.join(', ')); else showToast('✅ Refresh berhasil'); }
 
-// ===== v1.3.6 code45: Kirim APK + Panduan — pola Absensi (mailto) =====
+// ===== v1.3.6 code46: Kirim APK + Panduan — pola Absensi (mailto) =====
 // Email berisi data toko + SATU link panduan; login My Lapak pakai Kode Lisensi
 // (tidak ada kata sandi di email). Tombol membuka aplikasi email user; user
 // ketuk Kirim sendiri. Dipakai dari detail Pendaftar (sesudah approve) dan
@@ -1711,7 +1714,7 @@ try { devFbRestore(); } catch(e) {}
 </script>
 
 <script>
-// ===== v1.3.6 code45: daftar client dari cloud + migrasi 1x + sync berkala (1 data, tanpa PIN, tanpa kunci perangkat) =====
+// ===== v1.3.6 code46: daftar client dari cloud + migrasi 1x + sync berkala (1 data, tanpa PIN, tanpa kunci perangkat) =====
 // Daftar client dibaca dari licensedShops (1 query get() per refresh, N read,
 // tanpa listener). Daftar lokal (LS_CUST) hanya untuk client "belum pindah"
 // (tanpa toko) — bukan sumber ganda.
