@@ -132,7 +132,7 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 .devbox .cust { margin-top:10px; }
 
 
-/* ---- Layar Login profesional (code48): background brand + kartu floating ---- */
+/* ---- Layar Login profesional (code49): background brand + kartu floating ---- */
 #loginScreen { position:relative; min-height:100vh; min-height:100dvh; background:linear-gradient(160deg,#1769FF 0%,#0F56D6 42%,#102A56 100%); overflow:hidden; display:flex; align-items:center; justify-content:center; padding:32px 16px; }
 .login-bg { position:absolute; inset:0; overflow:hidden; pointer-events:none; }
 .blob { position:absolute; border-radius:50%; }
@@ -163,14 +163,14 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 .err-text { color:#dc2626; font-size:13px; min-height:18px; margin-top:6px; }
 
 
-/* ---- Empty-state Pendaftar (code48): ikon besar + judul + penjelasan ---- */
+/* ---- Empty-state Pendaftar (code49): ikon besar + judul + penjelasan ---- */
 .reg-empty { text-align:center; padding:28px 12px 22px; }
 .reg-empty svg { width:64px; height:64px; }
 .reg-empty-title { font-weight:800; font-size:16px; color:#102A56; margin-top:10px; }
 .reg-empty .note { margin-top:6px; }
 
 
-/* ---- Tiket (code48): badge notif di tombol nav ---- */
+/* ---- Tiket (code49): badge notif di tombol nav ---- */
 #devTiketNavBadge{position:absolute;top:4px;right:10px;background:#dc2626;color:#fff;font-size:11px;font-weight:800;min-width:20px;height:20px;line-height:20px;text-align:center;border-radius:10px;padding:0 5px;display:none;box-sizing:border-box}
 
 </style>
@@ -179,7 +179,7 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 <body>
 <header id="appHeader">
 <img id="appLogo" class="app-logo" src="icon.png" alt="MyLapak-Dev">
-<div class="hgrow"><h1>MyLapak-Dev</h1><p>Generate License Code • MyLapak App • v1.3.6 • code48</p></div>
+<div class="hgrow"><h1>MyLapak-Dev</h1><p>Generate License Code • MyLapak App • v1.3.6 • code49</p></div>
 </header>
 
 <div id="loginScreen">
@@ -203,7 +203,7 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
       <p class="login-foot">Login dengan akun Dev di Firebase Auth. Sesi dipertahankan di HP ini.</p>
     </div>
     <p class="login-sub">Sesi dipertahankan — buka app lagi dan sesi masih ada, langsung masuk Client tanpa ketik ulang.</p>
-    <p class="login-sub dim">My Lapak Dev v1.3.6 • code48</p>
+    <p class="login-sub dim">My Lapak Dev v1.3.6 • code49</p>
   </div>
 </div>
 
@@ -327,7 +327,7 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 <div class="card hidden" id="aboutCard">
 <h2>Tentang APK</h2>
 <img class="about-logo" src="logo-dev.png" alt="MyLapak Developer">
-<p class="note">MyLapak-Dev v1.3.6 (code48) • My Lapak • Data client di Firestore (cloud).<br>Package APK: com.miauwproject.mylapakadmin • Login: email Dev (Firebase Auth), tanpa PIN.<br>Istilah di app ini: Client = pembeli app, Kode lisensi = kode ML-XXXX-XXXX-XXXX.</p>
+<p class="note">MyLapak-Dev v1.3.6 (code49) • My Lapak • Data client di Firestore (cloud).<br>Package APK: com.miauwproject.mylapakadmin • Login: email Dev (Firebase Auth), tanpa PIN.<br>Istilah di app ini: Client = pembeli app, Kode lisensi = kode ML-XXXX-XXXX-XXXX.</p>
 </div>
 
 
@@ -626,7 +626,7 @@ function updateGenPreview(){
 
 
 
-// code48: tanpa PIN — gerbangnya layar Login (#loginScreen), bukan PIN.
+// code49: tanpa PIN — gerbangnya layar Login (#loginScreen), bukan PIN.
 function showLoginScreen(){
   if (typeof stopSyncTimer === 'function') stopSyncTimer();
   var am = document.getElementById('appMain'); if (am) am.classList.add('hidden');
@@ -1321,7 +1321,7 @@ setTheme(getTheme());
 
 <script>
 // ===== v1.3.0 devices: daftar perangkat Firestore, sumber sama dengan MyLapak utama =====
-// ===== v1.3.6 code48: Tiket Contact Developer — port dari v1.3.9-code25 =====
+// ===== v1.3.6 code49: Tiket Contact Developer — port dari v1.3.9-code25 =====
 // Koleksi tickets (cloud). Baca: auth. Tulis Dev: reply (replies+updatedAt),
 // status non-Selesai (status+updatedAt), flag (needsUpdate+updatedAt),
 // Selesai via arsip (ticketArchives + archived=true + kesimpulan) —
@@ -1343,9 +1343,9 @@ function devTiketRender(){ var el = document.getElementById('tiketDevList'); if 
 async function devTiketLoad(showToastFlag){ var el = document.getElementById('tiketDevList'); if (!el) return 0;
   if (!DEV_FB || !DEV_FB.db) { el.innerHTML = '<p class="note">Belum terhubung Firebase. Login dulu di layar awal.</p>'; devTiketNotifRenderBadge(0); return 0; }
   el.innerHTML = '<p class="note">Memuat tiket...</p>';
-  try { var snap = await DEV_FB.db.collection('tickets').orderBy('createdAt','desc').limit(30).get(); var arr = []; snap.forEach(function(d){ arr.push({ id: d.id, ...d.data() }); }); devTiketList = arr; devTiketLastDoc = snap.docs.length ? snap.docs[snap.docs.length - 1] : null; devTiketHasMore = snap.docs.length === 30; devTiketRender(); var _mb = document.getElementById('devTiketMoreBtn'); if (_mb) _mb.style.display = devTiketHasMore ? '' : 'none'; devTiketNotifRefreshBadge(); return arr.length; }
+  try { var snap = await DEV_FB.db.collection('tickets').orderBy('createdAt','desc').limit(30).get(); var arr = []; snap.forEach(function(d){ arr.push({ id: d.id, ...d.data() }); }); devTiketList = arr; devTiketLastDoc = snap.docs.length ? snap.docs[snap.docs.length - 1] : null; devTiketHasMore = snap.docs.length === 30; devTiketRender(); var _mb = document.getElementById('devTiketMoreBtn'); if (_mb) _mb.style.display = devTiketHasMore ? '' : 'none'; devTiketNotifRefreshBadge(); devTiketAutoCloseScan(arr).catch(function(){}); return arr.length; }
   catch(e) { el.innerHTML = '<p class="note">Gagal memuat tiket: ' + esc(e.message || e) + ' (pastikan rules tiket sudah dipublish manual di Console)</p>'; return 0; } }
-var devTiketLastDoc = null, devTiketHasMore = false; async function devTiketLoadMore(){ if (!DEV_FB || !DEV_FB.db || !devTiketLastDoc) return; var btn = document.getElementById('devTiketMoreBtn'); if (btn) btn.disabled = true; try { var snap = await DEV_FB.db.collection('tickets').orderBy('createdAt','desc').startAfter(devTiketLastDoc).limit(30).get(); var arr = []; snap.forEach(function(d){ arr.push({ id: d.id, ...d.data() }); }); devTiketList = devTiketList.concat(arr); devTiketLastDoc = snap.docs.length ? snap.docs[snap.docs.length - 1] : null; devTiketHasMore = snap.docs.length === 30; devTiketRender(); var _mb2 = document.getElementById('devTiketMoreBtn'); if (_mb2) _mb2.style.display = devTiketHasMore ? '' : 'none'; } catch(e) { showToast('Gagal memuat lagi: ' + (e.message || e)); } if (btn) btn.disabled = false; } function devTiketCloseAll(){ devTiketList.forEach(function(x){ var sid = String(x.id).replace(/[^A-Za-z0-9_-]/g, ''); var d = document.getElementById('devTiketDet-' + sid); if (d) { d.innerHTML = ''; d.style.display = 'none'; } var b = document.getElementById('devTiketBtn-' + sid); if (b) b.textContent = 'Lihat detail \u25bc'; }); devTiketOpenId = null; devTiketReplyPhotos = []; }
+var devTiketLastDoc = null, devTiketHasMore = false; async function devTiketLoadMore(){ if (!DEV_FB || !DEV_FB.db || !devTiketLastDoc) return; var btn = document.getElementById('devTiketMoreBtn'); if (btn) btn.disabled = true; try { var snap = await DEV_FB.db.collection('tickets').orderBy('createdAt','desc').startAfter(devTiketLastDoc).limit(30).get(); var arr = []; snap.forEach(function(d){ arr.push({ id: d.id, ...d.data() }); }); devTiketList = devTiketList.concat(arr); devTiketLastDoc = snap.docs.length ? snap.docs[snap.docs.length - 1] : null; devTiketHasMore = snap.docs.length === 30; devTiketRender(); var _mb2 = document.getElementById('devTiketMoreBtn'); if (_mb2) _mb2.style.display = devTiketHasMore ? '' : 'none'; devTiketAutoCloseScan(arr).catch(function(){}); } catch(e) { showToast('Gagal memuat lagi: ' + (e.message || e)); } if (btn) btn.disabled = false; } function devTiketCloseAll(){ devTiketList.forEach(function(x){ var sid = String(x.id).replace(/[^A-Za-z0-9_-]/g, ''); var d = document.getElementById('devTiketDet-' + sid); if (d) { d.innerHTML = ''; d.style.display = 'none'; } var b = document.getElementById('devTiketBtn-' + sid); if (b) b.textContent = 'Lihat detail \u25bc'; }); devTiketOpenId = null; devTiketReplyPhotos = []; }
 function devTiketToggle(id){ var sid = String(id).replace(/[^A-Za-z0-9_-]/g, ''); var det = document.getElementById('devTiketDet-' + sid); if (!det) return; var wasOpen = (devTiketOpenId === id) && det.style.display !== 'none' && det.innerHTML !== ''; devTiketCloseAll(); if (!wasOpen) devTiketOpen(id); }
 async function devTiketOpen(id){ try { devTiketCloseAll(); var t = devTiketList.find(function(x){ return x.id === id; }); if (!t) { showToast('Tiket tidak ditemukan'); return; } devTiketOpenId = id; devTiketReplyPhotos = [];
   var sid = String(id).replace(/[^A-Za-z0-9_-]/g, ''); var det = document.getElementById('devTiketDet-' + sid); if (!det) { showToast('Detail tiket tidak ditemukan'); return; } det.style.display = 'block'; var devNotifWasUnseen = !!devTiketNotifUnseenSet(devTiketList)[id]; if (devNotifWasUnseen) { try { var devNotifSeenMap = devTiketNotifGetSeen(); var devNotifLastUser = devTiketNotifLastUserAt(t); if (devNotifLastUser) { devNotifSeenMap[id] = devNotifLastUser; try { localStorage.setItem('dev_tiket_notif_seen_v1', JSON.stringify(devNotifSeenMap)); } catch(e3){} } } catch(e3){} var devNotifPill = document.getElementById('devTiketUserPill-' + sid); if (devNotifPill) devNotifPill.style.display = 'none'; devTiketNotifRefreshBadge(); }
@@ -1401,13 +1401,14 @@ async function devTiketSetFlag(id){ var _lt3 = (typeof devTiketList !== 'undefin
   if (!DEV_FB || !DEV_FB.db) { showToast('Belum terhubung Firebase'); return; }
   try { await DEV_FB.db.collection('tickets').doc(id).update({ needsUpdate: v, updatedAt: new Date().toISOString() }); showToast('✅ Flag Perlu update versi ' + (v ? 'diaktifkan' : 'dimatikan')); await devTiketLoad(); devTiketOpen(id); }
   catch(e) { showToast('Gagal simpan flag: ' + (e.message || e)); } }
-async function devTiketArchiveAndDone(id, requireConclusion){
-  if (!DEV_FB || !DEV_FB.db) { showToast('Belum terhubung Firebase'); return; }
-  try { var _ad = await DEV_FB.db.collection('tickets').doc(id).get(); if (_ad.exists && _ad.data().status === 'Selesai') { showToast('Tiket ini sudah selesai dan terkunci'); return; } } catch(_ae) {}
-  var ccEl = document.getElementById('devTiketConclusionCat'); var ctEl = document.getElementById('devTiketConclusionText');
-  var conclCat = ccEl ? ccEl.value : ''; var conclText = ctEl ? ctEl.value.trim() : '';
-  if (requireConclusion && !conclCat && !conclText) { showToast('Isi dulu kategori atau keterangan action sebelum menyelesaikan tiket'); return; }
-  if (!confirm('Tandai tiket ini Selesai? Lampiran akan dipindah ke arsip dan dihapus dari daftar aktif.')) return;
+async function devTiketArchiveAndDone(id, requireConclusion, opts){
+  if (!DEV_FB || !DEV_FB.db) { showToast('Belum terhubung Firebase'); return false; }
+  try { var _ad = await DEV_FB.db.collection('tickets').doc(id).get(); if (_ad.exists && _ad.data().status === 'Selesai') { showToast('Tiket ini sudah selesai dan terkunci'); return false; } } catch(_ae) {}
+  var conclCat, conclText;
+  if (opts && opts.conclusion) { conclCat = opts.conclusion.category || ''; conclText = opts.conclusion.text || ''; }
+  else { var ccEl = document.getElementById('devTiketConclusionCat'); var ctEl = document.getElementById('devTiketConclusionText'); conclCat = ccEl ? ccEl.value : ''; conclText = ctEl ? ctEl.value.trim() : ''; }
+  if (requireConclusion && !conclCat && !conclText) { showToast('Isi dulu kategori atau keterangan action sebelum menyelesaikan tiket'); return false; }
+  if (!(opts && opts.skipConfirm) && !confirm('Tandai tiket ini Selesai? Lampiran akan dipindah ke arsip dan dihapus dari daftar aktif.')) return false;
   try {
     var snap = await DEV_FB.db.collection('tickets').doc(id).collection('attachments').get(); var active = []; snap.forEach(function(d){ active.push({ aid: d.id, ...d.data() }); });
     var archRef = DEV_FB.db.collection('ticketArchives').doc(id); var merged = []; var ex = await archRef.get(); if (ex.exists) merged = (ex.data().attachments || []).slice();
@@ -1417,9 +1418,9 @@ async function devTiketArchiveAndDone(id, requireConclusion){
     var chk = await archRef.get(); if (!chk.exists) throw new Error('Arsip gagal dibuat, penghapusan dibatalkan');
     var _skipped = 0; for (var k = 0; k < active.length; k++) { var _inArch = merged.some(function(mm){ return mm.name === active[k].name && mm.sizeKB === active[k].sizeKB; }); if (_inArch) { await DEV_FB.db.collection('tickets').doc(id).collection('attachments').doc(active[k].aid).delete(); } else { _skipped++; } }
     await DEV_FB.db.collection('tickets').doc(id).update({ status: 'Selesai', archived: true, conclusionCategory: conclCat, conclusionText: conclText, concludedAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
-    showToast('✅ Tiket selesai, lampiran diarsipkan' + (_skipped ? (' (' + _skipped + ' lampiran baru tidak ikut arsip, tetap di daftar aktif)') : '') + (ex.exists ? ' (arsip lama dipakai)' : '') + ''); await devTiketLoad(); devTiketOpen(id);
-  } catch(e) { showToast('Gagal menyelesaikan tiket (status TIDAK diubah): ' + (e.message || e)); } }
-// code48: Tutup tiket simple — 1 ketuk, status otomatis Selesai, kesimpulan opsional.
+    if (!(opts && opts.quiet)) showToast('✅ Tiket selesai, lampiran diarsipkan' + (_skipped ? (' (' + _skipped + ' lampiran baru tidak ikut arsip, tetap di daftar aktif)') : '') + (ex.exists ? ' (arsip lama dipakai)' : '') + ''); if (!(opts && opts.skipReload)) { await devTiketLoad(); devTiketOpen(id); } return true;
+  } catch(e) { if (!(opts && opts.quiet)) showToast('Gagal menyelesaikan tiket (status TIDAK diubah): ' + (e.message || e)); return false; } }
+// code49: Tutup tiket simple — 1 ketuk, status otomatis Selesai, kesimpulan opsional.
 // Jalur lama (dropdown Selesai -> Simpan Status) tetap requireConclusion=true.
 async function devTiketCloseSimple(id){
   var _lt = (typeof devTiketList !== 'undefined' ? devTiketList : []).find(function(x){ return String(x.id) === String(id); });
@@ -1427,7 +1428,54 @@ async function devTiketCloseSimple(id){
   if (DEV_FB && DEV_FB.db) { try { var _sd = await DEV_FB.db.collection('tickets').doc(id).get(); if (_sd.exists && _sd.data().status === 'Selesai') { showToast('Tiket ini sudah selesai dan terkunci'); return; } } catch(_se) {} }
   await devTiketArchiveAndDone(id, false);
 }
-// code48 (A3): Refresh di kartu Tiket — adapter devRefreshAll code25.
+// code49: Auto-close tiket 24 jam — tanpa server, lazy check saat daftar tiket dimuat.
+// Syarat (semua): status bukan Selesai; ada >=1 balasan dev/auto; balasan TERAKHIR
+// (at terbesar) dari dev/auto (bukan user); >24 jam sejak aktivitas terakhir
+// (max at balasan terakhir, updatedAt, createdAt). Keterangan: 'Solved tanpa action'.
+var DEV_TIKET_AUTO_CLOSE_MS = 24*60*60*1000;
+var DEV_TIKET_AUTO_CLOSE_TEXT = 'Solved tanpa action (auto-close setelah 24 jam tanpa respon user)';
+var devTiketAutoCloseRunning = false;
+function devTiketAutoCloseDue(t, nowMs){
+  if (!t || (t.status || 'Baru') === 'Selesai') return false;
+  var reps = (t.replies || []).slice();
+  var hasDevAuto = false; var i, r, m, best = null, bestMs = -1;
+  for (i = 0; i < reps.length; i++) {
+    r = reps[i] || {};
+    if (r.from === 'dev' || r.from === 'auto') hasDevAuto = true;
+    m = Date.parse(r.at || '');
+    if (!isNaN(m) && m > bestMs) { bestMs = m; best = r; }
+  }
+  if (!hasDevAuto) return false;
+  if (!best) best = reps[reps.length - 1];
+  if (!best || (best.from !== 'dev' && best.from !== 'auto')) return false;
+  var lastMs = bestMs;
+  [t.updatedAt, t.createdAt].forEach(function(v){ var mm = Date.parse(v || ''); if (!isNaN(mm) && mm > lastMs) lastMs = mm; });
+  if (lastMs < 0) return false;
+  return (nowMs - lastMs) > DEV_TIKET_AUTO_CLOSE_MS;
+}
+async function devTiketAutoCloseScan(list){
+  if (devTiketAutoCloseRunning) return 0;
+  if (!DEV_FB || !DEV_FB.db) return 0;
+  var arr = (list || []).filter(function(t){ return devTiketAutoCloseDue(t, Date.now()); });
+  if (!arr.length) return 0;
+  devTiketAutoCloseRunning = true;
+  var n = 0;
+  try {
+    for (var i = 0; i < arr.length; i++) {
+      var ok = await devTiketArchiveAndDone(arr[i].id, false, {skipConfirm:true, quiet:true, skipReload:true, conclusion:{category:'Lainnya', text:DEV_TIKET_AUTO_CLOSE_TEXT}});
+      if (ok) n++;
+    }
+    if (n > 0) {
+      showToast(n + ' tiket ditutup otomatis (24 jam tanpa respon)');
+      var _reopen = (typeof devTiketOpenId !== 'undefined') ? devTiketOpenId : null;
+      await devTiketLoad();
+      if (_reopen) { try { devTiketOpen(_reopen); } catch(_re) {} }
+    }
+  } catch(e) {}
+  finally { devTiketAutoCloseRunning = false; }
+  return n;
+}
+// code49 (A3): Refresh di kartu Tiket — adapter devRefreshAll code25.
 // Versi code25 memanggil devPanelCode/devLoadDevices/devAutoClientsLoad
 // yang tidak ada di basis ini; di sini refresh Tiket + syncClients saja.
 async function devRefreshAll(){ var fails = [];
@@ -1435,7 +1483,7 @@ async function devRefreshAll(){ var fails = [];
   try { if (typeof syncClients === 'function') await syncClients(); } catch(e) { fails.push('Client'); }
   if (fails.length) showToast('Refresh selesai sebagian, gagal: ' + fails.join(', ')); else showToast('✅ Refresh berhasil'); }
 
-// ===== v1.3.6 code48: Kirim APK + Panduan — pola Absensi (mailto) =====
+// ===== v1.3.6 code49: Kirim APK + Panduan — pola Absensi (mailto) =====
 // Email berisi data toko + SATU link panduan; login My Lapak pakai Kode Lisensi
 // (tidak ada kata sandi di email). Tombol membuka aplikasi email user; user
 // ketuk Kirim sendiri. Dipakai dari detail Pendaftar (sesudah approve) dan
@@ -1722,7 +1770,7 @@ try { devFbRestore(); } catch(e) {}
 </script>
 
 <script>
-// ===== v1.3.6 code48: daftar client dari cloud + migrasi 1x + sync berkala (1 data, tanpa PIN, tanpa kunci perangkat) =====
+// ===== v1.3.6 code49: daftar client dari cloud + migrasi 1x + sync berkala (1 data, tanpa PIN, tanpa kunci perangkat) =====
 // Daftar client dibaca dari licensedShops (1 query get() per refresh, N read,
 // tanpa listener). Daftar lokal (LS_CUST) hanya untuk client "belum pindah"
 // (tanpa toko) — bukan sumber ganda.
