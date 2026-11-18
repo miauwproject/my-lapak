@@ -132,7 +132,7 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 .devbox .cust { margin-top:10px; }
 
 
-/* ---- Layar Login profesional (code46): background brand + kartu floating ---- */
+/* ---- Layar Login profesional (code47): background brand + kartu floating ---- */
 #loginScreen { position:relative; min-height:100vh; min-height:100dvh; background:linear-gradient(160deg,#1769FF 0%,#0F56D6 42%,#102A56 100%); overflow:hidden; display:flex; align-items:center; justify-content:center; padding:32px 16px; }
 .login-bg { position:absolute; inset:0; overflow:hidden; pointer-events:none; }
 .blob { position:absolute; border-radius:50%; }
@@ -163,14 +163,14 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 .err-text { color:#dc2626; font-size:13px; min-height:18px; margin-top:6px; }
 
 
-/* ---- Empty-state Pendaftar (code46): ikon besar + judul + penjelasan ---- */
+/* ---- Empty-state Pendaftar (code47): ikon besar + judul + penjelasan ---- */
 .reg-empty { text-align:center; padding:28px 12px 22px; }
 .reg-empty svg { width:64px; height:64px; }
 .reg-empty-title { font-weight:800; font-size:16px; color:#102A56; margin-top:10px; }
 .reg-empty .note { margin-top:6px; }
 
 
-/* ---- Tiket (code46): badge notif di tombol nav ---- */
+/* ---- Tiket (code47): badge notif di tombol nav ---- */
 #devTiketNavBadge{position:absolute;top:4px;right:10px;background:#dc2626;color:#fff;font-size:11px;font-weight:800;min-width:20px;height:20px;line-height:20px;text-align:center;border-radius:10px;padding:0 5px;display:none;box-sizing:border-box}
 
 </style>
@@ -179,7 +179,7 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 <body>
 <header id="appHeader">
 <img id="appLogo" class="app-logo" src="icon.png" alt="MyLapak-Dev">
-<div class="hgrow"><h1>MyLapak-Dev</h1><p>Generate License Code • MyLapak App • v1.3.6 • code46</p></div>
+<div class="hgrow"><h1>MyLapak-Dev</h1><p>Generate License Code • MyLapak App • v1.3.6 • code47</p></div>
 </header>
 
 <div id="loginScreen">
@@ -203,7 +203,7 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
       <p class="login-foot">Login dengan akun Dev di Firebase Auth. Sesi dipertahankan di HP ini.</p>
     </div>
     <p class="login-sub">Sesi dipertahankan — buka app lagi dan sesi masih ada, langsung masuk Client tanpa ketik ulang.</p>
-    <p class="login-sub dim">My Lapak Dev v1.3.6 • code46</p>
+    <p class="login-sub dim">My Lapak Dev v1.3.6 • code47</p>
   </div>
 </div>
 
@@ -327,7 +327,7 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 <div class="card hidden" id="aboutCard">
 <h2>Tentang APK</h2>
 <img class="about-logo" src="logo-dev.png" alt="MyLapak Developer">
-<p class="note">MyLapak-Dev v1.3.6 (code46) • My Lapak • Data client di Firestore (cloud).<br>Package APK: com.miauwproject.mylapakadmin • Login: email Dev (Firebase Auth), tanpa PIN.<br>Istilah di app ini: Client = pembeli app, Kode lisensi = kode ML-XXXX-XXXX-XXXX.</p>
+<p class="note">MyLapak-Dev v1.3.6 (code47) • My Lapak • Data client di Firestore (cloud).<br>Package APK: com.miauwproject.mylapakadmin • Login: email Dev (Firebase Auth), tanpa PIN.<br>Istilah di app ini: Client = pembeli app, Kode lisensi = kode ML-XXXX-XXXX-XXXX.</p>
 </div>
 
 
@@ -626,7 +626,7 @@ function updateGenPreview(){
 
 
 
-// code46: tanpa PIN — gerbangnya layar Login (#loginScreen), bukan PIN.
+// code47: tanpa PIN — gerbangnya layar Login (#loginScreen), bukan PIN.
 function showLoginScreen(){
   if (typeof stopSyncTimer === 'function') stopSyncTimer();
   var am = document.getElementById('appMain'); if (am) am.classList.add('hidden');
@@ -1321,7 +1321,7 @@ setTheme(getTheme());
 
 <script>
 // ===== v1.3.0 devices: daftar perangkat Firestore, sumber sama dengan MyLapak utama =====
-// ===== v1.3.6 code46: Tiket Contact Developer — port dari v1.3.9-code25 =====
+// ===== v1.3.6 code47: Tiket Contact Developer — port dari v1.3.9-code25 =====
 // Koleksi tickets (cloud). Baca: auth. Tulis Dev: reply (replies+updatedAt),
 // status non-Selesai (status+updatedAt), flag (needsUpdate+updatedAt),
 // Selesai via arsip (ticketArchives + archived=true + kesimpulan) —
@@ -1358,7 +1358,7 @@ async function devTiketOpen(id){ try { devTiketCloseAll(); var t = devTiketList.
   var cTxt = document.getElementById('devTiketConclusionText'); if (cTxt) cTxt.value = t.conclusionText || '';
   devTiketConclusionToggle();
   var repEl = document.getElementById('devTiketReplies');
-  if (repEl) repEl.innerHTML = '<b>Balasan (' + (t.replies || []).length + ')</b>' + (t.replies || []).map(function(r){ return '<div style="border-left:3px solid #ddd;padding:4px 8px;margin-top:4px"><b>' + esc(r.from === 'dev' ? 'Developer' : 'User') + '</b> <span class="note">' + esc(devTiketWIB(r.at)) + '</span><div>' + esc(r.body || '') + '</div></div>'; }).join('');
+  if (repEl) repEl.innerHTML = '<b>Balasan (' + (t.replies || []).length + ')</b>' + (t.replies || []).map(function(r){ return '<div style="border-left:3px solid #ddd;padding:4px 8px;margin-top:4px"><b>' + esc(r.from === 'dev' ? 'Developer' : (r.from === 'auto' ? 'Balasan Otomatis' : 'User')) + '</b> <span class="note">' + esc(devTiketWIB(r.at)) + '</span><div>' + esc(r.body || '').replace(/\n/g,'<br>') + '</div></div>'; }).join('');
   devTiketLoadPhotos(id, !!t.archived); var tbtn = document.getElementById('devTiketBtn-' + sid); if (tbtn) tbtn.textContent = 'Tutup detail \u25b2'; var card = document.getElementById('devTiketCard-' + sid); var sc = card || det; if (sc && sc.scrollIntoView) { try { sc.scrollIntoView({behavior:'smooth', block:'start'}); } catch(e2){} } } catch(e){ showToast('Gagal membuka detail: ' + (e.message || e)); } }
 async function devTiketLoadPhotos(id, archived){ var el = document.getElementById('devTiketPhotos'); if (!el) return;
   if (!DEV_FB || !DEV_FB.db) { el.innerHTML = '<p class="note">Belum terhubung Firebase.</p>'; return; }
@@ -1419,7 +1419,7 @@ async function devTiketArchiveAndDone(id){
     await DEV_FB.db.collection('tickets').doc(id).update({ status: 'Selesai', archived: true, conclusionCategory: conclCat, conclusionText: conclText, concludedAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
     showToast('✅ Tiket selesai, lampiran diarsipkan' + (_skipped ? (' (' + _skipped + ' lampiran baru tidak ikut arsip, tetap di daftar aktif)') : '') + (ex.exists ? ' (arsip lama dipakai)' : '') + ''); await devTiketLoad(); devTiketOpen(id);
   } catch(e) { showToast('Gagal menyelesaikan tiket (status TIDAK diubah): ' + (e.message || e)); } }
-// code46 (A3): Refresh di kartu Tiket — adapter devRefreshAll code25.
+// code47 (A3): Refresh di kartu Tiket — adapter devRefreshAll code25.
 // Versi code25 memanggil devPanelCode/devLoadDevices/devAutoClientsLoad
 // yang tidak ada di basis ini; di sini refresh Tiket + syncClients saja.
 async function devRefreshAll(){ var fails = [];
@@ -1427,7 +1427,7 @@ async function devRefreshAll(){ var fails = [];
   try { if (typeof syncClients === 'function') await syncClients(); } catch(e) { fails.push('Client'); }
   if (fails.length) showToast('Refresh selesai sebagian, gagal: ' + fails.join(', ')); else showToast('✅ Refresh berhasil'); }
 
-// ===== v1.3.6 code46: Kirim APK + Panduan — pola Absensi (mailto) =====
+// ===== v1.3.6 code47: Kirim APK + Panduan — pola Absensi (mailto) =====
 // Email berisi data toko + SATU link panduan; login My Lapak pakai Kode Lisensi
 // (tidak ada kata sandi di email). Tombol membuka aplikasi email user; user
 // ketuk Kirim sendiri. Dipakai dari detail Pendaftar (sesudah approve) dan
@@ -1714,7 +1714,7 @@ try { devFbRestore(); } catch(e) {}
 </script>
 
 <script>
-// ===== v1.3.6 code46: daftar client dari cloud + migrasi 1x + sync berkala (1 data, tanpa PIN, tanpa kunci perangkat) =====
+// ===== v1.3.6 code47: daftar client dari cloud + migrasi 1x + sync berkala (1 data, tanpa PIN, tanpa kunci perangkat) =====
 // Daftar client dibaca dari licensedShops (1 query get() per refresh, N read,
 // tanpa listener). Daftar lokal (LS_CUST) hanya untuk client "belum pindah"
 // (tanpa toko) — bukan sumber ganda.
