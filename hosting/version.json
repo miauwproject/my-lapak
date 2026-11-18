@@ -1,7 +1,7 @@
 {
-  "versionCode": 75,
+  "versionCode": 76,
   "versionName": "1.1.0",
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code75/my-lapak_v1.1.0-code75.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTc1L215LWxhcGFrX3YxLjEuMC1jb2RlNzUuYXBr",
-  "notes": "STABIL code75: simplifikasi pendaftaran 5 langkah jadi 2, aktivasi lisensi otomatis saat login Google, perpanjang 1 ketuk dari Dev. Tampilan/fitur tidak berubah. Plus 5 perbaikan UI: baris izin pembatalan dirapikan, overlay PROMO dihapus dari Beranda v2, pill Kembali v2 dihapus (swipe-back tetap), 3 tombol modal profil compact, kartu libur tema pantai."
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code76/my-lapak_v1.1.0-code76.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTc2L215LWxhcGFrX3YxLjEuMC1jb2RlNzYuYXBr",
+  "notes": "STABIL code76: alamat toko kini terisi otomatis dari picker peta (Profil Toko) + ikut tersimpan cloud; tombol Buka Katalog di kartu Link Katalog; banner toko tampil sebagai background hero Beranda v2."
 }
