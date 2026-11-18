@@ -132,7 +132,7 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 .devbox .cust { margin-top:10px; }
 
 
-/* ---- Layar Login profesional (code47): background brand + kartu floating ---- */
+/* ---- Layar Login profesional (code48): background brand + kartu floating ---- */
 #loginScreen { position:relative; min-height:100vh; min-height:100dvh; background:linear-gradient(160deg,#1769FF 0%,#0F56D6 42%,#102A56 100%); overflow:hidden; display:flex; align-items:center; justify-content:center; padding:32px 16px; }
 .login-bg { position:absolute; inset:0; overflow:hidden; pointer-events:none; }
 .blob { position:absolute; border-radius:50%; }
@@ -163,14 +163,14 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 .err-text { color:#dc2626; font-size:13px; min-height:18px; margin-top:6px; }
 
 
-/* ---- Empty-state Pendaftar (code47): ikon besar + judul + penjelasan ---- */
+/* ---- Empty-state Pendaftar (code48): ikon besar + judul + penjelasan ---- */
 .reg-empty { text-align:center; padding:28px 12px 22px; }
 .reg-empty svg { width:64px; height:64px; }
 .reg-empty-title { font-weight:800; font-size:16px; color:#102A56; margin-top:10px; }
 .reg-empty .note { margin-top:6px; }
 
 
-/* ---- Tiket (code47): badge notif di tombol nav ---- */
+/* ---- Tiket (code48): badge notif di tombol nav ---- */
 #devTiketNavBadge{position:absolute;top:4px;right:10px;background:#dc2626;color:#fff;font-size:11px;font-weight:800;min-width:20px;height:20px;line-height:20px;text-align:center;border-radius:10px;padding:0 5px;display:none;box-sizing:border-box}
 
 </style>
@@ -179,7 +179,7 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 <body>
 <header id="appHeader">
 <img id="appLogo" class="app-logo" src="icon.png" alt="MyLapak-Dev">
-<div class="hgrow"><h1>MyLapak-Dev</h1><p>Generate License Code • MyLapak App • v1.3.6 • code47</p></div>
+<div class="hgrow"><h1>MyLapak-Dev</h1><p>Generate License Code • MyLapak App • v1.3.6 • code48</p></div>
 </header>
 
 <div id="loginScreen">
@@ -203,7 +203,7 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
       <p class="login-foot">Login dengan akun Dev di Firebase Auth. Sesi dipertahankan di HP ini.</p>
     </div>
     <p class="login-sub">Sesi dipertahankan — buka app lagi dan sesi masih ada, langsung masuk Client tanpa ketik ulang.</p>
-    <p class="login-sub dim">My Lapak Dev v1.3.6 • code47</p>
+    <p class="login-sub dim">My Lapak Dev v1.3.6 • code48</p>
   </div>
 </div>
 
@@ -327,7 +327,7 @@ input[type=text], input[type=tel], input[type=email], input[type=date], input[ty
 <div class="card hidden" id="aboutCard">
 <h2>Tentang APK</h2>
 <img class="about-logo" src="logo-dev.png" alt="MyLapak Developer">
-<p class="note">MyLapak-Dev v1.3.6 (code47) • My Lapak • Data client di Firestore (cloud).<br>Package APK: com.miauwproject.mylapakadmin • Login: email Dev (Firebase Auth), tanpa PIN.<br>Istilah di app ini: Client = pembeli app, Kode lisensi = kode ML-XXXX-XXXX-XXXX.</p>
+<p class="note">MyLapak-Dev v1.3.6 (code48) • My Lapak • Data client di Firestore (cloud).<br>Package APK: com.miauwproject.mylapakadmin • Login: email Dev (Firebase Auth), tanpa PIN.<br>Istilah di app ini: Client = pembeli app, Kode lisensi = kode ML-XXXX-XXXX-XXXX.</p>
 </div>
 
 
@@ -626,7 +626,7 @@ function updateGenPreview(){
 
 
 
-// code47: tanpa PIN — gerbangnya layar Login (#loginScreen), bukan PIN.
+// code48: tanpa PIN — gerbangnya layar Login (#loginScreen), bukan PIN.
 function showLoginScreen(){
   if (typeof stopSyncTimer === 'function') stopSyncTimer();
   var am = document.getElementById('appMain'); if (am) am.classList.add('hidden');
@@ -1321,7 +1321,7 @@ setTheme(getTheme());
 
 <script>
 // ===== v1.3.0 devices: daftar perangkat Firestore, sumber sama dengan MyLapak utama =====
-// ===== v1.3.6 code47: Tiket Contact Developer — port dari v1.3.9-code25 =====
+// ===== v1.3.6 code48: Tiket Contact Developer — port dari v1.3.9-code25 =====
 // Koleksi tickets (cloud). Baca: auth. Tulis Dev: reply (replies+updatedAt),
 // status non-Selesai (status+updatedAt), flag (needsUpdate+updatedAt),
 // Selesai via arsip (ticketArchives + archived=true + kesimpulan) —
@@ -1351,7 +1351,7 @@ async function devTiketOpen(id){ try { devTiketCloseAll(); var t = devTiketList.
   var sid = String(id).replace(/[^A-Za-z0-9_-]/g, ''); var det = document.getElementById('devTiketDet-' + sid); if (!det) { showToast('Detail tiket tidak ditemukan'); return; } det.style.display = 'block'; var devNotifWasUnseen = !!devTiketNotifUnseenSet(devTiketList)[id]; if (devNotifWasUnseen) { try { var devNotifSeenMap = devTiketNotifGetSeen(); var devNotifLastUser = devTiketNotifLastUserAt(t); if (devNotifLastUser) { devNotifSeenMap[id] = devNotifLastUser; try { localStorage.setItem('dev_tiket_notif_seen_v1', JSON.stringify(devNotifSeenMap)); } catch(e3){} } } catch(e3){} var devNotifPill = document.getElementById('devTiketUserPill-' + sid); if (devNotifPill) devNotifPill.style.display = 'none'; devTiketNotifRefreshBadge(); }
   var isDone = (t.status === 'Selesai');
   var conclLine = (t.status === 'Selesai' && (t.conclusionCategory || t.conclusionText)) ? '<div style="margin-top:6px;background:var(--concl-bg,#FFFBEB);border:1px solid #F59E0B;border-radius:8px;padding:8px"><b>Kesimpulan:</b> ' + esc(t.conclusionCategory || '') + ((t.conclusionCategory && t.conclusionText) ? ' \u2014 ' : '') + esc(t.conclusionText || '') + '</div>' : '';
-  det.innerHTML = '<div class="cust"><b>Detail: ' + esc(t.ticketNo || t.id) + '</b><br>Nama toko: ' + esc(t.shopName || '-') + '<br>Kode toko: ' + esc(t.shopCode || '-') + '<br>Lisensi aktif: ' + esc(t.licenseCode || '-') + ' • ' + esc(devTiketHangus(t)) + '<br>Kategori: ' + esc(t.category || '') + ' • Status: ' + (isDone ? '' : esc(t.status || 'Baru')) + (isDone ? ' <span style="display:inline-block;background:#111827;color:#ffffff;font-weight:700;padding:3px 12px;border-radius:99px;font-size:12px">Tutup</span>' : '') + (t.needsUpdate ? ' <span class="badge badge-amber">⚠️ Perlu update versi</span>' : '') + (t.archived ? ' • Lampiran: diarsipkan' : '') + '<br>Dikirim: ' + esc(devTiketWIB(t.createdAt)) + '<br>Versi app: ' + esc(t.appVersionName || t.appVersion || '') + ' • HP: ' + esc(t.deviceModel || '') + ' • ' + esc(t.platform || '') + '<br><b>' + esc(t.title || '') + '</b><div>' + esc(t.description || '') + '</div>' + conclLine + '<div id="devTiketReplies" style="margin-top:8px"></div><div id="devTiketPhotos" style="margin-top:8px"><p class="note">Memuat foto...</p></div>' + (isDone ? '' : '<div style="margin-top:10px"><label>Balasan developer</label><textarea id="devTiketReplyBox" rows="3" style="width:100%"></textarea><div style="margin-top:6px"><label>Foto balasan (opsional, maks 3, JPG/PNG, total maks 500KB)</label><input id="devTiketReplyPhotoInput" type="file" accept="image/jpeg,image/png" multiple onchange="devTiketReplyOnPhotos(event)" style="width:100%;margin-top:4px"></div><div id="devTiketReplyPhotoPrev" style="font-size:12px;margin-top:4px"></div><button class="btn btn-green btn-sm" style="margin-top:6px" onclick="devTiketReply(\'' + String(id).replace(/[^A-Za-z0-9_-]/g, '') + '\')">Kirim Balasan</button></div><div style="margin-top:10px"><label>Ubah status</label><select id="devTiketStatusBox" style="width:100%" onchange="devTiketConclusionToggle()"><option>Baru</option><option>Diproses</option><option>Menunggu user</option><option>Selesai</option></select><button class="btn btn-outline btn-sm" style="margin-top:6px" onclick="devTiketSetStatus(\'' + String(id).replace(/[^A-Za-z0-9_-]/g, '') + '\')">Simpan Status</button></div><div style="margin-top:10px" id="devTiketConclusionWrap"><label>Kesimpulan penyelesaian (wajib sebelum Selesai)</label><select id="devTiketConclusionCat" style="width:100%"><option value="">Pilih kategori...</option><option>Bug diperbaiki</option><option>Panduan diberikan</option><option>Fitur ditambahkan</option><option>Bukan bug (sesuai desain)</option><option>Ditolak / di luar cakupan</option><option>Lainnya</option></select><textarea id="devTiketConclusionText" rows="2" style="width:100%;margin-top:4px" placeholder="Keterangan action yang dilakukan..."></textarea><div class="note">Wajib isi salah satu (kategori atau teks) sebelum status Selesai disimpan.</div></div><div style="margin-top:10px"><label><input type="checkbox" id="devTiketFlagBox"> Perlu update versi</label><button class="btn btn-outline btn-sm" style="margin-left:8px" onclick="devTiketSetFlag(\'' + String(id).replace(/[^A-Za-z0-9_-]/g, '') + '\')">Simpan Flag</button></div>') + '</div>';
+  det.innerHTML = '<div class="cust"><b>Detail: ' + esc(t.ticketNo || t.id) + '</b><br>Nama toko: ' + esc(t.shopName || '-') + '<br>Kode toko: ' + esc(t.shopCode || '-') + '<br>Lisensi aktif: ' + esc(t.licenseCode || '-') + ' • ' + esc(devTiketHangus(t)) + '<br>Kategori: ' + esc(t.category || '') + ' • Status: ' + (isDone ? '' : esc(t.status || 'Baru')) + (isDone ? ' <span style="display:inline-block;background:#111827;color:#ffffff;font-weight:700;padding:3px 12px;border-radius:99px;font-size:12px">Tutup</span>' : '') + (t.needsUpdate ? ' <span class="badge badge-amber">⚠️ Perlu update versi</span>' : '') + (t.archived ? ' • Lampiran: diarsipkan' : '') + '<br>Dikirim: ' + esc(devTiketWIB(t.createdAt)) + '<br>Versi app: ' + esc(t.appVersionName || t.appVersion || '') + ' • HP: ' + esc(t.deviceModel || '') + ' • ' + esc(t.platform || '') + '<br><b>' + esc(t.title || '') + '</b><div>' + esc(t.description || '') + '</div>' + conclLine + '<div id="devTiketReplies" style="margin-top:8px"></div><div id="devTiketPhotos" style="margin-top:8px"><p class="note">Memuat foto...</p></div>' + (isDone ? '' : '<div style="margin-top:10px"><label>Balasan developer</label><textarea id="devTiketReplyBox" rows="3" style="width:100%"></textarea><div style="margin-top:6px"><label>Foto balasan (opsional, maks 3, JPG/PNG, total maks 500KB)</label><input id="devTiketReplyPhotoInput" type="file" accept="image/jpeg,image/png" multiple onchange="devTiketReplyOnPhotos(event)" style="width:100%;margin-top:4px"></div><div id="devTiketReplyPhotoPrev" style="font-size:12px;margin-top:4px"></div><button class="btn btn-green btn-sm" style="margin-top:6px" onclick="devTiketReply(\'' + String(id).replace(/[^A-Za-z0-9_-]/g, '') + '\')">Kirim Balasan</button></div><div style="margin-top:14px;border:2px solid #16a34a;border-radius:12px;padding:12px"><label style="margin-top:0">Tutup tiket</label><label style="margin-top:8px">Kategori kesimpulan (opsional)</label><select id="devTiketConclusionCat" style="width:100%"><option value="">Pilih kategori...</option><option>Bug diperbaiki</option><option>Panduan diberikan</option><option>Fitur ditambahkan</option><option>Bukan bug (sesuai desain)</option><option>Ditolak / di luar cakupan</option><option>Lainnya</option></select><textarea id="devTiketConclusionText" rows="2" style="width:100%;margin-top:4px" placeholder="Keterangan action yang dilakukan... (boleh kosong)"></textarea><div class="note">Boleh dikosongkan — kalau diisi tetap tersimpan di tiket.</div><button class="btn btn-green" style="margin-top:10px;width:100%" onclick="devTiketCloseSimple(\'' + String(id).replace(/[^A-Za-z0-9_-]/g, '') + '\')">✓ Tutup Tiket</button><div class="note" style="margin-top:6px">Status otomatis jadi Selesai saat ditutup. Lampiran otomatis dipindah ke arsip.</div></div><div style="margin-top:10px"><label>Ubah status</label><select id="devTiketStatusBox" style="width:100%" onchange="devTiketConclusionToggle()"><option>Baru</option><option>Diproses</option><option>Menunggu user</option><option>Selesai</option></select><button class="btn btn-outline btn-sm" style="margin-top:6px" onclick="devTiketSetStatus(\'' + String(id).replace(/[^A-Za-z0-9_-]/g, '') + '\')">Simpan Status</button></div><div style="margin-top:10px"><label><input type="checkbox" id="devTiketFlagBox"> Perlu update versi</label><button class="btn btn-outline btn-sm" style="margin-left:8px" onclick="devTiketSetFlag(\'' + String(id).replace(/[^A-Za-z0-9_-]/g, '') + '\')">Simpan Flag</button></div>') + '</div>';
   var sb = document.getElementById('devTiketStatusBox'); if (sb) sb.value = t.status || 'Baru';
   var fb = document.getElementById('devTiketFlagBox'); if (fb) fb.checked = !!t.needsUpdate;
   var cCat = document.getElementById('devTiketConclusionCat'); if (cCat) cCat.value = t.conclusionCategory || '';
@@ -1393,7 +1393,7 @@ async function devTiketReply(id){ var _lt = (typeof devTiketList !== 'undefined'
   catch(e) { showToast('Gagal kirim balasan: ' + (e.message || e)); } }
 function devTiketConclusionToggle(){ var sb = document.getElementById('devTiketStatusBox'); var w = document.getElementById('devTiketConclusionWrap'); if (w) w.style.display = (sb && sb.value === 'Selesai') ? 'block' : 'none'; }
 async function devTiketSetStatus(id){ var _lt2 = (typeof devTiketList !== 'undefined' ? devTiketList : []).find(function(x){ return String(x.id) === String(id); }); if (_lt2 && _lt2.status === 'Selesai') { showToast('Tiket ini sudah selesai dan terkunci'); return; } if (DEV_FB && DEV_FB.db) { try { var _sd = await DEV_FB.db.collection('tickets').doc(id).get(); if (_sd.exists && _sd.data().status === 'Selesai') { showToast('Tiket ini sudah selesai dan terkunci'); return; } } catch(_se) {} } var sb = document.getElementById('devTiketStatusBox'); var st = sb ? sb.value : 'Diproses'; if (!st) return;
-  if (st === 'Selesai') { await devTiketArchiveAndDone(id); return; }
+  if (st === 'Selesai') { await devTiketArchiveAndDone(id, true); return; }
   if (!DEV_FB || !DEV_FB.db) { showToast('Belum terhubung Firebase'); return; }
   try { await DEV_FB.db.collection('tickets').doc(id).update({ status: st, updatedAt: new Date().toISOString() }); showToast('✅ Status diubah jadi ' + st); await devTiketLoad(); devTiketOpen(id); }
   catch(e) { showToast('Gagal ubah status: ' + (e.message || e)); } }
@@ -1401,12 +1401,12 @@ async function devTiketSetFlag(id){ var _lt3 = (typeof devTiketList !== 'undefin
   if (!DEV_FB || !DEV_FB.db) { showToast('Belum terhubung Firebase'); return; }
   try { await DEV_FB.db.collection('tickets').doc(id).update({ needsUpdate: v, updatedAt: new Date().toISOString() }); showToast('✅ Flag Perlu update versi ' + (v ? 'diaktifkan' : 'dimatikan')); await devTiketLoad(); devTiketOpen(id); }
   catch(e) { showToast('Gagal simpan flag: ' + (e.message || e)); } }
-async function devTiketArchiveAndDone(id){
+async function devTiketArchiveAndDone(id, requireConclusion){
   if (!DEV_FB || !DEV_FB.db) { showToast('Belum terhubung Firebase'); return; }
   try { var _ad = await DEV_FB.db.collection('tickets').doc(id).get(); if (_ad.exists && _ad.data().status === 'Selesai') { showToast('Tiket ini sudah selesai dan terkunci'); return; } } catch(_ae) {}
   var ccEl = document.getElementById('devTiketConclusionCat'); var ctEl = document.getElementById('devTiketConclusionText');
   var conclCat = ccEl ? ccEl.value : ''; var conclText = ctEl ? ctEl.value.trim() : '';
-  if (!conclCat && !conclText) { showToast('Isi dulu kategori atau keterangan action sebelum menyelesaikan tiket'); return; }
+  if (requireConclusion && !conclCat && !conclText) { showToast('Isi dulu kategori atau keterangan action sebelum menyelesaikan tiket'); return; }
   if (!confirm('Tandai tiket ini Selesai? Lampiran akan dipindah ke arsip dan dihapus dari daftar aktif.')) return;
   try {
     var snap = await DEV_FB.db.collection('tickets').doc(id).collection('attachments').get(); var active = []; snap.forEach(function(d){ active.push({ aid: d.id, ...d.data() }); });
@@ -1419,7 +1419,15 @@ async function devTiketArchiveAndDone(id){
     await DEV_FB.db.collection('tickets').doc(id).update({ status: 'Selesai', archived: true, conclusionCategory: conclCat, conclusionText: conclText, concludedAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
     showToast('✅ Tiket selesai, lampiran diarsipkan' + (_skipped ? (' (' + _skipped + ' lampiran baru tidak ikut arsip, tetap di daftar aktif)') : '') + (ex.exists ? ' (arsip lama dipakai)' : '') + ''); await devTiketLoad(); devTiketOpen(id);
   } catch(e) { showToast('Gagal menyelesaikan tiket (status TIDAK diubah): ' + (e.message || e)); } }
-// code47 (A3): Refresh di kartu Tiket — adapter devRefreshAll code25.
+// code48: Tutup tiket simple — 1 ketuk, status otomatis Selesai, kesimpulan opsional.
+// Jalur lama (dropdown Selesai -> Simpan Status) tetap requireConclusion=true.
+async function devTiketCloseSimple(id){
+  var _lt = (typeof devTiketList !== 'undefined' ? devTiketList : []).find(function(x){ return String(x.id) === String(id); });
+  if (_lt && _lt.status === 'Selesai') { showToast('Tiket ini sudah selesai dan terkunci'); return; }
+  if (DEV_FB && DEV_FB.db) { try { var _sd = await DEV_FB.db.collection('tickets').doc(id).get(); if (_sd.exists && _sd.data().status === 'Selesai') { showToast('Tiket ini sudah selesai dan terkunci'); return; } } catch(_se) {} }
+  await devTiketArchiveAndDone(id, false);
+}
+// code48 (A3): Refresh di kartu Tiket — adapter devRefreshAll code25.
 // Versi code25 memanggil devPanelCode/devLoadDevices/devAutoClientsLoad
 // yang tidak ada di basis ini; di sini refresh Tiket + syncClients saja.
 async function devRefreshAll(){ var fails = [];
@@ -1427,7 +1435,7 @@ async function devRefreshAll(){ var fails = [];
   try { if (typeof syncClients === 'function') await syncClients(); } catch(e) { fails.push('Client'); }
   if (fails.length) showToast('Refresh selesai sebagian, gagal: ' + fails.join(', ')); else showToast('✅ Refresh berhasil'); }
 
-// ===== v1.3.6 code47: Kirim APK + Panduan — pola Absensi (mailto) =====
+// ===== v1.3.6 code48: Kirim APK + Panduan — pola Absensi (mailto) =====
 // Email berisi data toko + SATU link panduan; login My Lapak pakai Kode Lisensi
 // (tidak ada kata sandi di email). Tombol membuka aplikasi email user; user
 // ketuk Kirim sendiri. Dipakai dari detail Pendaftar (sesudah approve) dan
@@ -1714,7 +1722,7 @@ try { devFbRestore(); } catch(e) {}
 </script>
 
 <script>
-// ===== v1.3.6 code47: daftar client dari cloud + migrasi 1x + sync berkala (1 data, tanpa PIN, tanpa kunci perangkat) =====
+// ===== v1.3.6 code48: daftar client dari cloud + migrasi 1x + sync berkala (1 data, tanpa PIN, tanpa kunci perangkat) =====
 // Daftar client dibaca dari licensedShops (1 query get() per refresh, N read,
 // tanpa listener). Daftar lokal (LS_CUST) hanya untuk client "belum pindah"
 // (tanpa toko) — bukan sumber ganda.
