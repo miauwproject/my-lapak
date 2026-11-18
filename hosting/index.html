@@ -451,6 +451,7 @@ body.v2 .card{background:var(--card);border-color:var(--line)}
 .v2hero .t{font-size:13px;color:#bae6fd;font-weight:700}
 .v2hero .v{font-size:28px;font-weight:800;margin:4px 0}
 .v2hero .s{font-size:12px;color:#bae6fd}
+.v2hero.has-banner .t,.v2hero.has-banner .v,.v2hero.has-banner .s{text-shadow:0 1px 8px rgba(0,0,0,.65)}
 .v2cta{display:block;width:100%;margin-top:12px;background:#06b6d4;color:#fff;border:none;border-radius:12px;padding:12px;font-size:15px;font-weight:800;cursor:pointer}
 .v2chips{display:flex;gap:8px;margin:12px 0;flex-wrap:wrap}
 .v2chip{flex:1;min-width:90px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:12px;padding:10px;text-align:center;cursor:pointer}
@@ -1472,7 +1473,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <label data-t="lbl_wa">Nomor WA</label><input id="pfWa" inputmode="tel" data-t-ph="ph_wa" placeholder="cth: 0812...">
     <label data-t="lbl_addr">Alamat</label><textarea id="pfAddr" data-t-ph="ph_addr" rows="2" placeholder="cth: Jl. Melati 12, Jakarta Selatan"></textarea>
     <div id="pfCodeRow" style="margin-top:10px"><label>Kode Toko</label><div style="font-size:26px;font-weight:800;letter-spacing:4px;text-align:center" id="pfShopCodeBig"></div><div style="text-align:center;margin-top:8px"><button class="btn btn-outline btn-sm" onclick="copyShopCode()">Salin Kode Toko</button></div></div>
-    <div id="pfCatRow" style="margin-top:10px"><label>Link Katalog</label><div id="pfCatLink" style="font-size:13px;word-break:break-all;margin-bottom:8px"></div><div class="rowbtns"><button class="btn btn-blue btn-sm" onclick="shareCatalog()">Salin Link Katalog</button></div></div>
+    <div id="pfCatRow" style="margin-top:10px"><label>Link Katalog</label><div id="pfCatLink" style="font-size:13px;word-break:break-all;margin-bottom:8px"></div><div class="rowbtns"><button class="btn btn-blue btn-sm" onclick="shareCatalog()">Salin Link Katalog</button><button class="btn btn-green btn-sm" onclick="openCatalog()">Buka Katalog</button></div></div>
     <button class="btn btn-green" data-t="save_profile" onclick="saveProfile()">Simpan Profil</button>
     <button class="btn btn-outline" data-t="change_pass" style="margin-top:8px" id="pfPassBtn" onclick="changePassword()">Ubah Password</button>
     <button class="btn btn-red" data-t="logout_switch" style="margin-top:8px;display:none" id="pfLogoutBtn" onclick="gLogout()">Keluar / Ganti Akun</button>
@@ -2039,7 +2040,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 const LS={get(k,d){try{const v=localStorage.getItem('wapp3_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('wapp3_'+k,JSON.stringify(v))}catch(e){}},del(k){localStorage.removeItem('wapp3_'+k)}};
 
 /* ================= v7.2: BAHASA, FLOAT BAR, BACK ================= */
-const APP_VERSION_CODE=75;const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
+const APP_VERSION_CODE=76;const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
 const L={id:{
 nav_dashboard:'Beranda',nav_kasir:'Pesanan',nav_produk:'Produk',nav_laporan:'Laporan',nav_ownerdash:'Dashboard',nav_pengaturan:'Pengaturan',online_label:'Order Online',
 back:'‹ Kembali',floatbar:'BANTUAN',
@@ -2962,7 +2963,7 @@ async function csaveOnce(name){
   for(let i=0;i<setDocs.length;i+=450){const batch=FB.db.batch();setDocs.slice(i,i+450).forEach(it=>batch.set(c.doc(it.id),JSON.parse(JSON.stringify(it))));await batch.commit()}
   cloudSnap[name]=JSON.parse(JSON.stringify(data));
   try{const _kn=cloudKnownGet();data.forEach(d=>{if(d&&d.id)_kn[d.id]=1});cloudKnownSet(_kn)}catch(e){}
-  if(name==='products')await FB.db.collection('shops').doc(SHOP_ID).set({name:shop.name,address:shop.address||'',phone:shop.phone||'',logo:shop.logo||'',banner:shop.banner||'',lat:shop.lat||'',lng:shop.lng||'',mapsUrl:shop.mapsUrl||'',expedisi:Array.isArray(shop.expedisi)?shop.expedisi.slice():[],expedisi_custom:Array.isArray(shop.expedisi_custom)?shop.expedisi_custom.slice():[],code:SHOP_CODE,updatedAt:new Date().toISOString()},{merge:true});
+  if(name==='products')await FB.db.collection('shops').doc(SHOP_ID).set({name:shop.name,address:shop.address||'',phone:shop.phone||'',logo:shop.logo||'',banner:shop.banner||'',lat:shop.lat||'',lng:shop.lng||'',mapsUrl:shop.mapsUrl||'',locAddress:shop.locAddress||'',expedisi:Array.isArray(shop.expedisi)?shop.expedisi.slice():[],expedisi_custom:Array.isArray(shop.expedisi_custom)?shop.expedisi_custom.slice():[],code:SHOP_CODE,updatedAt:new Date().toISOString()},{merge:true});
 }
 async function csave(name){let _e=null;for(let a=0;a<3;a++){try{await csaveOnce(name);return}catch(e){_e=e;if(a<2)await new Promise(r=>setTimeout(r,400*(a+1)))}}throw _e}
 async function cload(){
@@ -3674,7 +3675,7 @@ function applyPerms(){
 }
 function userMenu(){
   openModal(`<h2>👤 ${CUR_USER?esc(CUR_USER.name):(LANG==='en'?'Offline mode':'Mode Offline')}</h2>
-  ${CUR_USER?`<div class="sub" style="color:var(--mut);margin-bottom:4px">${esc(CUR_USER.email)}</div><div style="margin-bottom:10px"><span class="role-badge">${isDeveloper()?'Developer':ROLES[MY_ROLE]}</span></div><div class="card" style="margin-bottom:10px"><h3>${tr('msg_bio_title')}</h3><div style="font-size:13px;line-height:1.7">${esc(getProfile().name||CUR_USER.name)}<br>${CUR_USER.email?esc(CUR_USER.email)+'<br>':''}${getProfile().wa?('WA: '+esc(getProfile().wa)+'<br>'):''}${getProfile().address?esc(getProfile().address):''}</div></div><div class="card" style="margin-bottom:10px"><h3>${tr('shop_code')}</h3><div style="font-size:26px;font-weight:800;letter-spacing:4px;text-align:center">${SHOP_CODE}</div><div style="text-align:center;margin-top:8px"><button class="btn btn-outline btn-sm" onclick="copyShopCode()">${tr('msg_copy_shop_code')}</button></div></div>${SHOP_CODE?'<div class="card" style="margin-bottom:10px"><h3>'+tr('msg_catalog_link_title')+'</h3><div style="font-size:13px;word-break:break-all;margin-bottom:8px">'+esc(catalogUrl())+'</div><div class="rowbtns"><button class="btn btn-blue btn-sm" onclick="shareCatalog()">'+tr('msg_copy_catalog_link')+'</button></div></div>':''}`:''}
+  ${CUR_USER?`<div class="sub" style="color:var(--mut);margin-bottom:4px">${esc(CUR_USER.email)}</div><div style="margin-bottom:10px"><span class="role-badge">${isDeveloper()?'Developer':ROLES[MY_ROLE]}</span></div><div class="card" style="margin-bottom:10px"><h3>${tr('msg_bio_title')}</h3><div style="font-size:13px;line-height:1.7">${esc(getProfile().name||CUR_USER.name)}<br>${CUR_USER.email?esc(CUR_USER.email)+'<br>':''}${getProfile().wa?('WA: '+esc(getProfile().wa)+'<br>'):''}${getProfile().address?esc(getProfile().address):''}</div></div><div class="card" style="margin-bottom:10px"><h3>${tr('shop_code')}</h3><div style="font-size:26px;font-weight:800;letter-spacing:4px;text-align:center">${SHOP_CODE}</div><div style="text-align:center;margin-top:8px"><button class="btn btn-outline btn-sm" onclick="copyShopCode()">${tr('msg_copy_shop_code')}</button></div></div>${SHOP_CODE?'<div class="card" style="margin-bottom:10px"><h3>'+tr('msg_catalog_link_title')+'</h3><div style="font-size:13px;word-break:break-all;margin-bottom:8px">'+esc(catalogUrl())+'</div><div class="rowbtns"><button class="btn btn-blue btn-sm" onclick="shareCatalog()">'+tr('msg_copy_catalog_link')+'</button><button class="btn btn-green btn-sm" onclick="openCatalog()">Buka Katalog</button></div></div>':''}`:''}
   <div class="rowbtns" style="gap:6px"><button class="btn btn-outline" style="flex:1;font-size:11px;padding:8px 4px;line-height:1.3;white-space:nowrap" onclick="closeModal();go('profil')">${tr('prof_title')}</button><button class="btn btn-outline" style="flex:1;font-size:11px;padding:8px 4px;line-height:1.3;white-space:nowrap" onclick="closeModal();goPass()">${tr('change_pass')}</button>${CUR_USER?'<button class="btn btn-red" style="flex:1;font-size:11px;padding:8px 4px;line-height:1.3;white-space:nowrap" onclick="gLogout()">'+tr('logout_switch')+'</button>':''}</div>`);
 }
 async function gLogout(){try{LS.del('cart_'+SHOP_ID);LS.del('ocart_'+SHOP_ID);if(typeof CAT!=='undefined'&&CAT.shopId)LS.del('catcart_'+CAT.shopId);}catch(e){}try{if(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform()){try{const P=(window.Capacitor.Plugins&&window.Capacitor.Plugins.FirebaseAuthentication)||window.Capacitor.registerPlugin('FirebaseAuthentication');await P.signOut();}catch(e){}}}catch(e){}if(!FB||!FB.auth){location.reload();return}try{FB.auth.signOut().then(()=>location.reload()).catch(()=>location.reload())}catch(e){location.reload()}}
@@ -8819,7 +8820,7 @@ async function saveLocPicker(){
   if(!pin){toast(tr('msg_pick_map_first'));return}
   shop.lat=String(pin.lat.toFixed(6));shop.lng=String(pin.lng.toFixed(6));
   shop.mapsUrl='https://maps.google.com/?q='+shop.lat+','+shop.lng;
-  if(window._locAddr)shop.locAddress=window._locAddr;
+  if(window._locAddr){shop.locAddress=window._locAddr;shop.address=window._locAddr;const _sa=document.getElementById('setAddr');if(_sa)_sa.value=window._locAddr;}
   LS.set('shop',shop);
   try{await persist('products')}catch(e){}
   renderLocShopRow();
@@ -8877,6 +8878,7 @@ function confirmLogout(){openModal(`<h2>${tr('logout_title')}</h2><p style="font
 const HOSTED_ORIGIN='https://mylapak.web.app';
 function catalogUrl(){const cfg=fbConfig();if(!cfg||!SHOP_CODE)return '';const norm=s=>(s||'').trim().replace(/^https?:\/\//i,'').replace(/\/$/,'').toLowerCase();const isDef=norm(cfg.authDomain)==='toko-mobile-app.firebaseapp.com'&&norm(cfg.projectId)==='toko-mobile-app';const native=(window.Capacitor&&Capacitor.isNativePlatform)||location.hostname==='localhost'||location.protocol==='capacitor:';const origin=native?HOSTED_ORIGIN:location.origin;if(isDef)return origin+'?katalog='+SHOP_CODE;const b64=btoa(JSON.stringify({apiKey:cfg.apiKey,authDomain:cfg.authDomain,projectId:cfg.projectId}));return origin+'?katalog='+SHOP_CODE+'&cfg='+b64}
 function shareCatalog(){const cfg=fbConfig();if(!cfg){toast(tr('i18n_021'));return}if(!SHOP_CODE){toast(tr('i18n_075'));return}const url=catalogUrl();(navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(()=>toast(tr('i18n_087'))).catch(()=>{prompt('Salin link katalog:',url)});}
+function openCatalog(){const u=catalogUrl();if(!u){toast(tr('i18n_075'));return}window.open(u,'_blank');}
 function renderCloudCard(){const el=document.getElementById('cloudBody'),cfg=fbConfig();
  if(MODE==='cloud'&&CUR_USER){el.innerHTML=`<div class="helpbox">✅ Login sebagai <b>${esc(CUR_USER.name)}</b> (<span class="role-badge">${isDeveloper()?'Developer':ROLES[MY_ROLE]}</span>)<br>Mode cloud aktif — data tersinkron antar perangkat.</div><div class="rowbtns"><button class="btn btn-red btn-sm" onclick="gLogout()">Keluar Akun</button></div>`;return}
  el.innerHTML=`<div class="helpbox">Mode offline — data hanya di HP ini.<br><br>Untuk sinkron antar perangkat, katalog online, dan fitur cloud lainnya, login dengan akun Google yang sudah didaftarkan. Hubungi developer untuk aktivasi lisensi.</div><div class="rowbtns" style="margin-top:8px"><button class="btn btn-green" onclick="location.reload()">Restart & Login Google</button></div>`;}
@@ -9728,6 +9730,8 @@ function renderDashV2(){
   +'<div class="v2mini"><h3>'+iconHTML('list')+' Log Transaksi</h3>'+(allTx.length?allTx.map(r=>'<div class="row"><span>'+esc(r.nm)+'</span><b>'+rp(r.v)+'</b></div>').join(''):'<div class="empty">Belum ada transaksi.</div>')+'<span class="more" onclick="openLogAll()">Lihat semua ›</span></div>'
   +(isOwnerRole?'<div class="v2mini"><h3>'+iconHTML('activity')+' Log Aktivitas</h3>'+(act.length?act.map(a=>'<div class="row"><span>'+esc((a.by||'?')+' — '+(a.text||''))+'</span></div>').join(''):'<div class="empty">Belum ada aktivitas.</div>')+'<span class="more" onclick="openActivityAll()">Lihat semua ›</span></div>':'')
   +'<div class="v2mini"><h3>'+iconHTML('memo')+' Catatan Toko</h3>'+(topNotes.length?topNotes.map(n=>'<div class="row"><span>'+esc((n.body||'').slice(0,60))+'</span></div>').join(''):'<div class="empty">Belum ada catatan.</div>')+'<span class="more" onclick="go(\'notes\')">Lihat semua ›</span></div>';
+  const _hero=document.getElementById('dashHeroV2');
+  if(_hero){if(photoOK(shop.banner)){_hero.style.backgroundImage='linear-gradient(rgba(0,0,0,0.55),rgba(0,0,0,0.30)),url('+shop.banner+')';_hero.style.backgroundSize='cover';_hero.style.backgroundPosition='center';_hero.classList.add('has-banner')}else{_hero.style.backgroundImage='';_hero.classList.remove('has-banner')}}
 }
 /* ================= v7.0: KELOLA ROLE ================= */
 let roleDraft=null;
