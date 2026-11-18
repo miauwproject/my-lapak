@@ -1,7 +1,7 @@
 {
-  "versionCode": 78,
-  "versionName": "1.1.0",
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v1.1.0-code78/my-lapak_v1.1.0-code78.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92MS4xLjAtY29kZTc4L215LWxhcGFrX3YxLjEuMC1jb2RlNzguYXBr",
-  "notes": "STABIL code78: kartu Toko Libur pakai gambar pantai (latar transparan, opacity 40%) di atas gradient awal; pola titik + emoji deco dihapus."
+  "versionCode": 79,
+  "versionName": "2.0.0-beta",
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v2.0.0-beta-code79/my-lapak_v2.0.0-beta-code79.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92Mi4wLjAtYmV0YS1jb2RlNzkvbXktbGFwYWtfdjIuMC4wLWJldGEtY29kZTc5LmFwaw==",
+  "notes": "BETA code79: banner toko pindah ke header (v2, 16:9) + hero polos navy; toast update tidak lagi hardcode Stable."
 }
