@@ -15,6 +15,7 @@ header .t2{font-size:12px;opacity:.85;margin-top:6px}
 label{display:block;font-size:13px;font-weight:700;margin:14px 0 5px}
 input,textarea,select{width:100%;padding:11px 12px;border:1px solid #cbd5e1;border-radius:10px;font-size:15px;font-family:inherit;background:#fff}
 input:focus,textarea:focus{outline:2px solid #93c5fd;border-color:#2563eb}
+input[readonly]{background:#f1f5f9;color:#475569;cursor:not-allowed}
 textarea{min-height:70px;resize:vertical}
 .req{color:#dc2626}
 .pk{display:flex;flex-direction:column;gap:8px}
@@ -50,8 +51,8 @@ textarea{min-height:70px;resize:vertical}
       <p class="mut" style="margin:4px 0 0">Email ini dipakai untuk login Google ke aplikasi My Lapak.</p>
       <label>Nomor HP / WhatsApp <span class="req">*</span></label>
       <input id="dHp" type="tel" placeholder="cth 081234567890" autocomplete="tel">
-      <label>Jumlah HP yang dipakai <span class="req">*</span></label>
-      <input id="dJml" type="number" min="1" max="5" placeholder="1" oninput="hitungEstimasi()">
+      <label>Jumlah HP yang dipakai <span class="req">*</span> <span class="mut" style="font-weight:400">— otomatis sesuai paket, tidak bisa diubah</span></label>
+      <input id="dJml" type="number" min="1" max="5" value="1" readonly>
       <label>Paket yang diinginkan <span class="req">*</span></label>
       <div class="pk" id="pkList">
         <label class="pk-opt on"><input type="radio" name="paket" value="trial" checked onchange="hitungEstimasi()"><span><b>Trial — Gratis 7 hari</b><div class="pr">Maks 1 HP · semua fitur · tanpa kartu kredit</div></span></label>
@@ -85,9 +86,10 @@ var CFG = {apiKey:'AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8', authDomain:'toko-mo
 <script>
 function $(id){ return document.getElementById(id); }
 function paketDipilih(){ var r = document.querySelector('input[name="paket"]:checked'); return r ? r.value : 'trial'; }
+var MAX_HP = {trial:1, putus:3, langganan:5};
 function hitungEstimasi(){
-  var j = parseInt($('dJml').value, 10) || 0;
   var p = paketDipilih();
+  $('dJml').value = MAX_HP[p] || 1;
   var t = '';
   if (p === 'trial') t = 'Perkiraan biaya: Gratis — masa Trial 7 hari.';
   else if (p === 'putus') t = 'Perkiraan biaya: Rp350.000 sekali bayar (maks 3 HP).';
@@ -127,6 +129,7 @@ async function kirimDaftar(ev){
   }
   return false;
 }
+hitungEstimasi();
 </script>
 </body>
 </html>
