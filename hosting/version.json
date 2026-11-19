@@ -1,7 +1,7 @@
 {
-  "versionCode": 88,
+  "versionCode": 89,
   "versionName": "2.0.3-beta",
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v2.0.3-beta-code88/my-lapak_v2.0.3-beta-code88.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92Mi4wLjMtYmV0YS1jb2RlODgvbXktbGFwYWtfdjIuMC4zLWJldGEtY29kZTg4LmFwaw==",
-  "notes": "V2.0.3-beta: tema Default baru (biru dongker awal v2: header + hero navy, aksen cyan) sebagai tema awal; Biru royal tetap tersedia sebagai opsi Biru."
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v2.0.3-beta-code89/my-lapak_v2.0.3-beta-code89.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92Mi4wLjMtYmV0YS1jb2RlODkvbXktbGFwYWtfdjIuMC4zLWJldGEtY29kZTg5LmFwaw==",
+  "notes": "V2.0.3-beta: perbaikan popup Profil — pill role tampil benar (Owner/Admin/Kasir) dan nomor HP dari Profil Saya tampil di Biodata."
 }
