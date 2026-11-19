@@ -1,7 +1,7 @@
 {
-  "versionCode": 84,
-  "versionName": "2.0.2-beta",
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v2.0.2-beta-code84/my-lapak_v2.0.2-beta-code84.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92Mi4wLjItYmV0YS1jb2RlODQvbXktbGFwYWtfdjIuMC4yLWJldGEtY29kZTg0LmFwaw==",
-  "notes": "V2.0.2-beta: versi aplikasi kini tampil di baris sinkron (v1 & v2) — sejajar 'Terakhir sinkron', juga saat offline. Kartu Tentang menampilkan versi dinamis."
+  "versionCode": 85,
+  "versionName": "2.0.3-beta",
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v2.0.3-beta-code85/my-lapak_v2.0.3-beta-code85.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92Mi4wLjMtYmV0YS1jb2RlODUvbXktbGFwYWtfdjIuMC4zLWJldGEtY29kZTg1LmFwaw==",
+  "notes": "V2.0.3-beta: menu profil lebih rapi (foto avatar tampil, Kode Toko & Link Katalog pindah ke Detail Toko) + info lisensi & masa aktif di Detail Toko; Beranda & header kini ikut warna tema; ikon shortcut Beranda rata tengah; katalog ikut tema & pattern toko; kartu share item kini pakai warna tema + pattern toko, logo toko & info Terjual."
 }
