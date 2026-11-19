@@ -1,7 +1,7 @@
 {
-  "versionCode": 85,
+  "versionCode": 86,
   "versionName": "2.0.3-beta",
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v2.0.3-beta-code85/my-lapak_v2.0.3-beta-code85.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92Mi4wLjMtYmV0YS1jb2RlODUvbXktbGFwYWtfdjIuMC4zLWJldGEtY29kZTg1LmFwaw==",
-  "notes": "V2.0.3-beta: menu profil lebih rapi (foto avatar tampil, Kode Toko & Link Katalog pindah ke Detail Toko) + info lisensi & masa aktif di Detail Toko; Beranda & header kini ikut warna tema; ikon shortcut Beranda rata tengah; katalog ikut tema & pattern toko; kartu share item kini pakai warna tema + pattern toko, logo toko & info Terjual."
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v2.0.3-beta-code86/my-lapak_v2.0.3-beta-code86.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92Mi4wLjMtYmV0YS1jb2RlODYvbXktbGFwYWtfdjIuMC4zLWJldGEtY29kZTg2LmFwaw==",
+  "notes": "V2.0.3-beta: perbaikan layout kartu share item — jarak jelas antara kotak QR dan teks Scan QR, pill MY LAPAK kembali outline, nama produk satu baris supaya tidak pernah mendorong QR."
 }
