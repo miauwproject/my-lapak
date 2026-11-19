@@ -1,7 +1,7 @@
 {
-  "versionCode": 89,
+  "versionCode": 90,
   "versionName": "2.0.3-beta",
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v2.0.3-beta-code89/my-lapak_v2.0.3-beta-code89.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92Mi4wLjMtYmV0YS1jb2RlODkvbXktbGFwYWtfdjIuMC4zLWJldGEtY29kZTg5LmFwaw==",
-  "notes": "V2.0.3-beta: perbaikan popup Profil — pill role tampil benar (Owner/Admin/Kasir) dan nomor HP dari Profil Saya tampil di Biodata."
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v2.0.3-beta-code90/my-lapak_v2.0.3-beta-code90.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92Mi4wLjMtYmV0YS1jb2RlOTAvbXktbGFwYWtfdjIuMC4zLWJldGEtY29kZTkwLmFwaw==",
+  "notes": "V2.0.3-beta: baris ID dihapus dari kartu Biodata popup Profil — Biodata kini hanya nama, email, dan nomor HP."
 }
