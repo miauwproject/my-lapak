@@ -1,7 +1,7 @@
 {
-  "versionCode": 91,
+  "versionCode": 92,
   "versionName": "2.0.3-beta",
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v2.0.3-beta-code91/my-lapak_v2.0.3-beta-code91.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92Mi4wLjMtYmV0YS1jb2RlOTEvbXktbGFwYWtfdjIuMC4zLWJldGEtY29kZTkxLmFwaw==",
-  "notes": "V2.0.3-beta: tombol Logout + Ubah Password di popup Profil kini jalan \u2014 Logout -> gLogout(), Ubah Password -> changePassword() (keduanya mati diam-diam sejak code85)."
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v2.0.3-beta-code92/my-lapak_v2.0.3-beta-code92.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92Mi4wLjMtYmV0YS1jb2RlOTIvbXktbGFwYWtfdjIuMC4zLWJldGEtY29kZTkyLmFwaw==",
+  "notes": "V2.0.3-beta: unduh update in-app kini pakai HTTP langsung (downloadDirect) tanpa DownloadManager — DownloadManager di HP user tidak pernah menjalankan download (enqueue resolve ID tapi query tak menemukan baris)."
 }
