@@ -2057,7 +2057,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 const LS={get(k,d){try{const v=localStorage.getItem('wapp3_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('wapp3_'+k,JSON.stringify(v))}catch(e){}},del(k){localStorage.removeItem('wapp3_'+k)}};
 
 /* ================= v7.2: BAHASA, FLOAT BAR, BACK ================= */
-const APP_VERSION_CODE=89;const APP_VERSION_NAME='2.0.3-beta';const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
+const APP_VERSION_CODE=90;const APP_VERSION_NAME='2.0.3-beta';const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
 const L={id:{
 nav_dashboard:'Beranda',nav_kasir:'Pesanan',nav_produk:'Produk',nav_laporan:'Laporan',nav_ownerdash:'Dashboard',nav_pengaturan:'Pengaturan',online_label:'Order Online',
 back:'‹ Kembali',floatbar:'BANTUAN',
@@ -3807,7 +3807,7 @@ function userMenu(){
   const _pr=getProfile();
   const _av=_pr.avatar?avHTML(_pr.avatar):(CUR_USER&&CUR_USER.photo?'<img src="'+esc(CUR_USER.photo)+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%">':'<span style="font-size:34px">👤</span>');
   openModal(`${CUR_USER?`<div onclick="closeModal();go('profil')" style="width:76px;height:76px;border-radius:50%;margin:2px auto 8px;cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:34px;background:#f1f5f9;border:3px solid #06b6d4" title="${tr('menu_profil')}">${_av}</div>`:''}<h2>${CUR_USER?esc(CUR_USER.name):(LANG==='en'?'Offline mode':'Mode Offline')}</h2>
-  ${CUR_USER?`<div style="font-size:12px;color:var(--mut);margin-top:-8px;margin-bottom:8px">${esc(CUR_USER.email||'')}</div><div class="role-badge">${isDeveloper()?'Developer':(ROLES[MY_ROLE]||'')}</div><div class="card" style="margin:12px 0 0"><h3>📝 ${tr('menu_profil_biodata')}</h3><div style="font-size:14px;line-height:1.7"><div>👤 <b>${esc(CUR_USER.name)}</b></div><div>📧 ${esc(CUR_USER.email||'')}</div><div>📱 ${esc(getProfile().wa||'')}</div><div>🆔 ${esc(CUR_USER.uid||'')}</div></div></div>`
+  ${CUR_USER?`<div style="font-size:12px;color:var(--mut);margin-top:-8px;margin-bottom:8px">${esc(CUR_USER.email||'')}</div><div class="role-badge">${isDeveloper()?'Developer':(ROLES[MY_ROLE]||'')}</div><div class="card" style="margin:12px 0 0"><h3>📝 ${tr('menu_profil_biodata')}</h3><div style="font-size:14px;line-height:1.7"><div>👤 <b>${esc(CUR_USER.name)}</b></div><div>📧 ${esc(CUR_USER.email||'')}</div><div>📱 ${esc(getProfile().wa||'')}</div></div></div>`
   :`<div style="font-size:13px;color:var(--mut);margin:8px 0">${tr('offline_mode_desc')}</div>`}
   <div class="rowbtns" style="margin-top:14px"><button class="btn" onclick="closeModal();go('profil')">${tr('menu_profil')}</button><button class="btn btn-outline" onclick="closeModal();go('ubahpw')">${tr('menu_chpass')}</button><button class="btn btn-red" onclick="logoutNow()">${tr('menu_logout')}</button></div>`);
 }
