@@ -2057,7 +2057,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 const LS={get(k,d){try{const v=localStorage.getItem('wapp3_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('wapp3_'+k,JSON.stringify(v))}catch(e){}},del(k){localStorage.removeItem('wapp3_'+k)}};
 
 /* ================= v7.2: BAHASA, FLOAT BAR, BACK ================= */
-const APP_VERSION_CODE=85;const APP_VERSION_NAME='2.0.3-beta';const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
+const APP_VERSION_CODE=86;const APP_VERSION_NAME='2.0.3-beta';const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
 const L={id:{
 nav_dashboard:'Beranda',nav_kasir:'Pesanan',nav_produk:'Produk',nav_laporan:'Laporan',nav_ownerdash:'Dashboard',nav_pengaturan:'Pengaturan',online_label:'Order Online',
 back:'‹ Kembali',floatbar:'BANTUAN',
@@ -8121,17 +8121,19 @@ async function catStoryCardBlob(id){
         if(_pi){const _ts=360,_th=_ts*_pi.height/_pi.width;g.save();g.globalAlpha=0.22;for(let _y=0;_y<H;_y+=_th){for(let _x=0;_x<W;_x+=_ts){g.drawImage(_pi,_x,_y,_ts,_th);}}g.restore();}}
     }catch(e){}
   }
-  g.fillStyle='rgba(255,255,255,.12)';g.fillRect(0,0,W,10);
-  g.fillStyle='#fff';g.beginPath();g.arc(96,150,34,0,Math.PI*2);g.fill();
-  g.fillStyle='#071c45';g.font='800 26px sans-serif';g.textAlign='center';g.textBaseline='middle';
-  g.fillText(shopInitials(CAT.shop&&CAT.shop.name),96,152);
+  g.strokeStyle='#22d3ee';g.lineWidth=4;catRR(g,390,56,300,64,32);g.stroke();
+  g.fillStyle='#22d3ee';g.font='700 32px sans-serif';g.textAlign='center';g.textBaseline='middle';
+  g.fillText('MY LAPAK',540,90);
   let _sn=String((CAT.shop&&CAT.shop.name)||'');
-  g.font='30px sans-serif';g.textAlign='left';g.textBaseline='alphabetic';
+  g.font='30px sans-serif';
   while(_sn.length>3&&g.measureText(_sn).width>660)_sn=_sn.slice(0,-1);
   if(_sn!==String((CAT.shop&&CAT.shop.name)||''))_sn=_sn.replace(/\s+$/,'')+'…';
-  g.fillStyle='rgba(255,255,255,.9)';g.fillText(_sn,148,160);
-  g.fillStyle='#22d3ee';g.fillRect(830,118,180,44);
-  g.fillStyle='#071c45';g.font='800 30px sans-serif';g.textAlign='center';g.fillText('MY LAPAK',920,151);
+  const _nw=g.measureText(_sn).width,_gw=68+12+_nw,_sx=540-_gw/2;
+  g.fillStyle='#fff';g.beginPath();g.arc(_sx+34,150,34,0,Math.PI*2);g.fill();
+  g.fillStyle='#071c45';g.font='800 26px sans-serif';g.textAlign='center';g.textBaseline='middle';
+  g.fillText(shopInitials(CAT.shop&&CAT.shop.name),_sx+34,152);
+  g.fillStyle='rgba(255,255,255,.85)';g.font='30px sans-serif';g.textAlign='left';g.textBaseline='alphabetic';
+  g.fillText(_sn,_sx+68+12,160);
   const px=48,py=220,pw=984,ph=620;
   let _photoOK=false;
   if(p.photo){
@@ -8150,24 +8152,24 @@ async function catStoryCardBlob(id){
     g.fillStyle='#fff';g.font='800 34px sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText('PROMO',0,0);g.restore();
   }
   g.textAlign='left';g.textBaseline='alphabetic';
-  let ty=900;
-  const nameLines=catWrapText(g,p.name||'Produk',984,2);g.fillStyle='#fff';g.font='800 64px sans-serif';
-  nameLines.forEach(function(L,i){g.fillText(L,48,ty+i*76);});
-  ty=900+nameLines.length*76;
-  g.fillStyle='#4ade80';g.font='800 76px sans-serif';g.fillText(rp(p.price||0),48,ty+40);
-  ty+=40;
-  g.fillStyle='rgba(255,255,255,.85)';g.font='34px sans-serif';
-  g.fillText('Stok: '+(p.stock||0),48,ty+54);
+  let _nm=String(p.name||'Produk'),_fs=64,_cut=false;
+  g.fillStyle='#fff';g.font='800 '+_fs+'px sans-serif';
+  while(_fs>36&&g.measureText(_nm).width>984){_fs-=2;g.font='800 '+_fs+'px sans-serif';}
+  while(_nm.length>3&&g.measureText(_nm).width>984){_nm=_nm.slice(0,-1);_cut=true;}
+  if(_cut){_nm=_nm.replace(/\s+$/,'');while(_nm.length>3&&g.measureText(_nm+'…').width>984)_nm=_nm.slice(0,-1);_nm+='…';}
+  g.fillText(_nm,48,920);
+  g.fillStyle='#4ade80';g.font='800 76px sans-serif';g.fillText(rp(p.price||0),48,996);
+  g.fillStyle='rgba(255,255,255,.8)';g.font='34px sans-serif';
+  g.fillText('Stok: '+(p.stock||0),48,1050);
   const _sold=(p&&typeof p.sold==='number')?p.sold:0;
-  if(_sold>0){g.fillStyle='#fbbf24';g.font='800 36px sans-serif';g.fillText('🔥 Terjual '+_sold+'x',48,ty+104);}
-  const qy=Math.max(1220,ty+(_sold>0?104:54)+70);
-  const qs=480,qx=(W-qs)/2;
+  if(_sold>0){g.fillStyle='#fbbf24';g.font='700 34px sans-serif';g.fillText('🔥 Terjual '+_sold+'x',48,1100);}
+  const qs=504,qx=(W-qs)/2,qy=1200;
   const _url=location.origin+'/?katalog='+encodeURIComponent(CAT.code||'')+'&item='+encodeURIComponent(id);
-  g.fillStyle='#fff';catRR(g,qx-12,qy-12,qs+24,qs+24,20);g.fill();
+  g.fillStyle='#fff';catRR(g,qx,qy,qs,qs,40);g.fill();
   const _qr=qrcode(0,'M');_qr.addData(_url);_qr.make();
-  const _n=_qr.getModuleCount(),_qz=2,_cell=qs/(_n+_qz*2);
+  const _n=_qr.getModuleCount(),_qz=2,_cell=(qs-40)/(_n+_qz*2);
   g.fillStyle='#000';
-  for(let _r=0;_r<_n;_r++)for(let _c=0;_c<_n;_c++){if(_qr.isDark(_r,_c))g.fillRect(qx+(_qz+_c)*_cell,qy+(_qz+_r)*_cell,Math.ceil(_cell)+0.5,Math.ceil(_cell)+0.5);}
+  for(let _r=0;_r<_n;_r++)for(let _c=0;_c<_n;_c++){if(_qr.isDark(_r,_c))g.fillRect(qx+20+(_qz+_c)*_cell,qy+20+(_qz+_r)*_cell,Math.ceil(_cell)+0.5,Math.ceil(_cell)+0.5);}
   g.fillStyle='#fff';g.font='800 40px sans-serif';g.textAlign='center';g.fillText('📱 '+(LANG==='en'?'Scan QR to shop':'Scan QR untuk belanja'),540,1780);
   g.fillStyle='rgba(255,255,255,.65)';g.font='24px sans-serif';g.fillText(_url.replace(/^https?:\/\//,''),540,1870);
   return new Promise(function(res){cv.toBlob(function(b){res(b)},'image/png');});
