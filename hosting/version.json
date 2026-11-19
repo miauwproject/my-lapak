@@ -1,7 +1,7 @@
 {
-  "versionCode": 86,
+  "versionCode": 87,
   "versionName": "2.0.3-beta",
-  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v2.0.3-beta-code86/my-lapak_v2.0.3-beta-code86.apk",
-  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92Mi4wLjMtYmV0YS1jb2RlODYvbXktbGFwYWtfdjIuMC4zLWJldGEtY29kZTg2LmFwaw==",
-  "notes": "V2.0.3-beta: perbaikan layout kartu share item — jarak jelas antara kotak QR dan teks Scan QR, pill MY LAPAK kembali outline, nama produk satu baris supaya tidak pernah mendorong QR."
+  "apkUrl": "https://github.com/miauwproject/my-lapak/releases/download/v2.0.3-beta-code87/my-lapak_v2.0.3-beta-code87.apk",
+  "apkUrlB64": "aHR0cHM6Ly9naXRodWIuY29tL21pYXV3cHJvamVjdC9teS1sYXBhay9yZWxlYXNlcy9kb3dubG9hZC92Mi4wLjMtYmV0YS1jb2RlODcvbXktbGFwYWtfdjIuMC4zLWJldGEtY29kZTg3LmFwaw==",
+  "notes": "V2.0.3-beta: tema Default (Biru) di picker tema; tombol info Detail Barang dihapus dari kartu produk Kasir dan tombol + pindah ke pojok kanan atas; unduh update in-app diperbaiki (retry otomatis + alasan gagal ditampilkan bila fallback ke browser)."
 }
