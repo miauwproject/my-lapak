@@ -449,7 +449,7 @@ body.v2 #lapProfitCard #lNet{color:#fff!important}
 body.v2 #lapProfitCard .profit-sub{color:rgba(255,255,255,.75);font-size:12px;margin-top:4px}
 body.v2 #logLapCard .logfilt,body.v2 #logLapCard .logsearch{display:none!important}
 body.v2 #prodGrid{grid-template-columns:repeat(2,1fr)}
-.kasir-add{position:absolute;right:8px;bottom:8px;width:32px;height:32px;border-radius:50%;background:#06b6d4;color:#fff;border:none;font-size:20px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2}
+.kasir-add{position:absolute;right:8px;top:8px;width:32px;height:32px;border-radius:50%;background:#06b6d4;color:#fff;border:none;font-size:20px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2}
 body.v2 #kasirCats{position:sticky!important;top:72px!important;z-index:10;background:#fff;padding:8px 0}
 body.v2 .searchbar{top:72px}
 body.v2 #view-kasir [data-t="sort_label"],body.v2 #view-produk [data-t="sort_label"]{display:none}
@@ -2057,7 +2057,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 const LS={get(k,d){try{const v=localStorage.getItem('wapp3_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('wapp3_'+k,JSON.stringify(v))}catch(e){}},del(k){localStorage.removeItem('wapp3_'+k)}};
 
 /* ================= v7.2: BAHASA, FLOAT BAR, BACK ================= */
-const APP_VERSION_CODE=86;const APP_VERSION_NAME='2.0.3-beta';const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
+const APP_VERSION_CODE=87;const APP_VERSION_NAME='2.0.3-beta';const FB_API_KEY='AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8';let LANG=LS.get('lang','id');if(LANG!=='id'&&LANG!=='en')LANG='id';
 const L={id:{
 nav_dashboard:'Beranda',nav_kasir:'Pesanan',nav_produk:'Produk',nav_laporan:'Laporan',nav_ownerdash:'Dashboard',nav_pengaturan:'Pengaturan',online_label:'Order Online',
 back:'‹ Kembali',floatbar:'BANTUAN',
@@ -2727,7 +2727,7 @@ async function removePin(){
 }
 
 /* ---------- THEMES (v5) ---------- */
-const THEMES={hijau:'🌿 Hijau',biru:'💧 Biru',ungu:'🟣 Ungu',oranye:'🟤 Coklat',gelap:'🌙 Gelap'};
+const THEMES={hijau:'🌿 Hijau',biru:'🔵 Default (Biru)',ungu:'🟣 Ungu',oranye:'🟤 Coklat',gelap:'🌙 Gelap'};
 function applyTheme(){if(!LS.get('ml_theme_migrated_v102',false)){if(settings.theme==='hijau'){settings.theme='biru';LS.set('settings',settings)}LS.set('ml_theme_migrated_v102',true)}document.documentElement.setAttribute('data-theme',settings.theme||'biru');if(typeof applyBg==='function')applyBg();applyUiVersion()}
 function refreshThemeBox(){
   const el=document.getElementById('themeBox');if(!el)return;
@@ -3677,34 +3677,58 @@ function updDownload(){if(!updInfo)return;let url=updInfo.apkUrl||'';
 try{if(updInfo.apkUrlB64)url=atob(updInfo.apkUrlB64)}catch(e){}
 if(!(url.startsWith('https://mylapak.web.app/')||url.startsWith('https://toko-mobile-app.web.app/')||url.startsWith('https://github.com/miauwproject/my-lapak/releases/download/')))return;
 const plug=capApkUpd();
-if(!plug){updDlFallback(url);return;}
+if(!plug){updDlFallback(url,'Plugin update tidak tersedia');return;}
 updDl={id:null,file:updDlFileName(),ver:updInfo.versionName||'',timer:null,done:false,failN:0,url:url};
 try{const v=document.getElementById('voiceIsland');if(v)v.classList.remove('show')}catch(e){}
 updIslandShow(0);
 try{
   const p=plug.download({url:url,fileName:updDl.file});
-  if(p&&p.then)p.then(function(r){if(r&&r.downloadId!=null){updDl.id=r.downloadId;try{LS.set('updDlPending',{id:updDl.id,file:updDl.file,ver:updDl.ver})}catch(e){}updDl.timer=setInterval(updDlPoll,600);}else{updDlFallback(url);}}).catch(function(){updDlFallback(url);});
-  else updDlFallback(url);
-}catch(e){updDlFallback(url);}}
+  if(p&&p.then)p.then(function(r){if(r&&r.downloadId!=null){updDl.id=r.downloadId;try{LS.set('updDlPending',{id:updDl.id,file:updDl.file,ver:updDl.ver})}catch(e){}updDl.timer=setInterval(updDlPoll,600);}else{updDlFallback(url,'Plugin tidak mengembalikan ID unduhan');}}).catch(function(e){updDlFallback(url,'Download ditolak: '+(e&&e.message?e.message:'tidak diketahui'));});
+  else updDlFallback(url,'Plugin tidak merespons');
+}catch(e){updDlFallback(url,'Download ditolak: '+(e&&e.message?e.message:'tidak diketahui'));}}
 function updDlStopPoll(){if(updDl.timer){clearInterval(updDl.timer);updDl.timer=null;}}
+function updDlReasonText(r){
+  var m={1000:'error tidak diketahui',1001:'error file',1002:'HTTP tidak didukung',1004:'error data HTTP',1005:'terlalu banyak redirect',1006:'ruang penyimpanan habis',1007:'perangkat tidak ditemukan',1008:'tidak bisa lanjutkan unduhan',1009:'file sudah ada'};
+  var code=(r&&typeof r.reason==='number')?r.reason:-1;
+  return code>=0?(' (alasan: '+(m[code]||('kode '+code))+')'):'';
+}
 function updDlPoll(){
   const plug=capApkUpd();if(!plug||updDl.id==null||updDl.done){updDlStopPoll();return;}
-  let p=null;try{p=plug.query({downloadId:updDl.id})}catch(e){updDl.failN++;if(updDl.failN>=5){updDlStopPoll();updDlFallback(updDl.url);}return;}
+  if(updDl.retrying)return;
+  let p=null;try{p=plug.query({downloadId:updDl.id})}catch(e){updDl.failN++;if(updDl.failN>=5){updDlStopPoll();updDlFallback(updDl.url,'Tidak bisa cek status unduhan (5x gagal)');}return;}
   if(p&&p.then)p.then(function(r){
     updDl.failN=0;
     if(!r)return;
     if(r.status==='successful'){updDlStopPoll();updDlDone();return;}
-    if(r.status==='failed'){updDlStopPoll();updDlFallback(updDl.url);return;}
+    if(r.status==='failed'){
+      if(!updDl.retried&&(r.downloaded||0)===0){
+        updDl.retried=true;updDl.retrying=true;
+        try{
+          const p2=plug.download({url:updDl.url,fileName:updDl.file});
+          if(p2&&p2.then)p2.then(function(r2){
+            updDl.retrying=false;
+            if(r2&&r2.downloadId!=null){updDl.id=r2.downloadId;updDl.failN=0;try{LS.set('updDlPending',{id:updDl.id,file:updDl.file,ver:updDl.ver})}catch(e){}updIslandShow(0);}
+            else{updDlStopPoll();updDlFallback(updDl.url,'DownloadManager gagal'+updDlReasonText(r));}
+          }).catch(function(e){updDl.retrying=false;updDlStopPoll();updDlFallback(updDl.url,'Download ditolak: '+(e&&e.message?e.message:'tidak diketahui'));});
+          else{updDl.retrying=false;updDlStopPoll();updDlFallback(updDl.url,'DownloadManager gagal'+updDlReasonText(r));}
+        }catch(e){updDl.retrying=false;updDlStopPoll();updDlFallback(updDl.url,'Download ditolak: '+(e&&e.message?e.message:'tidak diketahui'));}
+        return;
+      }
+      updDlStopPoll();updDlFallback(updDl.url,'DownloadManager gagal'+updDlReasonText(r));return;
+    }
     const pct=(r.total>0)?Math.max(0,Math.min(100,Math.floor(r.downloaded*100/r.total))):0;
     updIslandShow(pct);
-  }).catch(function(){updDl.failN++;if(updDl.failN>=5){updDlStopPoll();updDlFallback(updDl.url);}});
+  }).catch(function(){updDl.failN++;if(updDl.failN>=5){updDlStopPoll();updDlFallback(updDl.url,'Tidak bisa cek status unduhan (5x gagal)');}});
 }
 function updDlDone(){updDl.done=true;updIslandDone();updToastDone();}
-function updDlFallback(url){
+function updDlFallback(url,reason){
   try{LS.del('updDlPending')}catch(e){}
   updDlStopPoll();updIslandHide();
+  var rsn=reason||'Unduhan in-app gagal';
+  try{LS.set('updDlLastFail',rsn)}catch(e){}
+  toast('Unduhan in-app gagal ('+rsn+') — dibuka di browser');
   updToastShow();
-  if(url)window.open(url,'_system');
+  if(url)setTimeout(function(){window.open(url,'_system');},1500);
 }
 function updInstallApk(){
   const plug=capApkUpd();
@@ -3987,7 +4011,7 @@ function renderKasirGrid(){const _v2k=(typeof uiV2==='function'&&uiV2());const c
  const q=(document.getElementById('kasirSearch').value||'').toLowerCase();
  const list=products.filter(p=>(kasirCat==='Semua'||(p.category||'Lainnya')===kasirCat)&&p.name.toLowerCase().includes(q));
  list.sort((a,b)=>a.name.localeCompare(b.name,'id',{sensitivity:'base'}));
- document.getElementById('kasirGrid').innerHTML=list.length?list.map(p=>`<div class="prod ${p.stock<=0?'out':''} ${p.stock>0&&p.stock<=settings.low?'low':''}" style="border-top:4px solid ${catColor(p.category||'Lainnya')}" onclick="openProdQuick('${p.id}')">${can('produk_stok')?`<button class="info-btn" onclick="event.stopPropagation();openProdDetail('${p.id}')">ℹ️</button>`:''}${(_v2k&&p.stock>0)?`<button class="kasir-add" onclick="event.stopPropagation();addCart('${p.id}')">+</button>`:''}${photoOK(p.photo)?`<img class="prod-img" src="${p.photo}">`:`<div class="prod-img" style="background:var(--line);display:flex;align-items:center;justify-content:center;font-size:32px">📦</div>`}<div class="nm">${esc(p.name)}</div><div class="ct">${esc(p.category||'Lainnya')}</div><div class="pr">${rp(p.price)}</div><div class="st">${LANG==='en'?'Stock: ':'Stok: '}<b>${p.stock} ${p.unit||'pcs'}</b> ${p.stock<=0?'<span class="badge out">HABIS</span>':p.stock<=settings.low?'<span class="badge low">MENIPIS</span>':'<span class="badge ok">OK</span>'}</div></div>`).join(''):'<div class="empty" style="grid-column:1/-1"><div class="ic">📦</div>'+tr('no_products')+'</div>';
+ document.getElementById('kasirGrid').innerHTML=list.length?list.map(p=>`<div class="prod ${p.stock<=0?'out':''} ${p.stock>0&&p.stock<=settings.low?'low':''}" style="border-top:4px solid ${catColor(p.category||'Lainnya')}" onclick="openProdQuick('${p.id}')">${(_v2k&&p.stock>0)?`<button class="kasir-add" onclick="event.stopPropagation();addCart('${p.id}')">+</button>`:''}${photoOK(p.photo)?`<img class="prod-img" src="${p.photo}">`:`<div class="prod-img" style="background:var(--line);display:flex;align-items:center;justify-content:center;font-size:32px">📦</div>`}<div class="nm">${esc(p.name)}</div><div class="ct">${esc(p.category||'Lainnya')}</div><div class="pr">${rp(p.price)}</div><div class="st">${LANG==='en'?'Stock: ':'Stok: '}<b>${p.stock} ${p.unit||'pcs'}</b> ${p.stock<=0?'<span class="badge out">HABIS</span>':p.stock<=settings.low?'<span class="badge low">MENIPIS</span>':'<span class="badge ok">OK</span>'}</div></div>`).join(''):'<div class="empty" style="grid-column:1/-1"><div class="ic">📦</div>'+tr('no_products')+'</div>';
  }
 function renderKasir(){renderKasirGrid();updateCartBar();sweepOrders();renderKasirOrders();renderLogKasir();renderPayWaitCard();hideViewRefresh('view-kasir');renderOrderSumCard();}
 function addCart(id){const p=products.find(x=>x.id===id);if(!p||p.stock===0){toast(tr('i18n_136'));return}
