@@ -38,6 +38,13 @@ textarea{min-height:70px;resize:vertical}
 .addr-prev .lbl{font-size:12px;color:#475569}
 .addr-prev .warn{color:#dc2626;font-weight:700}
 .link-kecil{font-size:13px;color:#2563eb;text-decoration:underline;cursor:pointer}
+/* --- Opsi My Driver (pola toggle Dev, bukan paket ke-4) --- */
+.drv-opt{border:1.5px solid #cbd5e1;border-radius:12px;padding:12px;cursor:pointer;display:flex;gap:10px;align-items:flex-start;margin-top:8px}
+.drv-opt.on{border-color:#2563eb;background:#eff6ff}
+.drv-opt input{width:auto;margin-top:2px;accent-color:#2563eb}
+.drv-opt b{font-size:14px} .drv-opt .pr{font-size:12px;color:#475569;margin-top:2px}
+.drv-ic{flex:none;width:34px;height:34px;border-radius:9px;background:#dbeafe;color:#1d4ed8;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.drv-badge{display:inline-block;font-size:11px;font-weight:800;color:#1d4ed8;background:#dbeafe;border-radius:999px;padding:2px 8px;margin-left:6px;vertical-align:1px}
 </style>
 </head>
 <body>
@@ -67,6 +74,7 @@ textarea{min-height:70px;resize:vertical}
         <label class="pk-opt"><input type="radio" name="paket" value="putus" onchange="hitungEstimasi()"><span><b>Beli Putus — Rp350rb</b><div class="pr">Sekali bayar · maks 3 HP · app jalan selamanya</div></span></label>
         <label class="pk-opt"><input type="radio" name="paket" value="langganan" onchange="hitungEstimasi()"><span><b>Langganan — Rp50rb / bulan</b><div class="pr">Bayar per 3 bulan (Rp150rb) di muka · maks 5 HP · termasuk update + bantuan</div></span></label>
       </div>
+      <label class="drv-opt" id="drvBox"><input type="checkbox" id="dDriver" onchange="hitungEstimasi()"><span class="drv-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 8h13v8H1z"/><path d="M14 11h4l3 3v2h-7z"/><circle cx="6" cy="18.5" r="1.8"/><circle cx="17.5" cy="18.5" r="1.8"/></svg></span><span><b>Tambah My Driver</b><span class="drv-badge">+ DRIVER</span><div class="pr">Kurir toko + live tracking + foto bukti antar + link tracking ke pelanggan. Harga menyesuaikan paket di atas.</div></span></label>
       <div class="est" id="dEstimasi">Perkiraan biaya: Gratis — masa Trial 7 hari.</div>
       <label>Alamat toko <span class="mut">(opsional)</span></label>
       <div id="alamatPicker">
@@ -115,17 +123,20 @@ var CFG = {apiKey:'AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8', authDomain:'toko-mo
 function $(id){ return document.getElementById(id); }
 function paketDipilih(){ var r = document.querySelector('input[name="paket"]:checked'); return r ? r.value : 'trial'; }
 var MAX_HP = {trial:1, putus:3, langganan:5};
+function driverDipilih(){ var c = document.getElementById('dDriver'); return !!(c && c.checked); }
 function hitungEstimasi(){
   var p = paketDipilih();
+  var drv = driverDipilih();
   $('dJml').value = MAX_HP[p] || 1;
   var t = '';
-  if (p === 'trial') t = 'Perkiraan biaya: Gratis — masa Trial 7 hari.';
-  else if (p === 'putus') t = 'Perkiraan biaya: Rp350.000 sekali bayar (maks 3 HP).';
-  else t = 'Perkiraan biaya: Rp150.000 per 3 bulan (Rp50rb / bulan × 3, maks 5 HP).';
+  if (p === 'trial') t = 'Perkiraan biaya: Gratis — masa Trial 7 hari.' + (drv ? ' My Driver aktif selama trial.' : '');
+  else if (p === 'putus') t = drv ? 'Perkiraan biaya: Rp500.000 sekali bayar (maks 3 HP) + My Driver.' : 'Perkiraan biaya: Rp350.000 sekali bayar (maks 3 HP).';
+  else t = drv ? 'Perkiraan biaya: Rp225.000 per 3 bulan (Rp75rb / bulan × 3, maks 5 HP) + My Driver.' : 'Perkiraan biaya: Rp150.000 per 3 bulan (Rp50rb / bulan × 3, maks 5 HP).';
   $('dEstimasi').textContent = t;
   document.querySelectorAll('.pk-opt').forEach(function(el){
     el.classList.toggle('on', el.querySelector('input').checked);
   });
+  var db = $('drvBox'); if (db) db.classList.toggle('on', drv);
 }
 /* ============ PICKER ALAMAT WILAYAH ============ */
 var API = 'https://www.emsifa.com/api-wilayah-indonesia/api';
@@ -265,6 +276,7 @@ async function kirimDaftar(ev){
     if (!firebase.apps.length) firebase.initializeApp(CFG);
     await firebase.firestore().collection('registrations').add({
       shopName: nama, ownerName: owner, ownerEmail: email, phone: hp, jmlHp: jml, paket: paket,
+      hasDriver: driverDipilih(),
       alamat: alamat, catatan: $('dCatatan').value.trim(),
       status: 'menunggu', createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
