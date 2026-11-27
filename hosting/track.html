@@ -65,6 +65,10 @@ body{margin:0;background:#e8ebee;font-family:system-ui,-apple-system,"Segoe UI",
 .leaflet-pulsing{animation:leafletPulse 1.8s ease-out infinite}
 @keyframes leafletPulse{0%{opacity:.9}70%{opacity:.15}100%{opacity:.9}}
 .upd{font-size:12px;color:var(--mut);margin-top:8px}
+.mk-img{width:32px;height:auto;display:block;filter:drop-shadow(0 3px 3px rgba(0,0,0,.4))}
+.mk-wrap{background:none;border:none}
+.leaflet-container .leaflet-marker-pane img.mk-img{width:32px;height:auto;display:block;filter:drop-shadow(0 3px 3px rgba(0,0,0,.4))}
+.leaflet-container .mk-wrap{background:none;border:none}
 </style>
 </head>
 <body>
@@ -163,6 +167,38 @@ function haversineKm(a, b){
   var dLat = (b.lat - a.lat) * rad, dLng = (b.lng - a.lng) * rad;
   var s = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(a.lat*rad) * Math.cos(b.lat*rad) * Math.sin(dLng/2) * Math.sin(dLng/2);
   return 2 * R * Math.asin(Math.sqrt(s));
+}
+
+/* ---------- code107: marker kurir + rute jalan OSRM ---------- */
+var _prevLoc = null; /* posisi kurir render sebelumnya (untuk bearing) */
+var _routeCache = null; /* {pts:[[lat,lng],...], distKm} toko->customer, atau null bila OSRM gagal; fetch sekali per halaman */
+var _routeTried = false;
+function drvBearingKm(lat1,lng1,lat2,lng2){var dx=(lng2-lng1)*Math.cos(lat1*Math.PI/180),dy=lat2-lat1;return Math.atan2(-dy,dx)*180/Math.PI-90;}
+function drvEtaMin(distKm){return Math.max(1,Math.ceil(distKm/25*60));} /* ETA = ceil(jarak jalan km / 25 x 60) menit — kecepatan rata-rata kurir 25 km/jam */
+async function drvOsrmRoute(lat1,lng1,lat2,lng2){
+  try{
+    var ctl=null,tm=null;
+    try{if(typeof AbortController==="function"){ctl=new AbortController();tm=setTimeout(function(){try{ctl.abort();}catch(e){}},8000);}}catch(e){ctl=null;}
+    var res=null;
+    try{res=await fetch("https://router.project-osrm.org/route/v1/driving/"+lng1+","+lat1+";"+lng2+","+lat2+"?overview=full&geometries=geojson",{signal:ctl?ctl.signal:undefined});}
+    finally{if(tm)clearTimeout(tm);}
+    if(!res||res.status!==200)return null;
+    var j=await res.json();
+    var r=j&&j.routes&&j.routes[0];
+    if(!r||!r.geometry||!r.geometry.coordinates||!r.geometry.coordinates.length)return null;
+    return {pts:r.geometry.coordinates.map(function(c){return [c[1],c[0]];}),distKm:(r.distance||0)/1000};
+  }catch(e){return null;}
+}
+function drvRemainKm(pts, loc){
+  /* sisa dari posisi kurir ke ujung rute: titik terdekat -> total - kumulatif sampai titik itu */
+  try{
+    if(!pts||pts.length<2||!loc||loc.lat==null)return null;
+    var best=0,bd=1e9;
+    for(var i=0;i<pts.length;i++){var d=haversineKm({lat:pts[i][0],lng:pts[i][1]},loc);if(d!=null&&d<bd){bd=d;best=i;}}
+    var total=0,cum=0;
+    for(var j=1;j<pts.length;j++){var seg=haversineKm({lat:pts[j-1][0],lng:pts[j-1][1]},{lat:pts[j][0],lng:pts[j][1]})||0;total+=seg;if(j<=best)cum+=seg;}
+    return Math.max(0,total-cum);
+  }catch(e){return null;}
 }
 function show(id){
   ["screenLoading","screenDenied","screenTrack"].forEach(function(x){
@@ -274,6 +310,17 @@ function renderMap(){
   var hasLoc = !!(loc && loc.lat != null && loc.lng != null);
   var box = $("#mapBox");
   $("#noLocBox").style.display = hasLoc ? "none" : "block";
+  if (!_routeTried){
+    var _sLa0 = parseFloat((snapData.shop || {}).lat), _sLn0 = parseFloat((snapData.shop || {}).lng);
+    var _cLa0 = parseFloat((snapData.customer || {}).lat), _cLn0 = parseFloat((snapData.customer || {}).lng);
+    if (!isNaN(_sLa0) && !isNaN(_sLn0) && !isNaN(_cLa0) && !isNaN(_cLn0)){
+      _routeTried = true;
+      drvOsrmRoute(_sLa0, _sLn0, _cLa0, _cLn0).then(function(r){
+        _routeCache = r || null;
+        if (r){ renderMap(); renderEta(); }
+      }).catch(function(){ _routeCache = null; });
+    }
+  }
   var LL = window.L;
   if (LL && LL.map){
     try {
@@ -295,8 +342,17 @@ function renderMap(){
       if (hasLoc){
         var kLat = parseFloat(loc.lat), kLng = parseFloat(loc.lng);
         LL.circleMarker([kLat,kLng],{radius:14,color:"#0ea5e9",weight:2,fillColor:"#0ea5e9",fillOpacity:.25,className:"leaflet-pulsing"}).addTo(map);
-        LL.circleMarker([kLat,kLng],{radius:9,color:"#0ea5e9",weight:2,fillColor:"#0ea5e9",fillOpacity:1}).addTo(map).bindTooltip((snapData.kurirNama || "Kurir") + " · live",{permanent:true,direction:"top"});
-        LL.polyline([[sLat,sLng],[kLat,kLng],[cLat,cLng]],{color:"#06b6d4",weight:3,dashArray:"8 6"}).addTo(map);
+        var _mk = LL.marker([kLat,kLng],{icon:LL.divIcon({className:"mk-wrap",html:'<img class="mk-img" src="driver-marker.png">',iconSize:[32,56],iconAnchor:[16,28]})}).addTo(map);
+        _mk.bindTooltip((snapData.kurirNama || "Kurir") + " · live",{permanent:true,direction:"top"});
+        if (_prevLoc && (_prevLoc.lat !== kLat || _prevLoc.lng !== kLng)){
+          try { var _el = _mk.getElement(); var _im = _el && _el.querySelector("img"); if (_im) _im.style.transform = "rotate(" + drvBearingKm(_prevLoc.lat, _prevLoc.lng, kLat, kLng).toFixed(1) + "deg)"; } catch (e) {}
+        }
+        _prevLoc = {lat:kLat, lng:kLng};
+        if (_routeCache && _routeCache.pts && _routeCache.pts.length > 1){
+          LL.polyline(_routeCache.pts,{color:"#06b6d4",weight:4}).addTo(map);
+        } else {
+          LL.polyline([[sLat,sLng],[kLat,kLng],[cLat,cLng]],{color:"#06b6d4",weight:3,dashArray:"8 6"}).addTo(map);
+        }
       } else {
         LL.polyline([[sLat,sLng],[cLat,cLng]],{color:"#94a3b8",weight:3,dashArray:"8 6"}).addTo(map);
       }
@@ -336,10 +392,12 @@ function renderMap(){
     + '<g transform="translate(' + sP[0] + ',' + sP[1] + ')"><circle r="10" fill="#071c45"/><text y="4" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">T</text></g>'
     + '<g transform="translate(' + cP[0] + ',' + cP[1] + ')"><path d="M0 -12 C 7 -12 11 -7 11 -2 C 11 5 0 12 0 12 C 0 12 -11 5 -11 -2 C -11 -7 -7 -12 0 -12Z" fill="#dc2626"/><circle cy="-2" r="3.5" fill="#fff"/></g>';
   if (hasLoc){
+    var _deg = 0;
+    if (_prevLoc && (_prevLoc.lat !== kLat2 || _prevLoc.lng !== kLng2)) _deg = drvBearingKm(_prevLoc.lat, _prevLoc.lng, kLat2, kLng2);
+    _prevLoc = {lat:kLat2, lng:kLng2};
     svg += '<g transform="translate(' + kP[0] + ',' + kP[1] + ')">'
       + '<circle class="pulse-ring" r="10" fill="none" stroke="#0ea5e9" stroke-width="2"/>'
-      + '<circle r="10" fill="#0ea5e9" stroke="#fff" stroke-width="2.5"/>'
-      + '<g transform="translate(-7,-7) scale(0.58)"><path d="M5 17h-2l-1-4H1v-2h2l1.5-5H7l1 4h5l2-3h3v2h-2.5l-1.5 3H19v2h-3l-1 4h-2l1-4h-7l-1 4z" fill="#fff"/></g></g>';
+      + '<g transform="rotate(' + _deg.toFixed(1) + ')"><image href="driver-marker.png" x="-16" y="-28" width="32" height="56"/></g></g>';
   }
   svg += '<text x="' + Math.min(340, sP[0]+12) + '" y="' + Math.min(222, sP[1]-4) + '" font-size="11" font-weight="700" fill="#071c45">Toko</text>'
     + '<text x="' + Math.max(8, cP[0]-24) + '" y="' + Math.max(14, cP[1]-16) + '" font-size="11" font-weight="700" fill="#dc2626">' + esc(cust.name || "Customer") + '</text>';
@@ -353,11 +411,14 @@ function renderEta(){
   var cust = snapData.customer || {};
   var loc = snapData.loc || null;
   if (!loc || loc.lat == null || cust.lat == null){ chip.style.display = "none"; return; }
-  var sisa = haversineKm({lat:parseFloat(loc.lat), lng:parseFloat(loc.lng)}, {lat:parseFloat(cust.lat), lng:parseFloat(cust.lng)});
+  var sisa = null;
+  if (_routeCache && _routeCache.pts) sisa = drvRemainKm(_routeCache.pts, {lat:parseFloat(loc.lat), lng:parseFloat(loc.lng)});
+  if (sisa == null) sisa = haversineKm({lat:parseFloat(loc.lat), lng:parseFloat(loc.lng)}, {lat:parseFloat(cust.lat), lng:parseFloat(cust.lng)});
   if (sisa == null){ chip.style.display = "none"; return; }
-  var total = (snapData.distanceKm != null) ? Number(snapData.distanceKm)
+  var total = (snapData.roadKm != null) ? Number(snapData.roadKm)
+    : (snapData.distanceKm != null) ? Number(snapData.distanceKm)
     : haversineKm({lat:parseFloat((snapData.shop||{}).lat), lng:parseFloat((snapData.shop||{}).lng)}, {lat:parseFloat(cust.lat), lng:parseFloat(cust.lng)});
-  var menit = Math.max(1, Math.ceil(sisa / 15 * 60));
+  var menit = drvEtaMin(sisa); /* ETA = ceil(jarak jalan km / 25 x 60) menit */
   chip.innerHTML = "&plusmn; " + menit + " menit lagi<small>" + fmtKm(sisa) + " km tersisa &middot; dari total " + fmtKm(total || sisa) + " km</small>";
   chip.style.display = "block";
 }
