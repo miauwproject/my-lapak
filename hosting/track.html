@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lacak Pesanan • My Lapak</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+/* Variabel + class disalin dari code105 / preview-tracker-publik panel 2 */
+:root{--green:#06b6d4;--green-d:#071C45;--blue:#2563eb;--red:#dc2626;--line:#e5e7eb;--txt:#1f2937;--mut:#6b7280;--card:#fff;--bg:#f4f6f4}
+*{box-sizing:border-box}
+body{margin:0;background:#e8ebee;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--txt)}
+.phone{width:390px;max-width:100%;margin:0 auto;background:var(--bg);min-height:100vh;padding:14px 12px 24px}
+.modal{background:var(--card);border-radius:16px;padding:14px;box-shadow:0 4px 18px rgba(0,0,0,.12);margin-bottom:22px}
+.mhead{font-size:16px;font-weight:800;margin-bottom:4px}
+.meta{font-size:13px;color:var(--mut);line-height:1.6}
+.btn{display:block;width:100%;border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;text-align:center;background:var(--line);color:var(--txt);text-decoration:none}
+.btn-green{background:#06b6d4;color:#fff}
+.btn-outline-red{background:var(--card);border:1.5px solid var(--red);color:var(--red)}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.rowbtns{display:flex;gap:8px}
+.rowbtns .btn{flex:1}
+.helpbox{background:#f1f5f9;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:12.5px;color:var(--mut);line-height:1.55;margin-top:8px}
+.helpbox.live{background:#ecfdf5;border-color:#a7f3d0;color:#166534}
+.live-badge{display:inline-flex;align-items:center;gap:6px;background:#dcfce7;color:#166534;font-size:11px;font-weight:800;padding:3px 10px;border-radius:99px}
+.live-badge .dot{width:8px;height:8px;border-radius:50%;background:#16a34a;animation:pulse 1.6s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(22,163,74,.5)}70%{box-shadow:0 0 0 7px rgba(22,163,74,0)}100%{box-shadow:0 0 0 0 rgba(22,163,74,0)}}
+.mapbox{position:relative;height:230px;border-radius:12px;border:1px solid var(--line);overflow:hidden;background:#e8eef4}
+.mapbox svg{display:block;width:100%;height:100%}
+.mapbox .leaflet-container{height:100%;width:100%}
+.map-eta{position:absolute;left:8px;bottom:8px;background:rgba(7,28,69,.92);color:#fff;border-radius:10px;padding:7px 11px;font-size:12px;font-weight:700;line-height:1.4;z-index:500}
+.map-eta small{display:block;font-weight:400;color:#bae6fd;font-size:11px}
+.pulse-ring{animation:ping 1.8s ease-out infinite;transform-origin:center;transform-box:fill-box}
+@keyframes ping{0%{transform:scale(.6);opacity:.9}80%{transform:scale(2.2);opacity:0}100%{transform:scale(2.2);opacity:0}}
+.tl{display:flex;align-items:flex-start;margin:12px 0 4px}
+.tl-step{flex:1;text-align:center;position:relative}
+.tl-step::before{content:"";position:absolute;top:11px;left:-50%;width:100%;height:2px;background:var(--line);z-index:0}
+.tl-step:first-child::before{display:none}
+.tl-step.done::before{background:var(--green)}
+.tl-dot{position:relative;z-index:1;width:22px;height:22px;border-radius:50%;margin:0 auto 4px;display:flex;align-items:center;justify-content:center;background:var(--line);color:#fff}
+.tl-step.done .tl-dot{background:var(--green)}
+.tl-step.now .tl-dot{background:var(--blue);box-shadow:0 0 0 4px #dbeafe}
+.tl-lbl{font-size:11px;font-weight:700;color:var(--mut);line-height:1.3}
+.tl-step.now .tl-lbl{color:var(--blue)}
+.tl-time{font-size:10.5px;color:var(--mut)}
+.courier{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:10px}
+.avatar{width:42px;height:42px;border-radius:50%;background:var(--green-d);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex:none}
+.courier .c-name{font-weight:800;font-size:14px}
+.courier .c-sub{font-size:12px;color:var(--mut);line-height:1.5}
+.kv{display:flex;justify-content:space-between;font-size:13px;padding:7px 2px;border-bottom:1px solid var(--line)}
+.kv:last-child{border-bottom:none}
+.kv b{font-size:13px}
+.priv{font-size:11.5px;color:var(--mut);text-align:center;margin-top:10px;line-height:1.5}
+.track-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.order-no{background:#dbeafe;color:#1d4ed8;font-size:12px;font-weight:800;padding:2px 10px;border-radius:99px;white-space:nowrap}
+.shop-name{font-size:15px;font-weight:800}
+.shop-sub{font-size:12px;color:var(--mut)}
+.mfoot{background:var(--card);padding-top:10px;margin-top:10px}
+.screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px 16px}
+.auth-card{background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:36px 32px;max-width:440px;width:100%;text-align:center;box-shadow:0 8px 24px rgba(15,42,77,.06)}
+.auth-card h1{font-size:21px;color:#0f2440}
+.auth-card p{color:#64748b;font-size:14px;margin-top:8px;line-height:1.6}
+.spinner{width:34px;height:34px;margin:0 auto 14px;border:3px solid #dbeafe;border-top-color:#0284c7;border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.leaflet-pulsing{animation:leafletPulse 1.8s ease-out infinite}
+@keyframes leafletPulse{0%{opacity:.9}70%{opacity:.15}100%{opacity:.9}}
+.upd{font-size:12px;color:var(--mut);margin-top:8px}
+</style>
+</head>
+<body>
+<div class="phone" id="app">
+  <!-- Layar loading -->
+  <div class="screen" id="screenLoading">
+    <div class="auth-card"><div class="spinner"></div><h1>Memuat pesanan&hellip;</h1><p>Mengecek link tracking kamu.</p></div>
+  </div>
+
+  <!-- Layar tolak: tanpa data order apa pun -->
+  <div class="screen" id="screenDenied" style="display:none">
+    <div class="auth-card">
+      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto 12px;display:block"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <h1>Link tidak valid atau sudah kedaluwarsa</h1>
+      <p>Minta link tracking terbaru ke toko, atau hubungi toko lewat WhatsApp.</p>
+    </div>
+  </div>
+
+  <!-- Halaman tracker -->
+  <div class="modal" id="screenTrack" style="display:none">
+    <div class="track-head">
+      <div><div class="shop-name" id="shopName">-</div><div class="shop-sub">Lacak Pesanan</div></div>
+      <span class="order-no" id="orderNo">-</span>
+    </div>
+    <div class="tl" id="timeline"></div>
+    <div class="mapbox" style="margin-top:10px" id="mapBox">
+      <div id="leafletMap" style="height:100%;width:100%;display:none"></div>
+      <div id="svgMap" style="height:100%;width:100%"></div>
+      <div class="map-eta" id="etaChip" style="display:none"></div>
+    </div>
+    <div class="helpbox" id="noLocBox" style="display:none">Belum ada posisi live &mdash; kurir belum membagikan posisinya. Peta di atas menunjukkan lokasi toko &amp; alamat antar.</div>
+    <div style="margin-top:10px"><span class="live-badge"><span class="dot"></span>LIVE &middot; update tiap 30 detik</span></div>
+    <div class="upd" id="lastUpd"></div>
+    <div class="courier" id="courierCard">
+      <div class="avatar" id="courierAvatar">?</div>
+      <div><div class="c-name" id="courierName">-</div><div class="c-sub" id="courierSub">-</div></div>
+    </div>
+    <div style="margin-top:6px">
+      <div class="kv"><span>Pesanan</span><b id="sumItems">-</b></div>
+      <div class="kv"><span>Total bayar</span><b id="sumTotal">-</b></div>
+      <div class="kv"><span>Status</span><b id="sumStatus">-</b></div>
+    </div>
+    <div class="mfoot rowbtns">
+      <a class="btn btn-green" id="btnChatToko" href="#" target="_blank" rel="noopener">Chat Toko (WA)</a>
+      <a class="btn btn-outline-red" id="btnLapor" href="#" target="_blank" rel="noopener">Lapor Kendala</a>
+    </div>
+    <div class="priv">Tanpa login &mdash; link ini khusus order kamu.<br>Halaman read-only, cuma bisa lihat status &amp; posisi kurir.</div>
+  </div>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+"use strict";
+/* Config Firestore = proyek toko-mobile-app (disalin dari kasir.html / code105 — JANGAN karang) */
+var FB_CONFIG = {apiKey:"AIzaSyCEnJ3GoapTR6zSeUf1FSemYjex5LRcEp8",authDomain:"toko-mobile-app.firebaseapp.com",projectId:"toko-mobile-app",appId:"1:964910397769:web:e2baf7c523194459100298"};
+var CDN_BASE = "https://www.gstatic.com/firebasejs/10.12.2/";
+var TOKEN_RE = /^[0-9a-f]{32}$/i;
+var STEPS = [["baru","Dipesan"],["diproses","Diproses"],["dikirim","Dikirim"],["sampai","Sampai"]];
+var STATUS_LBL = {baru:"Dipesan",diproses:"Diproses",dikirim:"Dikirim",sampai:"Sampai",batal:"Dibatalkan"};
+
+var params = new URLSearchParams(location.search);
+var orderParam = params.get("order") || "";
+var tokenParam = params.get("t") || "";
+var snapData = null;
+var leafletMap = null;
+var pollTimer = null, updTimer = null;
+
+function $(s){ return document.querySelector(s); }
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+function fmtRp(n){ return "Rp " + Number(n || 0).toLocaleString("id-ID"); }
+function fmtKm(n){ return Number(n || 0).toLocaleString("id-ID", {minimumFractionDigits:1, maximumFractionDigits:1}); }
+function fmtTime(iso){
+  if (!iso) return "—";
+  var d = new Date(iso);
+  if (isNaN(d.getTime())) return "—";
+  return String(d.getHours()).padStart(2,"0") + ":" + String(d.getMinutes()).padStart(2,"0");
+}
+function toMillis(v){
+  if (v == null) return null;
+  if (typeof v === "number") return v;
+  if (typeof v === "string"){ var t = Date.parse(v); return isNaN(t) ? null : t; }
+  if (typeof v.toMillis === "function"){ try { return v.toMillis(); } catch(e){ return null; } }
+  if (typeof v.toDate === "function"){ try { return v.toDate().getTime(); } catch(e){ return null; } }
+  if (typeof v.seconds === "number") return v.seconds * 1000 + Math.floor((v.nanoseconds || 0) / 1e6);
+  return null;
+}
+function normWa(wa){
+  var d = String(wa || "").replace(/\D/g, "");
+  if (!d) return "";
+  if (d.startsWith("0")) d = "62" + d.slice(1);
+  return d;
+}
+function haversineKm(a, b){
+  if (!a || !b || a.lat == null || b.lat == null) return null;
+  var R = 6371, rad = Math.PI / 180;
+  var dLat = (b.lat - a.lat) * rad, dLng = (b.lng - a.lng) * rad;
+  var s = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(a.lat*rad) * Math.cos(b.lat*rad) * Math.sin(dLng/2) * Math.sin(dLng/2);
+  return 2 * R * Math.asin(Math.sqrt(s));
+}
+function show(id){
+  ["screenLoading","screenDenied","screenTrack"].forEach(function(x){
+    var el = document.getElementById(x);
+    if (el) el.style.display = (x === id) ? (id === "screenTrack" ? "block" : "flex") : "none";
+  });
+}
+function deny(){ snapData = null; show("screenDenied"); }
+
+/* ---------- Firebase: mock (tes) atau SDK asli ---------- */
+var MOCK = window.__MOCK__ || window.__MOCK_FIREBASE__ || null;
+var FBDb = null;
+function mockDb(){
+  if (!MOCK) return null;
+  if (MOCK.collection && typeof MOCK.collection === "function") return MOCK;
+  if (typeof MOCK.firestore === "function") return MOCK.firestore();
+  if (MOCK.firestore) return MOCK.firestore;
+  if (MOCK.db) return MOCK.db;
+  return null;
+}
+function loadScript(src){
+  return new Promise(function(res, rej){
+    var s = document.createElement("script");
+    s.src = src; s.onload = function(){ res(); }; s.onerror = function(){ rej(new Error("Gagal memuat " + src)); };
+    document.head.appendChild(s);
+  });
+}
+function initFirebase(){
+  var m = mockDb();
+  if (m){ FBDb = m; return Promise.resolve(); }
+  return loadScript(CDN_BASE + "firebase-app-compat.js")
+    .then(function(){ return loadScript(CDN_BASE + "firebase-firestore-compat.js"); })
+    .then(function(){
+      if (!window.firebase) throw new Error("SDK Firebase tidak termuat.");
+      if (!window.firebase.apps || !window.firebase.apps.length) window.firebase.initializeApp(FB_CONFIG);
+      FBDb = window.firebase.firestore();
+    });
+}
+
+/* ---------- Validasi: SEBELUM tampilkan data apa pun ---------- */
+function validateDoc(d){
+  if (!d || !d.exists) return false;
+  var v = d.data();
+  if (!v) return false;
+  if (v.orderId !== orderParam) return false;
+  var exp = toMillis(v.expiresAt);
+  if (exp == null || exp <= Date.now()) return false;
+  return true;
+}
+function fetchSnap(){
+  return FBDb.collection("trackSnapshots").doc(tokenParam).get();
+}
+function applySnap(d){
+  if (!validateDoc(d)){ deny(); return false; }
+  snapData = d.data();
+  render();
+  return true;
+}
+function startLive(){
+  var docRef = FBDb.collection("trackSnapshots").doc(tokenParam);
+  var liveOk = false;
+  try {
+    if (typeof docRef.onSnapshot === "function"){
+      docRef.onSnapshot(function(d){
+        liveOk = true;
+        if (!validateDoc(d)){ deny(); return; }
+        snapData = d.data();
+        render();
+      }, function(){
+        /* listener gagal -> polling di bawah */
+      });
+      /* fallback polling tiap 30 dtk bila listener tidak pernah fire */
+      setTimeout(function(){ if (!liveOk) startPolling(); }, 5000);
+      return;
+    }
+  } catch (e) { /* jatuh ke polling */ }
+  startPolling();
+}
+function startPolling(){
+  if (pollTimer) return;
+  pollTimer = setInterval(function(){
+    fetchSnap().then(function(d){ applySnap(d); }).catch(function(){ /* tetap di halaman terakhir */ });
+  }, 30000);
+}
+
+/* ---------- Render ---------- */
+function renderTimeline(){
+  var st = snapData.status || "baru";
+  var idx = -1;
+  for (var i = 0; i < STEPS.length; i++) if (STEPS[i][0] === st) idx = i;
+  var times = snapData.statusTimes || {};
+  var check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  var dot = '<svg width="12" height="12" viewBox="0 0 24 24" fill="#fff"><circle cx="12" cy="12" r="5"/></svg>';
+  $("#timeline").innerHTML = STEPS.map(function(s, i){
+    var cls = "tl-step";
+    var inner = "";
+    if (idx >= 0){
+      if (i < idx){ cls += " done"; inner = check; }
+      else if (i === idx){ cls += (i > 0 ? " done" : "") + " now"; inner = (i > 0 ? check : dot); if (i > 0) cls = "tl-step done now"; }
+    } else if (times[s[0]]){ cls += " done"; inner = check; }
+    return '<div class="' + cls + '"><div class="tl-dot">' + inner + '</div><div class="tl-lbl">' + s[1] + '</div><div class="tl-time">' + fmtTime(times[s[0]]) + '</div></div>';
+  }).join("");
+}
+
+function renderMap(){
+  var shop = snapData.shop || {};
+  var cust = snapData.customer || {};
+  var loc = snapData.loc || null;
+  var hasLoc = !!(loc && loc.lat != null && loc.lng != null);
+  var box = $("#mapBox");
+  $("#noLocBox").style.display = hasLoc ? "none" : "block";
+  var LL = window.L;
+  if (LL && LL.map){
+    try {
+      $("#leafletMap").style.display = "block";
+      $("#svgMap").style.display = "none";
+      if (leafletMap){ try { leafletMap.remove(); } catch(e){} leafletMap = null; }
+      var sLat = parseFloat(shop.lat), sLng = parseFloat(shop.lng);
+      var cLat = parseFloat(cust.lat), cLng = parseFloat(cust.lng);
+      if (isNaN(sLat)) { sLat = -6.41882; sLng = 106.86410; }
+      if (isNaN(cLat)) { cLat = sLat + 0.02; cLng = sLng + 0.02; }
+      var pts = [[sLat, sLng], [cLat, cLng]];
+      if (hasLoc) pts.push([parseFloat(loc.lat), parseFloat(loc.lng)]);
+      var mid = pts.reduce(function(a,p){ return [a[0]+p[0]/pts.length, a[1]+p[1]/pts.length]; }, [0,0]);
+      var map = LL.map("leafletMap").setView(mid, 13);
+      leafletMap = map;
+      LL.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom:19, attribution:"© OpenStreetMap contributors"}).addTo(map);
+      LL.circleMarker([sLat,sLng],{radius:9,color:"#071c45",weight:2,fillColor:"#071c45",fillOpacity:1}).addTo(map).bindTooltip("Toko",{permanent:true,direction:"top"});
+      LL.circleMarker([cLat,cLng],{radius:9,color:"#dc2626",weight:2,fillColor:"#dc2626",fillOpacity:1}).addTo(map).bindTooltip(cust.name || "Customer",{permanent:true,direction:"top"});
+      if (hasLoc){
+        var kLat = parseFloat(loc.lat), kLng = parseFloat(loc.lng);
+        LL.circleMarker([kLat,kLng],{radius:14,color:"#0ea5e9",weight:2,fillColor:"#0ea5e9",fillOpacity:.25,className:"leaflet-pulsing"}).addTo(map);
+        LL.circleMarker([kLat,kLng],{radius:9,color:"#0ea5e9",weight:2,fillColor:"#0ea5e9",fillOpacity:1}).addTo(map).bindTooltip((snapData.kurirNama || "Kurir") + " · live",{permanent:true,direction:"top"});
+        LL.polyline([[sLat,sLng],[kLat,kLng],[cLat,cLng]],{color:"#06b6d4",weight:3,dashArray:"8 6"}).addTo(map);
+      } else {
+        LL.polyline([[sLat,sLng],[cLat,cLng]],{color:"#94a3b8",weight:3,dashArray:"8 6"}).addTo(map);
+      }
+      map.fitBounds(LL.latLngBounds(pts).pad(0.25));
+      setTimeout(function(){ try { map.invalidateSize(); } catch(e){} }, 300);
+      return;
+    } catch (e) { /* jatuh ke SVG */ }
+  }
+  /* Fallback peta SVG inline (gaya preview) — proyeksi equirectangular sederhana */
+  $("#leafletMap").style.display = "none";
+  $("#svgMap").style.display = "block";
+  var sLat2 = parseFloat(shop.lat), sLng2 = parseFloat(shop.lng);
+  var cLat2 = parseFloat(cust.lat), cLng2 = parseFloat(cust.lng);
+  if (isNaN(sLat2)) { sLat2 = -6.41882; sLng2 = 106.86410; }
+  if (isNaN(cLat2)) { cLat2 = sLat2 + 0.02; cLng2 = sLng2 + 0.02; }
+  var kLat2 = hasLoc ? parseFloat(loc.lat) : null, kLng2 = hasLoc ? parseFloat(loc.lng) : null;
+  var lats = [sLat2, cLat2], lngs = [sLng2, cLng2];
+  if (hasLoc){ lats.push(kLat2); lngs.push(kLng2); }
+  var minLat = Math.min.apply(null, lats), maxLat = Math.max.apply(null, lats);
+  var minLng = Math.min.apply(null, lngs), maxLng = Math.max.apply(null, lngs);
+  if (maxLat - minLat < 0.005){ var m = (maxLat+minLat)/2; minLat = m-0.0025; maxLat = m+0.0025; }
+  if (maxLng - minLng < 0.005){ var m2 = (maxLng+minLng)/2; minLng = m2-0.0025; maxLng = m2+0.0025; }
+  var pad = 30;
+  var padTop = 30, padBottom = hasLoc ? 62 : 30; /* ruang untuk chip ETA di kiri bawah */
+  function py(lat){ return padTop + (maxLat - lat) / (maxLat - minLat) * (230 - padTop - padBottom); }
+  function pxx(lng){ return pad + (lng - minLng) / (maxLng - minLng) * (360 - pad*2); }
+  var sP = [pxx(sLng2), py(sLat2)], cP = [pxx(cLng2), py(cLat2)];
+  var kP = hasLoc ? [pxx(kLng2), py(kLat2)] : null;
+  var route = hasLoc
+    ? "M" + sP[0] + " " + sP[1] + " C " + ((sP[0]+kP[0])/2) + " " + ((sP[1]+kP[1])/2) + ", " + kP[0] + " " + kP[1] + ", " + cP[0] + " " + cP[1]
+    : "M" + sP[0] + " " + sP[1] + " L " + cP[0] + " " + cP[1];
+  var svg = '<svg viewBox="0 0 360 230" aria-label="Peta live kurir">'
+    + '<rect width="360" height="230" fill="#e8eef4"/>'
+    + '<g stroke="#ffffff" stroke-width="14" stroke-linecap="round"><path d="M-10 60 H370"/><path d="M-10 150 H370"/><path d="M90 -10 V240"/><path d="M250 -10 V240"/></g>'
+    + '<g stroke="#cbd5e1" stroke-width="2"><path d="M-10 100 H370"/><path d="M170 -10 V240"/><path d="M-10 195 H370"/></g>'
+    + '<path d="' + route + '" fill="none" stroke="' + (hasLoc ? "#06b6d4" : "#94a3b8") + '" stroke-width="3.5" stroke-dasharray="8 6"/>'
+    + '<g transform="translate(' + sP[0] + ',' + sP[1] + ')"><circle r="10" fill="#071c45"/><text y="4" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">T</text></g>'
+    + '<g transform="translate(' + cP[0] + ',' + cP[1] + ')"><path d="M0 -12 C 7 -12 11 -7 11 -2 C 11 5 0 12 0 12 C 0 12 -11 5 -11 -2 C -11 -7 -7 -12 0 -12Z" fill="#dc2626"/><circle cy="-2" r="3.5" fill="#fff"/></g>';
+  if (hasLoc){
+    svg += '<g transform="translate(' + kP[0] + ',' + kP[1] + ')">'
+      + '<circle class="pulse-ring" r="10" fill="none" stroke="#0ea5e9" stroke-width="2"/>'
+      + '<circle r="10" fill="#0ea5e9" stroke="#fff" stroke-width="2.5"/>'
+      + '<g transform="translate(-7,-7) scale(0.58)"><path d="M5 17h-2l-1-4H1v-2h2l1.5-5H7l1 4h5l2-3h3v2h-2.5l-1.5 3H19v2h-3l-1 4h-2l1-4h-7l-1 4z" fill="#fff"/></g></g>';
+  }
+  svg += '<text x="' + Math.min(340, sP[0]+12) + '" y="' + Math.min(222, sP[1]-4) + '" font-size="11" font-weight="700" fill="#071c45">Toko</text>'
+    + '<text x="' + Math.max(8, cP[0]-24) + '" y="' + Math.max(14, cP[1]-16) + '" font-size="11" font-weight="700" fill="#dc2626">' + esc(cust.name || "Customer") + '</text>';
+  if (hasLoc) svg += '<text x="' + Math.min(300, kP[0]+13) + '" y="' + Math.max(14, kP[1]-16) + '" font-size="11" font-weight="800" fill="#0369a1">' + esc(snapData.kurirNama || "Kurir") + ' · live</text>';
+  svg += '</svg>';
+  $("#svgMap").innerHTML = svg;
+}
+
+function renderEta(){
+  var chip = $("#etaChip");
+  var cust = snapData.customer || {};
+  var loc = snapData.loc || null;
+  if (!loc || loc.lat == null || cust.lat == null){ chip.style.display = "none"; return; }
+  var sisa = haversineKm({lat:parseFloat(loc.lat), lng:parseFloat(loc.lng)}, {lat:parseFloat(cust.lat), lng:parseFloat(cust.lng)});
+  if (sisa == null){ chip.style.display = "none"; return; }
+  var total = (snapData.distanceKm != null) ? Number(snapData.distanceKm)
+    : haversineKm({lat:parseFloat((snapData.shop||{}).lat), lng:parseFloat((snapData.shop||{}).lng)}, {lat:parseFloat(cust.lat), lng:parseFloat(cust.lng)});
+  var menit = Math.max(1, Math.ceil(sisa / 15 * 60));
+  chip.innerHTML = "&plusmn; " + menit + " menit lagi<small>" + fmtKm(sisa) + " km tersisa &middot; dari total " + fmtKm(total || sisa) + " km</small>";
+  chip.style.display = "block";
+}
+
+function renderLastUpd(){
+  var el = $("#lastUpd");
+  var t = toMillis(snapData.locUpdatedAt) || toMillis((snapData.loc||{}).updatedAt);
+  if (!t){ el.textContent = ""; return; }
+  var sec = Math.max(0, Math.floor((Date.now() - t) / 1000));
+  el.textContent = "Terakhir update: " + sec + " detik lalu";
+}
+
+function render(){
+  var d = snapData;
+  $("#shopName").textContent = d.shopName || (d.shop && d.shop.name) || "Toko";
+  $("#orderNo").textContent = d.orderNo || d.orderId || orderParam;
+  renderTimeline();
+  renderMap();
+  renderEta();
+  renderLastUpd();
+  var initial = String(d.kurirNama || "?").trim().charAt(0).toUpperCase() || "?";
+  $("#courierAvatar").textContent = initial;
+  $("#courierName").textContent = d.kurirNama || "-";
+  var rating = d.ratingText || "5.0 · 0 ulasan";
+  $("#courierSub").innerHTML = esc(d.kurirPlat || "-") + ' &middot; <svg width="12" height="12" viewBox="0 0 24 24" fill="#f59e0b" style="vertical-align:-1px"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z"/></svg> ' + esc(rating);
+  $("#sumItems").textContent = d.itemsSummary || "-";
+  $("#sumTotal").textContent = fmtRp(d.total);
+  var times = d.statusTimes || {};
+  var stLbl = STATUS_LBL[d.status] || d.status || "-";
+  $("#sumStatus").textContent = stLbl + " · " + fmtTime(times[d.status]);
+  var wa = normWa(d.shopWa);
+  var no = d.orderNo || d.orderId || orderParam;
+  var chat = $("#btnChatToko"), lapor = $("#btnLapor");
+  if (wa){
+    chat.href = "https://wa.me/" + wa + "?text=" + encodeURIComponent("Halo " + (d.shopName || "toko") + "! Saya mau tanya soal pesanan " + no + " (status: " + stLbl + ").");
+    chat.removeAttribute("disabled");
+    lapor.href = "https://wa.me/" + wa + "?text=" + encodeURIComponent("Halo " + (d.shopName || "toko") + "! Saya lapor kendala untuk pesanan " + no + " — status: " + stLbl + ". Kendalanya: ");
+    lapor.removeAttribute("disabled");
+  } else {
+    chat.href = "#"; lapor.href = "#";
+    chat.setAttribute("disabled", ""); lapor.setAttribute("disabled", "");
+  }
+  show("screenTrack");
+}
+
+/* ---------- boot ---------- */
+updTimer = setInterval(function(){ if (snapData) renderLastUpd(); }, 1000);
+if (!TOKEN_RE.test(tokenParam) || !orderParam){ deny(); }
+else {
+  initFirebase().then(function(){
+    return fetchSnap();
+  }).then(function(d){
+    if (!applySnap(d)) return;
+    startLive();
+  }).catch(function(){ deny(); });
+}
+})();
+</script>
+</body>
+</html>
